@@ -1,0 +1,756 @@
+Initialize engine version: 4.5.3f3 (fca41a4fabea)
+GfxDevice: creating device client; threaded=1
+Direct3D:
+    Version:  Direct3D 11.0 [level 11.0]
+    Renderer: Intel(R) HD Graphics Family (ID=0xa16)
+    Vendor:   Intel
+    VRAM:     0 MB
+Begin MonoManager ReloadAssembly
+Platform assembly: C:\Users\rbala1\Documents\Sparse Volumetric Particle System\RaveUnity_Data\Managed\UnityEngine.dll (this message is harmless)
+Loading C:\Users\rbala1\Documents\Sparse Volumetric Particle System\RaveUnity_Data\Managed\UnityEngine.dll into Unity Child Domain
+Platform assembly: C:\Users\rbala1\Documents\Sparse Volumetric Particle System\RaveUnity_Data\Managed\Assembly-CSharp.dll (this message is harmless)
+Loading C:\Users\rbala1\Documents\Sparse Volumetric Particle System\RaveUnity_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
+- Completed reload, in  0.132 seconds
+desktop: 1920x1200 59Hz; virtual: 3840x1200 at 0,0
+<RI> Initializing input.
+<RI> Input initialized.
+WARNING: Shader Unsupported: 'Custom/Fill Volume' - Pass '' shader state not supported
+WARNING: Shader Unsupported: 'Custom/Fill Volume' - Setting to default shader.
+Done filling 0, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Start() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:41)
+ 
+(Filename: C Line: 0)
+
+Done filling 1, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Start() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:41)
+ 
+(Filename: C Line: 0)
+
+Done filling 0, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Update() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:49)
+ 
+(Filename: C Line: 0)
+
+Done filling 1, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Update() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:49)
+ 
+(Filename: C Line: 0)
+
+Done filling 0, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Update() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:49)
+ 
+(Filename: C Line: 0)
+
+Done filling 1, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Update() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:49)
+ 
+(Filename: C Line: 0)
+
+Done filling 0, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Update() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:49)
+ 
+(Filename: C Line: 0)
+
+Done filling 1, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Update() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:49)
+ 
+(Filename: C Line: 0)
+
+Done filling 0, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Update() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:49)
+ 
+(Filename: C Line: 0)
+
+Done filling 1, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Update() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:49)
+ 
+(Filename: C Line: 0)
+
+Done filling 0, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Update() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:49)
+ 
+(Filename: C Line: 0)
+
+Done filling 1, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Update() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:49)
+ 
+(Filename: C Line: 0)
+
+Done filling 0, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Update() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:49)
+ 
+(Filename: C Line: 0)
+
+Done filling 1, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Update() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:49)
+ 
+(Filename: C Line: 0)
+
+Done filling 0, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Update() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:49)
+ 
+(Filename: C Line: 0)
+
+Done filling 1, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Update() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:49)
+ 
+(Filename: C Line: 0)
+
+Done filling 0, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Update() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:49)
+ 
+(Filename: C Line: 0)
+
+Done filling 1, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Update() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:49)
+ 
+(Filename: C Line: 0)
+
+Done filling 0, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Update() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:49)
+ 
+(Filename: C Line: 0)
+
+Done filling 1, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Update() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:49)
+ 
+(Filename: C Line: 0)
+
+Done filling 0, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Update() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:49)
+ 
+(Filename: C Line: 0)
+
+Done filling 1, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Update() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:49)
+ 
+(Filename: C Line: 0)
+
+Done filling 0, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Update() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:49)
+ 
+(Filename: C Line: 0)
+
+Done filling 1, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Update() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:49)
+ 
+(Filename: C Line: 0)
+
+Done filling 0, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Update() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:49)
+ 
+(Filename: C Line: 0)
+
+Done filling 1, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Update() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:49)
+ 
+(Filename: C Line: 0)
+
+Done filling 0, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Update() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:49)
+ 
+(Filename: C Line: 0)
+
+Done filling 1, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Update() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:49)
+ 
+(Filename: C Line: 0)
+
+Done filling 0, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Update() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:49)
+ 
+(Filename: C Line: 0)
+
+Done filling 1, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Update() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:49)
+ 
+(Filename: C Line: 0)
+
+Done filling 0, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Update() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:49)
+ 
+(Filename: C Line: 0)
+
+Done filling 1, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Update() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:49)
+ 
+(Filename: C Line: 0)
+
+Done filling 0, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Update() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:49)
+ 
+(Filename: C Line: 0)
+
+Done filling 1, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Update() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:49)
+ 
+(Filename: C Line: 0)
+
+Done filling 0, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Update() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:49)
+ 
+(Filename: C Line: 0)
+
+Done filling 1, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Update() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:49)
+ 
+(Filename: C Line: 0)
+
+Done filling 0, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Update() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:49)
+ 
+(Filename: C Line: 0)
+
+Done filling 1, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Update() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:49)
+ 
+(Filename: C Line: 0)
+
+Done filling 0, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Update() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:49)
+ 
+(Filename: C Line: 0)
+
+Done filling 1, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Update() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:49)
+ 
+(Filename: C Line: 0)
+
+Done filling 0, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Update() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:49)
+ 
+(Filename: C Line: 0)
+
+Done filling 1, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Update() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:49)
+ 
+(Filename: C Line: 0)
+
+Done filling 0, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Update() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:49)
+ 
+(Filename: C Line: 0)
+
+Done filling 1, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Update() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:49)
+ 
+(Filename: C Line: 0)
+
+Done filling 0, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Update() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:49)
+ 
+(Filename: C Line: 0)
+
+Done filling 1, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Update() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:49)
+ 
+(Filename: C Line: 0)
+
+Done filling 0, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Update() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:49)
+ 
+(Filename: C Line: 0)
+
+Done filling 1, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Update() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:49)
+ 
+(Filename: C Line: 0)
+
+Done filling 0, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Update() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:49)
+ 
+(Filename: C Line: 0)
+
+Done filling 1, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Update() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:49)
+ 
+(Filename: C Line: 0)
+
+Done filling 0, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Update() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:49)
+ 
+(Filename: C Line: 0)
+
+Done filling 1, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Update() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:49)
+ 
+(Filename: C Line: 0)
+
+Done filling 0, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Update() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:49)
+ 
+(Filename: C Line: 0)
+
+Done filling 1, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Update() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:49)
+ 
+(Filename: C Line: 0)
+
+Done filling 0, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Update() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:49)
+ 
+(Filename: C Line: 0)
+
+Done filling 1, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Update() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:49)
+ 
+(Filename: C Line: 0)
+
+Done filling 0, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Update() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:49)
+ 
+(Filename: C Line: 0)
+
+Done filling 1, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Update() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:49)
+ 
+(Filename: C Line: 0)
+
+Done filling 0, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Update() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:49)
+ 
+(Filename: C Line: 0)
+
+Done filling 1, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Update() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:49)
+ 
+(Filename: C Line: 0)
+
+Done filling 0, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Update() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:49)
+ 
+(Filename: C Line: 0)
+
+Done filling 1, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Update() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:49)
+ 
+(Filename: C Line: 0)
+
+Done filling 0, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Update() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:49)
+ 
+(Filename: C Line: 0)
+
+Done filling 1, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Update() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:49)
+ 
+(Filename: C Line: 0)
+
+Done filling 0, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Update() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:49)
+ 
+(Filename: C Line: 0)
+
+Done filling 1, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Update() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:49)
+ 
+(Filename: C Line: 0)
+
+Done filling 0, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Update() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:49)
+ 
+(Filename: C Line: 0)
+
+Done filling 1, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Update() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:49)
+ 
+(Filename: C Line: 0)
+
+Done filling 0, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Update() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:49)
+ 
+(Filename: C Line: 0)
+
+Done filling 1, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Update() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:49)
+ 
+(Filename: C Line: 0)
+
+Done filling 0, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Update() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:49)
+ 
+(Filename: C Line: 0)
+
+Done filling 1, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Update() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:49)
+ 
+(Filename: C Line: 0)
+
+Done filling 0, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Update() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:49)
+ 
+(Filename: C Line: 0)
+
+Done filling 1, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Update() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:49)
+ 
+(Filename: C Line: 0)
+
+Done filling 0, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Update() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:49)
+ 
+(Filename: C Line: 0)
+
+Done filling 1, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Update() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:49)
+ 
+(Filename: C Line: 0)
+
+Done filling 0, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Update() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:49)
+ 
+(Filename: C Line: 0)
+
+Done filling 1, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Update() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:49)
+ 
+(Filename: C Line: 0)
+
+Done filling 0, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Update() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:49)
+ 
+(Filename: C Line: 0)
+
+Done filling 1, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Update() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:49)
+ 
+(Filename: C Line: 0)
+
+Done filling 0, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Update() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:49)
+ 
+(Filename: C Line: 0)
+
+Done filling 1, 2, 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelGridGenerator:FillMetavoxel(Int32, Int32, Int32) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:312)
+MetavoxelGridGenerator:FillMetavoxels() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:255)
+MetavoxelGridGenerator:Update() (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\MetavoxelGridGenerator.cs:49)
+ 
+(Filename: C Line: 0)
+
