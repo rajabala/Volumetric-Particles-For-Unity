@@ -1,0 +1,2160 @@
+Initialize engine version: 4.5.3f3 (fca41a4fabea)
+GfxDevice: creating device client; threaded=1
+Direct3D:
+    Version:  Direct3D 11.0 [level 11.0]
+    Renderer: Intel(R) HD Graphics Family (ID=0xa16)
+    Vendor:   Intel
+    VRAM:     0 MB
+Begin MonoManager ReloadAssembly
+Platform assembly: C:\Users\rbala1\Documents\Sparse Volumetric Particle System\RaveUnity_Data\Managed\UnityEngine.dll (this message is harmless)
+Loading C:\Users\rbala1\Documents\Sparse Volumetric Particle System\RaveUnity_Data\Managed\UnityEngine.dll into Unity Child Domain
+Platform assembly: C:\Users\rbala1\Documents\Sparse Volumetric Particle System\RaveUnity_Data\Managed\Assembly-CSharp.dll (this message is harmless)
+Loading C:\Users\rbala1\Documents\Sparse Volumetric Particle System\RaveUnity_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
+Platform assembly: C:\Users\rbala1\Documents\Sparse Volumetric Particle System\RaveUnity_Data\Managed\Assembly-UnityScript-firstpass.dll (this message is harmless)
+Loading C:\Users\rbala1\Documents\Sparse Volumetric Particle System\RaveUnity_Data\Managed\Assembly-UnityScript-firstpass.dll into Unity Child Domain
+- Completed reload, in  0.137 seconds
+<RI> Initializing input.
+<RI> Input initialized.
+desktop: 1920x1200 59Hz; virtual: 3840x1200 at 0,0
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+
+MV 000 : Particles covered = 2
+UnityEngine.Debug:Internal_Log(Int32, String, Object)
+UnityEngine.Debug:Log(Object)
+MetavoxelManager:FillMetavoxel(Int32, Int32, Int32, RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:295)
+MetavoxelManager:FillMetavoxels(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:256)
+MetavoxelManager:OnRenderImage(RenderTexture, RenderTexture) (at C:\Users\rbala1\Documents\Sparse Volumetric Particle System\Assets\Main Scene\MetavoxelManager.cs:97)
+ 
+(Filename: C Line: 0)
+

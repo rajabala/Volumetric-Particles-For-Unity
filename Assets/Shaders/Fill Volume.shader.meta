@@ -1,0 +1,8 @@
+fileFormatVersion: 2
+guid: fa08e66a0b50f7c48a965042a5e7298e
+ShaderImporter:
+  defaultTextures:
+  - _DisplacementTexture: {fileID: 8900000, guid: 58fa667d98a6d2c4ca34acb0ad6bb945,
+      type: 2}
+  - _RampTexture: {fileID: 2800000, guid: 4f812e38977347943b92138e13876fd5, type: 3}
+  userData: 
