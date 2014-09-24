@@ -3,6 +3,7 @@
 		_DisplacementTexture("Displaced sphere", Cube) = "white" {}
 		_RampTexture("Ramp Texture", 2D) = "" {}
 		_NumVoxels("Num voxels in metavoxel", Float) = 8
+		_InitLightIntensity("Init light intensity", Float) = 1.0
 	}
 	SubShader {
 		Pass{
@@ -28,12 +29,9 @@
 			int		mIndex;
 		};
 		
-		struct cbLight {
-		};
-
 		// UAVs
 		RWTexture3D<float4> volumeTex;
-		RWTexture2D<float4> lightPropogationTex;
+		RWTexture2D<float> lightPropogationTex;
 
 		// Buffers
 		StructuredBuffer<particle> _Particles;						
@@ -41,12 +39,13 @@
 		// Metavoxel uniforms
 		float4x4 _MetavoxelToWorld;	
 		float4x4 _WorldToLight;
-		float4 _MetavoxelIndex;
+		float3 _MetavoxelIndex;
+		float3 _MetavoxelGridDim;
 		float _NumVoxels; // metavoxel's voxel dimensions
 		int _NumParticles;
 
 		// Other uniforms
-		float _LightIntensity;
+		float _InitLightIntensity;
 
 		// helper methods
 		float4 get_voxel_world_pos(float2 svPos, float zSlice)
@@ -68,7 +67,17 @@
 		float4 frag(v2f_img i) : COLOR
 		{
 			int slice, pp;
-					
+
+			//// i.pos.xy represents the pixel position within the metavoxel grid facing the light.
+			//// convert to a [0, _NumVoxels] range for use within the metavoxel
+			//float2 svpos = i.pos.xy - float2(_MetavoxelIndex.x * _NumVoxels, _MetavoxelIndex.y * _NumVoxels);
+			float lightPassthrough;
+
+			if (_MetavoxelIndex.z == 0.0)
+				lightPassthrough = _InitLightIntensity;
+			else
+				lightPassthrough = lightPropogationTex[int2(i.pos.xy + _MetavoxelIndex.xy * _NumVoxels)];
+
 			float4 clearColor = float4(0.0f, 0.0f, 0.0, 0);
 			float4 voxelColor;
 			float4 particleColor;
@@ -78,6 +87,7 @@
 			// i.e., i.pos is already in "image space"
 			for (slice = 0; slice < _NumVoxels; slice++) {
 				voxelColor = clearColor;
+
 				for (pp = 0; pp < _NumParticles; pp++) {
 					float4 voxelWorldPos = get_voxel_world_pos(i.pos.xy, slice);
 					float3 vs = _Particles[pp].mWorldPos - voxelWorldPos;
@@ -86,7 +96,7 @@
 					float dSqVoxelSphere = dot(vs, vs);
 
 					// outer coverage test -- check if sphere's outer radius covers the voxel center
-					if (dSqVoxelSphere <= (_Particles[pp].mRadius * _Particles[pp].mRadius)) {						
+					if (dSqVoxelSphere <= (ro * ro)) {						
 						// use perlin noise to "displace" the sphere  [todo]
 
 						
@@ -108,7 +118,8 @@
 				
 							//Blend
 							voxelColor.rgb += max((1 - voxelColor.a), 0) * particleColor.rgb;
-							voxelColor.a += particleColor.a;							
+							voxelColor.a += particleColor.a;	
+							lightPassthrough -= particleColor.a;
 
 						} // actual coverage test
 
@@ -120,7 +131,7 @@
 
 			} // per slice
 
-			lightPropogationTex[int2(i.pos.xy + _MetavoxelIndex.xy * _NumVoxels)] = float4(1.0f, 0.0f, 1.0f, 1.0f);
+			lightPropogationTex[int2(i.pos.xy + _MetavoxelIndex.xy * _NumVoxels)] = lightPassthrough;
 			
 			discard;
 			return float4(1.0f, 0.0f, 1.0f, 1.0f);

@@ -178,15 +178,13 @@ public class MetavoxelManager : MonoBehaviour {
 
     void CreateLightPropogationUAV()
     {
-        lightPropogationUAV = new RenderTexture(numMetavoxelsX * numVoxelsInMetavoxel, numMetavoxelsY * numVoxelsInMetavoxel, 0 /* no need depth surface, just color*/, RenderTextureFormat.ARGB32);
+        lightPropogationUAV = new RenderTexture(numMetavoxelsX * numVoxelsInMetavoxel, numMetavoxelsY * numVoxelsInMetavoxel, 0 /* no need depth surface, just color*/, RenderTextureFormat.RFloat);
         lightPropogationUAV.generateMips = false;
         lightPropogationUAV.enableRandomWrite = true;
         lightPropogationUAV.Create();
 
-
-
         Graphics.SetRenderTarget(lightPropogationUAV);
-        GL.Clear(false, true, Color.blue);
+        GL.Clear(false, true, Color.red);
 
         testLightPlane.renderer.material.SetTexture("_Plane", lightPropogationUAV);
     }
@@ -319,7 +317,8 @@ public class MetavoxelManager : MonoBehaviour {
         matFillVolume.SetPass(0); 
         matFillVolume.SetFloat("_NumVoxels", numVoxelsInMetavoxel);
         matFillVolume.SetInt("_NumParticles", numParticles);
-        matFillVolume.SetVector("_MetavoxelIndex", new Vector4(xx, yy, zz, 1.0f));
+        matFillVolume.SetVector("_MetavoxelIndex", new Vector3(xx, yy, zz));
+        matFillVolume.SetVector("_MetavoxelGridDim", new Vector3(numMetavoxelsX, numMetavoxelsY, numMetavoxelsZ));
         matFillVolume.SetBuffer("_Particles", dpBuffer);
         matFillVolume.SetMatrix("_MetavoxelToWorld", Matrix4x4.TRS( mvGrid[zz, yy, xx].mPos, 
                                                                     mvGrid[zz, yy, xx].mRot,
