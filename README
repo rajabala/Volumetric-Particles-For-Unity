@@ -1,0 +1,28 @@
+The death of billboarded particles in photorealistic games is imminent.
+Most games provide the illusion of 3D particle systems via textured quads that face the 
+camera plane (or) the camera view direction. You move, and these quads move as well.
+
+This makes volumetric lighting and self-shadowing hard, and the illusion breaks down in
+virtual reality.
+
+This repo houses a work-in-progress Unity implementation of Doug Mcnabb's "Sparse 
+Volumetric Particle system". The gist of the idea is:
+(a) The world is a grid of metavoxels (a 3D cube of voxels) that face the light. Each
+	voxel of a metavoxel holds opacity/color information.
+(b) Particles are represented as displaced spheres, and each metavoxel holds information
+	on the particles it covers.
+(c) Metavoxels are "filled" in nearest to farthest order from the light, using a 3D
+	texture to hold voxel data, via a pixel (or) compute shader.
+(d) Metavoxels are rendered as cubes, and raymarched from the eye, with over (and)
+	under alpha-blending based on where the metavoxel is wrt the eye and the light.
+(e) The result of (d) is blended with the main scene, and voila, we have true-3D 
+	particles.
+	
+	
+TODO:
+(d) and (e)
+
+BUGS:
+1. The grid in (a) is centered at the origin. Needs to use view/light frustum to create it.
+
+ 
