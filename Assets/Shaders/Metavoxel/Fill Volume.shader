@@ -7,8 +7,9 @@
 	}
 	SubShader {
 		Pass{
-		Cull Off ZWrite Off ZTest Always // ZTest Always => Don't perform ZTest
+		Cull Off ZWrite Off ZTest Off
 		CGPROGRAM
+// Upgrade NOTE: excluded shader from DX11 and Xbox360; has structs without semantics (struct v2f members pos)	
 		#pragma target 5.0
 		#pragma exclude_renderers flash gles opengl
 		#pragma enable_d3d11_debug_symbols

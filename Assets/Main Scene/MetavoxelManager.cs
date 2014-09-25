@@ -35,6 +35,7 @@ public class MetavoxelManager : MonoBehaviour {
     public int updateInterval;
 
     public Material matFillVolume;
+    public Material matRayMarch;
     
     public GameObject testLightPlane;
     public GameObject testQuad;
@@ -46,15 +47,18 @@ public class MetavoxelManager : MonoBehaviour {
     private Transform[] particles;
 
     // Resources
-    public  RenderTexture rtCam; // bind this as RT for this cam. we don't sample/use it though..
+    private RenderTexture lightPropogationUAV;
+    private  RenderTexture rtCam; // bind this as RT for this cam. we don't sample/use it though..
     private RenderTexture[, ,] mvFillTextures; 
-    public  RenderTexture lightPropogationUAV;
 
     // temp prototyping stuff
     private Vector3 mvScale;
     private List<GameObject> mvQuads;
     private GameObject quadDaddy;
     private bool renderQuads;
+    private Mesh cubeMesh;
+    public Vector3[] cubeVertices;
+    public Vector2[] cubeUVs;
 
 	
 	void Start () {        
@@ -100,7 +104,7 @@ public class MetavoxelManager : MonoBehaviour {
             FillMetavoxels(src, dst);
 
             if (renderQuads)
-                RenderMetavoxelsAsQuads();
+                CreateMetavoxelQuads();
             else
                 DestroyMetavoxelQuads();
 
@@ -141,6 +145,28 @@ public class MetavoxelManager : MonoBehaviour {
         quadDaddy = new GameObject("quadDaddy");
         quadDaddy.transform.position = Vector3.zero;
         quadDaddy.transform.rotation = Quaternion.identity;
+
+        cubeMesh = new Mesh();
+        cubeMesh.vertices = cubeVertices;
+        cubeMesh.uv = cubeUVs;
+        cubeMesh.triangles = new int[] {// back (make it ccw?)
+                                        0, 1, 2,
+                                        0, 2, 3,
+                                        // front,
+                                        4, 5, 6,
+                                        4, 6, 7,
+                                        // left
+                                        0, 1, 5,
+                                        0, 5, 4,
+                                        // right
+                                        7, 6, 2,
+                                        7, 2, 3,
+                                        // top
+                                        5, 1, 2,
+                                        5, 2, 6,
+                                        // bot
+                                        4, 0, 3, 
+                                        4, 3, 7};
     }
 
 
@@ -307,7 +333,7 @@ public class MetavoxelManager : MonoBehaviour {
             index++;
         }
 
-        Debug.Log("MV " + xx + yy + zz + " : Particles covered = " + mvGrid[zz, yy, xx].mParticlesCovered.Count);
+        //Debug.Log("MV " + xx + yy + zz + " : Particles covered = " + mvGrid[zz, yy, xx].mParticlesCovered.Count);
 
         ComputeBuffer dpBuffer = new ComputeBuffer(numParticles,
                                                    Marshal.SizeOf(dpArray[0]));
@@ -323,15 +349,6 @@ public class MetavoxelManager : MonoBehaviour {
         matFillVolume.SetMatrix("_MetavoxelToWorld", Matrix4x4.TRS( mvGrid[zz, yy, xx].mPos, 
                                                                     mvGrid[zz, yy, xx].mRot,
                                                                     mvScale));
-        // test--
-        Matrix4x4 trs = Matrix4x4.TRS(mvGrid[zz, yy, xx].mPos,
-                                                                    mvGrid[zz, yy, xx].mRot,
-                                                                    mvScale);
-
-        Vector3 wPosCorner1 = trs.MultiplyPoint(new Vector4(-0.5f, -0.5f, -0.5f));
-        Vector3 wPosCorner2 = trs.MultiplyPoint(new Vector4(0.5f, 0.5f, -0.5f));
-
-
         // end test--
         Graphics.Blit(src, src, matFillVolume);
 
@@ -341,13 +358,46 @@ public class MetavoxelManager : MonoBehaviour {
         Graphics.ClearRandomWriteTargets();
     }
 
-
-    void RenderMetavoxels()
+    // The ray march step uses alpha blending and imposes order requirements
+    void SortMetavoxelSlicesFromEye()
     {
 
     }
 
-    void RenderMetavoxelsAsQuads()
+    // Submit a cube from the perspective of the main camera
+    // This function is called 
+    public void RenderMetavoxels()
+    {
+        matRayMarch.SetPass(0);
+        matRayMarch.SetTexture("_LightPropogationTexture", lightPropogationUAV);
+        matRayMarch.SetFloat("_NumVoxels", numVoxelsInMetavoxel);
+       
+        for (int zz = 0; zz < numMetavoxelsZ; zz++)
+        {
+            for (int yy = 0; yy < numMetavoxelsY; yy++)
+            {
+                for (int xx = 0; xx < numMetavoxelsX; xx++)
+                {
+                    if (mvGrid[zz, yy, xx].mCovered)
+                    {
+                        matRayMarch.SetTexture("_VolumeTexture", mvFillTextures[zz, yy, xx]);
+                        matRayMarch.SetMatrix("_MetavoxelToWorld", Matrix4x4.TRS(mvGrid[zz, yy, xx].mPos, 
+                                                                             mvGrid[zz, yy, xx].mRot,
+                                                                             mvScale));
+
+                        Graphics.DrawMeshNow(cubeMesh, Vector3.zero, Quaternion.identity);
+                    }
+
+                }
+            }
+        }
+    }
+
+    // Called from Maincamera.OnRenderImage()
+    // Cheap hack to check if fill volume is working. It doesn't "render" the quads as such.
+    // Only instantiates them. Since this camera doesn't "see" anything (via cullmask), it
+    // ends up being rendered by the main camera.
+    void CreateMetavoxelQuads()
     {
         // Draw a bunch of alpha blended quads that're textured with the voxel's 3D fill info
         for (int zz = 0; zz < numMetavoxelsZ; zz++)
