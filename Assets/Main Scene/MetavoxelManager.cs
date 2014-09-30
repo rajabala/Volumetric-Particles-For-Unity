@@ -148,8 +148,8 @@ public class MetavoxelManager : MonoBehaviour {
         cubeMesh.vertices = cubeVertices;
         cubeMesh.uv = cubeUVs;
         cubeMesh.triangles = new int[] {// back (make it ccw?)
-                                        0, 1, 2,
-                                        0, 2, 3,
+                                        3, 2, 1,
+                                        3, 1, 0,
                                         // front,
                                         4, 5, 6,
                                         4, 6, 7,
@@ -163,8 +163,8 @@ public class MetavoxelManager : MonoBehaviour {
                                         5, 1, 2,
                                         5, 2, 6,
                                         // bot
-                                        4, 0, 3, 
-                                        4, 3, 7};
+                                        0, 4, 7, 
+                                        0, 7, 3};
     }
 
 
@@ -366,9 +366,7 @@ public class MetavoxelManager : MonoBehaviour {
     // This function is called 
     public void RenderMetavoxels()
     {
-        matRayMarch.SetPass(0);
-        matRayMarch.SetTexture("_LightPropogationTexture", lightPropogationUAV);
-        matRayMarch.SetFloat("_NumVoxels", numVoxelsInMetavoxel);
+
        
         for (int zz = 0; zz < numMetavoxelsZ; zz++)
         {
@@ -378,17 +376,26 @@ public class MetavoxelManager : MonoBehaviour {
                 {
                     if (mvGrid[zz, yy, xx].mCovered)
                     {
+                        bool setPass = matRayMarch.SetPass(0); // [eureka] should be done for every drawmeshnow call apparently..!
+                        if (!setPass)
+                        {
+                            Debug.LogError("material set pass returned false;..");
+                        }
+
+                        matRayMarch.SetTexture("_LightPropogationTexture", lightPropogationUAV);
+                        matRayMarch.SetFloat("_NumVoxels", numVoxelsInMetavoxel);
+
+                        //Debug.Log("rendering mv " + xx + "," + yy +"," + zz);
                         matRayMarch.SetTexture("_VolumeTexture", mvFillTextures[zz, yy, xx]);
-                        //matRayMarch.SetMatrix("_MetavoxelToWorld", Matrix4x4.TRS(mvGrid[zz, yy, xx].mPos, 
-                        //                                                     mvGrid[zz, yy, xx].mRot,
-                        //                                                     mvScale));
-                        matRayMarch.SetMatrix("_MetavoxelToWorld", Matrix4x4.TRS(Vector3.zero,
-                                                                                Quaternion.identity,
-                                                                                mvScale));
-                        matRayMarch.SetMatrix("_WorldToMainCamera", Camera.main.worldToCameraMatrix);
+                        matRayMarch.SetMatrix("_MetavoxelToWorld", Matrix4x4.TRS(mvGrid[zz, yy, xx].mPos, 
+                                                                             mvGrid[zz, yy, xx].mRot,
+                                                                             mvScale ));
+
+                        matRayMarch.SetMatrix("_WorldToMainCamera", Camera.main.worldToCameraMatrix);           
                         matRayMarch.SetMatrix("_Projection", Camera.main.projectionMatrix);
                         matRayMarch.SetVector("_MetavoxelIndex", new Vector3(xx, yy, zz));
-                        Graphics.DrawMeshNow(cubeMesh, mvGrid[zz, yy, xx].mPos, mvGrid[zz, yy, xx].mRot);
+                        
+                        Graphics.DrawMeshNow(cubeMesh, Vector3.zero, Quaternion.identity);
                     }
 
                 }

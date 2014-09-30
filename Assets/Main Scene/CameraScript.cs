@@ -48,8 +48,8 @@ public class CameraScript : MonoBehaviour {
         RenderTexture.active = rayMarchRT;
         GL.Clear(false, true, new Color(0f,0f,0f,0f));
 
-        RenderTexture.active = mainSceneRT;
-        GL.Clear(true, true, Color.black);
+        //RenderTexture.active = mainSceneRT;
+        //GL.Clear(true, true, Color.black);
         camera.targetTexture = mainSceneRT;
     }
 
@@ -76,6 +76,10 @@ public class CameraScript : MonoBehaviour {
         Graphics.Blit(mainSceneRT, null as RenderTexture);
     }
 
+    //void OnRenderImage(RenderTexture src, RenderTexture dst)
+    //{
+
+    //}
 
     void OnGUI()
     {

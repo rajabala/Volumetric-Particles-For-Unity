@@ -9,7 +9,7 @@
 			//Tags {"Queue" = "Geometry"}
 			Pass
 			{
-				Cull Off ZWrite Off ZTest Less
+				//Cull Off ZWrite Off ZTest Always
 				CGPROGRAM				
 #pragma target 5.0
 #pragma exclude_renderers flash gles opengl
@@ -37,8 +37,8 @@
 
 				v2f vert(appdata_base i) {
 					// transform metavoxel from model -> world -> eye -> proj space
-					v2f o;
-					o.pos = mul(i.vertex, _MetavoxelToWorld * _WorldToMainCamera * _Projection);
+					v2f o;								
+					o.pos = mul( mul( UNITY_MATRIX_VP , _MetavoxelToWorld), i.vertex);
 					return o;
 				}
 
@@ -60,8 +60,8 @@
 				// [todo] this can be parallelized.
 				float4 frag(v2f i) : COLOR
 				{
-					return float4(0.5f, 0.5f, 0.0f, 1.0f);
-					return float4(_MetavoxelIndex.xyz * 0.8f, 0.7f);
+				//	return float4(1.0f, 1.0f, 1.0f, 1.0f);
+					return float4(_MetavoxelIndex.xyz * 0.3f, 0.7f);
 				}
 					
 				ENDCG
