@@ -6,9 +6,10 @@
 		}
 		SubShader
 		{
+			//Tags {"Queue" = "Geometry"}
 			Pass
 			{
-				Cull Off ZWrite Off ZTest Always
+				Cull Off ZWrite Off ZTest Less
 				CGPROGRAM				
 #pragma target 5.0
 #pragma exclude_renderers flash gles opengl
@@ -23,7 +24,8 @@
 
 				// Metavoxel uniforms
 				float4x4 _MetavoxelToWorld;
-				float4x4 _WorldToLight;
+				float4x4 _WorldToMainCamera;
+				float4x4 _Projection;
 				float3 _MetavoxelIndex;
 				float3 _MetavoxelGridDim;
 				float _NumVoxels; // metavoxel's voxel dimensions
@@ -36,7 +38,7 @@
 				v2f vert(appdata_base i) {
 					// transform metavoxel from model -> world -> eye -> proj space
 					v2f o;
-					o.pos = i.vertex;
+					o.pos = mul(i.vertex, _MetavoxelToWorld * _WorldToMainCamera * _Projection);
 					return o;
 				}
 
@@ -58,8 +60,8 @@
 				// [todo] this can be parallelized.
 				float4 frag(v2f i) : COLOR
 				{
-					
-					return float4(1.0f, 0.0f, 1.0f, 1.0f);
+					return float4(0.5f, 0.5f, 0.0f, 1.0f);
+					return float4(_MetavoxelIndex.xyz * 0.8f, 0.7f);
 				}
 					
 				ENDCG

@@ -5,8 +5,9 @@ public class CameraScript : MonoBehaviour {
     public Light[] mLights;
     public float cameraSpeed;
     public Material matDepthBlend;
-    //public RenderTexture mainSceneRT;
+    public RenderTexture mainSceneRT;
     public RenderTexture rayMarchRT;
+    public Camera theCam;
 
     private bool moveLight;
     private bool drawMetavoxelGrid;
@@ -23,9 +24,7 @@ public class CameraScript : MonoBehaviour {
             mvMgrs[ii++] = l.GetComponentInChildren<MetavoxelManager>();
         }
 
-        CreateResources();
-
-        //camera.depthTextureMode = DepthTextureMode.Depth;
+        CreateResources();        
     }
 	
 	// Update is called once per frame
@@ -33,40 +32,48 @@ public class CameraScript : MonoBehaviour {
         ProcessInput();        
 	}
 
-    // Order of event calls in unity: file:///C:/Program%20Files%20(x86)/Unity/Editor/Data/Documentation/html/en/Manual/ExecutionOrder.html
-    // [Render objects in scene] -> [OnRenderObject] -> [OnPostRender] -> [OnRenderImage]
-    // OnRenderObject is called after camera has rendered the scene.
-    // This can be used to render your own objects using Graphics.DrawMeshNow or other functions.
-    // This function is similar to OnPostRender, except OnRenderObject is called on any object that has a script with the function; no matter if it's attached to a Camera or not.
+    //Order of event calls in unity: file:///C:/Program%20Files%20(x86)/Unity/Editor/Data/Documentation/html/en/Manual/ExecutionOrder.html
+    //[Render objects in scene] -> [OnRenderObject] -> [OnPostRender] -> [OnRenderImage]
+     
+    //OnRenderObject is called after camera has rendered the scene.
+    //This can be used to render your own objects using Graphics.DrawMeshNow or other functions.
+    //This function is similar to OnPostRender, except OnRenderObject is called on any object that has a script with the function; no matter if it's attached to a Camera or not.
     //void OnRenderObject()
     //{
-    //    // Use the camera's existing depth buffer to depth-test the particles, while
-    //    // writing the ray marched volume into a separate color buffer that's blended
-    //    // with the main scene in OnRenderImage(..)
 
-    //    Graphics.SetRenderTarget(rayMarchRT.colorBuffer, camera.targetTexture.depthBuffer);
-      
-    //    foreach (MetavoxelManager mgr in mvMgrs)
-    //        mgr.RenderMetavoxels();
     //}
 
-    // OnPostRender is called after a camera has finished rendering the scene.
+    void OnPreRender()
+    {
+        RenderTexture.active = rayMarchRT;
+        GL.Clear(false, true, new Color(0f,0f,0f,0f));
+
+        RenderTexture.active = mainSceneRT;
+        GL.Clear(true, true, Color.black);
+        camera.targetTexture = mainSceneRT;
+    }
+
+    //// OnPostRender is called after a camera has finished rendering the scene.
     void OnPostRender()
     {
+        // Use the camera's existing depth buffer to depth-test the particles, while
+        // writing the ray marched volume into a separate color buffer that's blended
+        // with the main scene in OnRenderImage(..)
+
+        Graphics.SetRenderTarget(rayMarchRT.colorBuffer, mainSceneRT.depthBuffer);
+        foreach (MetavoxelManager mgr in mvMgrs)
+            mgr.RenderMetavoxels();
+
+        Graphics.Blit(rayMarchRT, mainSceneRT, matDepthBlend);
+
         if (drawMetavoxelGrid)
         {
             foreach (MetavoxelManager mgr in mvMgrs)
                 mgr.DrawMetavoxelGrid();
         }
-    }
 
-
-    void OnRenderImage(RenderTexture src, RenderTexture dst)
-    {
-        //Graphics.SetRenderTarget(mainSceneRT);
-        // blend the volume ray march RT with the main scene's (no depth test required)       
-        // Graphics.Blit(rayMarchTexture, src, matDepthBlend);
-        Graphics.Blit(src, dst);
+        camera.targetTexture = null;
+        Graphics.Blit(mainSceneRT, null as RenderTexture);
     }
 
 
@@ -85,21 +92,17 @@ public class CameraScript : MonoBehaviour {
             rayMarchRT.isVolume = false;
             rayMarchRT.enableRandomWrite = false;
             rayMarchRT.Create();
-            Graphics.SetRenderTarget(rayMarchRT);
-            GL.Clear(false, true, new Color(0.3f, 0.0f, 0.0f, 0.6f));
         }
 
-        //if (!mainSceneRT)
-        //{
-        //    mainSceneRT = new RenderTexture(Screen.width, Screen.height, 0, RenderTextureFormat.ARGB32);
-        //    mainSceneRT.useMipMap = false;
-        //    mainSceneRT.isVolume = false;
-        //    mainSceneRT.enableRandomWrite = false;
-        //    mainSceneRT.Create();
-        //    camera.targetTexture = mainSceneRT;
-        //    Graphics.SetRenderTarget(mainSceneRT);
-        //    GL.Clear(true, true, Color.black);
-        //}
+        if (!mainSceneRT)
+        {
+            mainSceneRT = new RenderTexture(Screen.width, Screen.height, 0, RenderTextureFormat.ARGB32);
+            mainSceneRT.useMipMap = false;
+            mainSceneRT.isVolume = false;
+            mainSceneRT.enableRandomWrite = false;
+            mainSceneRT.Create();
+            camera.targetTexture = mainSceneRT;
+        }
     }
 
 

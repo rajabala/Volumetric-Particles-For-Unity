@@ -107,8 +107,6 @@ public class MetavoxelManager : MonoBehaviour {
                 CreateMetavoxelQuads();
             else
                 DestroyMetavoxelQuads();
-
-            RenderMetavoxels(); //[todo]
         }
         
     }
@@ -116,7 +114,7 @@ public class MetavoxelManager : MonoBehaviour {
 
     void OnGUI()
     {
-        renderQuads = GUI.Toggle(new Rect(25, 50, 100, 30), renderQuads, "Render metavoxels as quads");
+        renderQuads = GUI.Toggle(new Rect(25, 50, 200, 30), renderQuads, "Render metavoxels as quads");
     }
 
 
@@ -381,11 +379,16 @@ public class MetavoxelManager : MonoBehaviour {
                     if (mvGrid[zz, yy, xx].mCovered)
                     {
                         matRayMarch.SetTexture("_VolumeTexture", mvFillTextures[zz, yy, xx]);
-                        matRayMarch.SetMatrix("_MetavoxelToWorld", Matrix4x4.TRS(mvGrid[zz, yy, xx].mPos, 
-                                                                             mvGrid[zz, yy, xx].mRot,
-                                                                             mvScale));
-
-                        Graphics.DrawMeshNow(cubeMesh, Vector3.zero, Quaternion.identity);
+                        //matRayMarch.SetMatrix("_MetavoxelToWorld", Matrix4x4.TRS(mvGrid[zz, yy, xx].mPos, 
+                        //                                                     mvGrid[zz, yy, xx].mRot,
+                        //                                                     mvScale));
+                        matRayMarch.SetMatrix("_MetavoxelToWorld", Matrix4x4.TRS(Vector3.zero,
+                                                                                Quaternion.identity,
+                                                                                mvScale));
+                        matRayMarch.SetMatrix("_WorldToMainCamera", Camera.main.worldToCameraMatrix);
+                        matRayMarch.SetMatrix("_Projection", Camera.main.projectionMatrix);
+                        matRayMarch.SetVector("_MetavoxelIndex", new Vector3(xx, yy, zz));
+                        Graphics.DrawMeshNow(cubeMesh, mvGrid[zz, yy, xx].mPos, mvGrid[zz, yy, xx].mRot);
                     }
 
                 }
@@ -399,6 +402,8 @@ public class MetavoxelManager : MonoBehaviour {
     // ends up being rendered by the main camera.
     void CreateMetavoxelQuads()
     {
+        DestroyMetavoxelQuads();
+
         // Draw a bunch of alpha blended quads that're textured with the voxel's 3D fill info
         for (int zz = 0; zz < numMetavoxelsZ; zz++)
         {
