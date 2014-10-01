@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEditor;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
@@ -534,8 +535,79 @@ public class MetavoxelManager : MonoBehaviour {
             GL.Vertex3(v.x, v.y, v.z);
         }
         GL.End();
+
+
     }
 
+
+    void OnDrawGizmos()
+    {
+        for (int zz = 0; zz < numMetavoxelsZ; zz++)
+        {
+            for (int yy = 0; yy < numMetavoxelsY; yy++)
+            {
+                for (int xx = 0; xx < numMetavoxelsX; xx++)
+                {
+                    List<Vector3> points = new List<Vector3>();
+
+                    Vector3 wsPosBeforeRotation = new Vector3((xx - numMetavoxelsX / 2) * mvSizeX,
+                                                  (yy - numMetavoxelsY / 2) * mvSizeY,
+                                                  (zz - numMetavoxelsZ / 2) * mvSizeZ);
+
+
+                    Quaternion q = new Quaternion();
+                    q.SetLookRotation(-transform.forward, transform.up);
+
+                    Vector3 mvPos = q * wsPosBeforeRotation;
+
+
+                    // back, front --> Z ; top, bot --> Y ; left, right --> X
+                    Vector3 offBotLeftBack = q * new Vector3(-mvSizeX * 0.5f, -mvSizeY * 0.5f, -mvSizeZ * 0.5f),
+                            offBotLeftFront = q * new Vector3(-mvSizeX * 0.5f, -mvSizeY * 0.5f, mvSizeZ * 0.5f),
+                            offTopLeftBack = q * new Vector3(-mvSizeX * 0.5f, mvSizeY * 0.5f, -mvSizeZ * 0.5f),
+                            offTopLeftFront = q * new Vector3(-mvSizeX * 0.5f, mvSizeY * 0.5f, mvSizeZ * 0.5f),
+                            offBotRightBack = q * new Vector3(mvSizeX * 0.5f, -mvSizeY * 0.5f, -mvSizeZ * 0.5f),
+                            offBotRightFront = q * new Vector3(mvSizeX * 0.5f, -mvSizeY * 0.5f, mvSizeZ * 0.5f),
+                            offTopRightBack = q * new Vector3(mvSizeX * 0.5f, mvSizeY * 0.5f, -mvSizeZ * 0.5f),
+                            offTopRightFront = q * new Vector3(mvSizeX * 0.5f, mvSizeY * 0.5f, mvSizeZ * 0.5f);
+
+                    // left 
+                    points.Add(mvPos + offBotLeftBack);
+                    points.Add(mvPos + offBotLeftFront);
+                    points.Add(mvPos + offBotLeftFront);
+                    points.Add(mvPos + offTopLeftFront);
+                    points.Add(mvPos + offTopLeftFront);
+                    points.Add(mvPos + offTopLeftBack);
+                    points.Add(mvPos + offTopLeftBack);
+                    points.Add(mvPos + offBotLeftBack);
+                    // right
+                    points.Add(mvPos + offBotRightBack);
+                    points.Add(mvPos + offBotRightFront);
+                    points.Add(mvPos + offBotRightFront);
+                    points.Add(mvPos + offTopRightFront);
+                    points.Add(mvPos + offTopRightFront);
+                    points.Add(mvPos + offTopRightBack);
+                    points.Add(mvPos + offTopRightBack);
+                    points.Add(mvPos + offBotRightBack);
+                    // join left and right
+                    points.Add(mvPos + offTopLeftBack);
+                    points.Add(mvPos + offTopRightBack);
+                    points.Add(mvPos + offTopLeftFront);
+                    points.Add(mvPos + offTopRightFront);
+
+                    points.Add(mvPos + offBotLeftBack);
+                    points.Add(mvPos + offBotRightBack);
+                    points.Add(mvPos + offBotLeftFront);
+                    points.Add(mvPos + offBotRightFront);
+
+                    for (int ii = 0; ii < points.Count; ii += 2)
+                    {
+                        Gizmos.DrawLine(points[ii], points[ii + 1]);
+                    }
+                }
+            }
+        }
+    }
 
 
     void SaveFillTexture(int xx, int yy, int zz)

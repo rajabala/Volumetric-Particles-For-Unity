@@ -104,8 +104,9 @@
 					mvRayPos += mvRayDir * (_MetavoxelSize.x / _NumSteps);
 					// convert from mv space to sampling space, i.e., [-mvSize/2, mvSize/2] -> [0,1]
 					float3 samplePos = (mvRayPos + _MetavoxelSize)/(2 * _MetavoxelSize);
-					finalColor += tex3D(_VolumeTexture, samplePos); // [todo] is addition the best "combine" operation for each ray step color?
-
+					float4 sampleColor = tex3D(_VolumeTexture, samplePos); // [todo] is addition the best "combine" operation for each ray step color?
+					finalColor.a += sampleColor.a;
+					finalColor.rgb = max(finalColor.rgb, sampleColor.rgb);
 					
 
 				}

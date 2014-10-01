@@ -11,12 +11,14 @@ public class CameraScript : MonoBehaviour {
 
     private bool moveLight;
     private bool drawMetavoxelGrid;
+    private bool rayMarchVoxels;
     private MetavoxelManager[] mvMgrs;
 
     // Use this for initialization
 	void Start () {
         moveLight = false;
         drawMetavoxelGrid = false;
+        rayMarchVoxels = false;
 
         mvMgrs = new MetavoxelManager[mLights.Length];
         int ii = 0;
@@ -61,8 +63,12 @@ public class CameraScript : MonoBehaviour {
         // with the main scene in OnRenderImage(..)
 
         Graphics.SetRenderTarget(rayMarchRT.colorBuffer, mainSceneRT.depthBuffer);
-        foreach (MetavoxelManager mgr in mvMgrs)
-            mgr.RenderMetavoxels();
+
+        if (rayMarchVoxels)
+        {
+            foreach (MetavoxelManager mgr in mvMgrs)
+                mgr.RenderMetavoxels();
+        }
 
         Graphics.Blit(rayMarchRT, mainSceneRT, matDepthBlend);
 
@@ -84,6 +90,7 @@ public class CameraScript : MonoBehaviour {
     void OnGUI()
     {
         drawMetavoxelGrid = GUI.Toggle(new Rect(25, 25, 100, 30), drawMetavoxelGrid, "Show mv grid");
+        rayMarchVoxels = GUI.Toggle(new Rect(25, 75, 150, 30), rayMarchVoxels, "Ray march voxels");
     }
 
     // ---- private methods ----------------

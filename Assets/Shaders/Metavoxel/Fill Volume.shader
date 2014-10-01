@@ -117,8 +117,10 @@
 							particleColor.a = 1.0; // cubeColor.x;
 				
 							//Blend
-							voxelColor.rgb += max((1 - voxelColor.a), 0) * particleColor.rgb;
-							voxelColor.a += particleColor.a;	
+							/*voxelColor.rgb += max((1 - voxelColor.a), 0) * particleColor.rgb;
+							voxelColor.a += particleColor.a;	*/
+							voxelColor.rgb = max(voxelColor.rgb, particleColor.rgb);
+							voxelColor.a += particleColor.a;
 							lightPassthrough -= particleColor.a;
 
 						} // actual coverage test
