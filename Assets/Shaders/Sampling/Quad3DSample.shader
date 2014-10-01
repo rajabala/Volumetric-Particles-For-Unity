@@ -43,7 +43,7 @@ Shader "Custom/Quad Sample 3D Texture" {
 			float4 frag(ps_input i) : COLOR
 			{
 				//return fixed4(0.6f, 0.60f, 0.0f, 1.0f);
-				return tex3D(_Volume, float3(i.uv, _Slice / (float) _NumVoxels));
+				return tex3D(_Volume, float3(i.uv, _Slice / (float) _NumVoxels)); // texture coordinates are normalized i.e, [0..1]
 			}
 
 				ENDCG

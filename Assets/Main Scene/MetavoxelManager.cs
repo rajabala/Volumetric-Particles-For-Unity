@@ -366,8 +366,23 @@ public class MetavoxelManager : MonoBehaviour {
     // This function is called 
     public void RenderMetavoxels()
     {
+        // Resources
+        matRayMarch.SetTexture("_LightPropogationTexture", lightPropogationUAV);
 
-       
+        // Metavoxel grid uniforms
+        matRayMarch.SetFloat("_NumVoxels", numVoxelsInMetavoxel);
+
+        // Camera uniforms
+        matRayMarch.SetVector("_CameraWorldPos", Camera.main.transform.position);
+        matRayMarch.SetFloat("_Fov", Camera.main.fieldOfView);
+        matRayMarch.SetFloat("_Near", Camera.main.nearClipPlane);
+        matRayMarch.SetFloat("_Far", Camera.main.farClipPlane);
+        matRayMarch.SetVector("_ScreenRes", new Vector2(Screen.currentResolution.width,
+                                                        Screen.currentResolution.height));
+        // Ray march uniforms
+        matRayMarch.SetInt("_NumSteps", 10);
+
+
         for (int zz = 0; zz < numMetavoxelsZ; zz++)
         {
             for (int yy = 0; yy < numMetavoxelsY; yy++)
@@ -382,18 +397,15 @@ public class MetavoxelManager : MonoBehaviour {
                             Debug.LogError("material set pass returned false;..");
                         }
 
-                        matRayMarch.SetTexture("_LightPropogationTexture", lightPropogationUAV);
-                        matRayMarch.SetFloat("_NumVoxels", numVoxelsInMetavoxel);
-
                         //Debug.Log("rendering mv " + xx + "," + yy +"," + zz);
                         matRayMarch.SetTexture("_VolumeTexture", mvFillTextures[zz, yy, xx]);
-                        matRayMarch.SetMatrix("_MetavoxelToWorld", Matrix4x4.TRS(mvGrid[zz, yy, xx].mPos, 
-                                                                             mvGrid[zz, yy, xx].mRot,
-                                                                             mvScale ));
-
-                        matRayMarch.SetMatrix("_WorldToMainCamera", Camera.main.worldToCameraMatrix);           
-                        matRayMarch.SetMatrix("_Projection", Camera.main.projectionMatrix);
+                        Matrix4x4 mvToWorld = Matrix4x4.TRS(mvGrid[zz, yy, xx].mPos, 
+                                                            mvGrid[zz, yy, xx].mRot,
+                                                            mvScale );
+                        matRayMarch.SetMatrix("_MetavoxelToWorld", mvToWorld);
+                        matRayMarch.SetMatrix("_WorldToMetavoxel", mvToWorld.inverse);   
                         matRayMarch.SetVector("_MetavoxelIndex", new Vector3(xx, yy, zz));
+                        matRayMarch.SetVector("_MetavoxelSize", mvScale);
                         
                         Graphics.DrawMeshNow(cubeMesh, Vector3.zero, Quaternion.identity);
                     }
