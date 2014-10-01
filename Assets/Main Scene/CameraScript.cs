@@ -17,8 +17,8 @@ public class CameraScript : MonoBehaviour {
     // Use this for initialization
 	void Start () {
         moveLight = false;
-        drawMetavoxelGrid = false;
-        rayMarchVoxels = false;
+        drawMetavoxelGrid = true;
+        rayMarchVoxels = true;
 
         mvMgrs = new MetavoxelManager[mLights.Length];
         int ii = 0;
