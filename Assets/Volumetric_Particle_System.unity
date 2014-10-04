@@ -416,7 +416,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1212396186}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.91380143, y: 0, z: -4.02854633}
+  m_LocalPosition: {x: 10.0145111, y: 0, z: -4.02854633}
   m_LocalScale: {x: 2.35504174, y: 2.35504127, z: 2.35504127}
   m_Children: []
   m_Father: {fileID: 0}
@@ -549,7 +549,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1569223725}
   m_LocalRotation: {x: .707106829, y: 0, z: 0, w: .707106829}
-  m_LocalPosition: {x: 0, y: 13.3325663, z: 1.79035306}
+  m_LocalPosition: {x: 0, y: 21.1307774, z: 1.79035401}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1773395101}
@@ -628,9 +628,9 @@ MonoBehaviour:
   mvSizeX: 2
   mvSizeY: 2
   mvSizeZ: 2
-  numMetavoxelsX: 3
-  numMetavoxelsY: 3
-  numMetavoxelsZ: 3
+  numMetavoxelsX: 2
+  numMetavoxelsY: 2
+  numMetavoxelsZ: 2
   numVoxelsInMetavoxel: 16
   updateInterval: 2
   matFillVolume: {fileID: 2100000, guid: 742e800cae20c4547bc14935a578e998, type: 2}
@@ -907,7 +907,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1982426422}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.21286964, y: 2.4555459, z: -4.72323052e-08}
+  m_LocalPosition: {x: 2.21286964, y: .122477055, z: -4.72323052e-08}
   m_LocalScale: {x: 1.41412044, y: 1.41412055, z: 1.41412055}
   m_Children: []
   m_Father: {fileID: 2032660676}
@@ -1007,6 +1007,7 @@ MonoBehaviour:
   mainSceneRT: {fileID: 0}
   rayMarchRT: {fileID: 0}
   theCam: {fileID: 0}
+  camMoveSpeed: 25
 --- !u!1 &2020046264
 GameObject:
   m_ObjectHideFlags: 0

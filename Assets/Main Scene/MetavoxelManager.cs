@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
+#if UNITY_EDITOR 
 using UnityEditor;
+#endif
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
@@ -25,6 +27,21 @@ public struct DisplacedParticle
     public int mIndex;
 }
 
+
+// Compare used for sorting metavoxels from the eye: sorts greater distance to closer
+public class MvDistComparer : IComparer<Vector3>
+{
+    public int Compare(Vector3 x, Vector3 y)
+    {
+        if (x == null || y == null)
+            return 0;
+
+        if (x.z > y.z)
+            return 1;
+       
+        return -1;
+    }
+}
 [RequireComponent(typeof(Camera))] // needs to be attached to a game object that has a camera component
 
 // Class that creates, updates, fills and renders a sparse metavoxel grid
@@ -50,13 +67,15 @@ public class MetavoxelManager : MonoBehaviour {
     // Resources
     private RenderTexture lightPropogationUAV;
     private  RenderTexture rtCam; // bind this as RT for this cam. we don't sample/use it though..
-    private RenderTexture[, ,] mvFillTextures; 
+    private RenderTexture[, ,] mvFillTextures;
 
+    private List<Vector3> sortedMVSliceFromEye;
     // temp prototyping stuff
     private Vector3 mvScale;
     private List<GameObject> mvQuads;
     private GameObject quadDaddy;
     private bool renderQuads;
+    private bool showPrettyColors;
     private Mesh cubeMesh;
     public Vector3[] cubeVertices;
     public Vector2[] cubeUVs;
@@ -83,8 +102,10 @@ public class MetavoxelManager : MonoBehaviour {
 
         CreateTempResources();
         renderQuads = false;
+        showPrettyColors = false;
 
         mvScale = new Vector3(mvSizeX, mvSizeY, mvSizeZ);
+        sortedMVSliceFromEye = new List<Vector3>();
 	}
 	
 
@@ -116,6 +137,7 @@ public class MetavoxelManager : MonoBehaviour {
     void OnGUI()
     {
         renderQuads = GUI.Toggle(new Rect(25, 50, 200, 30), renderQuads, "Render metavoxels as quads");
+        showPrettyColors = GUI.Toggle(new Rect(25, 100, 200, 30), showPrettyColors, "Show pretty colors");
     }
 
 
@@ -360,59 +382,96 @@ public class MetavoxelManager : MonoBehaviour {
     // The ray march step uses alpha blending and imposes order requirements
     void SortMetavoxelSlicesFromEye()
     {
+        sortedMVSliceFromEye.Clear();
+        Vector3 cameraPos = Camera.main.transform.position;
 
+        for (int yy = 0; yy < numMetavoxelsY; yy++)
+        {
+            for (int xx = 0; xx < numMetavoxelsX; xx++)
+            {
+                
+                Vector3 distFromEye = mvGrid[0, yy, xx].mPos - cameraPos;
+                sortedMVSliceFromEye.Add(new Vector3(xx, yy, Vector3.Dot(distFromEye, distFromEye)));
+            }
+        }
+
+        MvDistComparer mvdc = new MvDistComparer();
+        sortedMVSliceFromEye.Sort(mvdc);
     }
 
     // Submit a cube from the perspective of the main camera
     // This function is called 
     public void RenderMetavoxels()
     {
+        SortMetavoxelSlicesFromEye();
         // Resources
         matRayMarch.SetTexture("_LightPropogationTexture", lightPropogationUAV);
 
         // Metavoxel grid uniforms
         matRayMarch.SetFloat("_NumVoxels", numVoxelsInMetavoxel);
+        matRayMarch.SetVector("_MetavoxelSize", mvScale);
 
         // Camera uniforms
+        matRayMarch.SetMatrix("_CameraToWorld", Camera.main.transform.localToWorldMatrix);
         matRayMarch.SetVector("_CameraWorldPos", Camera.main.transform.position);
         matRayMarch.SetFloat("_Fov", Camera.main.fieldOfView);
         matRayMarch.SetFloat("_Near", Camera.main.nearClipPlane);
         matRayMarch.SetFloat("_Far", Camera.main.farClipPlane);
-        matRayMarch.SetVector("_ScreenRes", new Vector2(Screen.currentResolution.width,
-                                                        Screen.currentResolution.height));
+        matRayMarch.SetVector("_ScreenRes", new Vector2(Screen.width,
+                                                        Screen.height));
+
+
+        Debug.Log(Screen.width + ", " + Screen.height);
+
         // Ray march uniforms
         matRayMarch.SetInt("_NumSteps", 10);
 
+        int showPrettyColors_i = 0;
+        if (showPrettyColors)
+            showPrettyColors_i = 1;
 
+        matRayMarch.SetInt("_ShowPrettyColors", showPrettyColors_i);
+
+        //int count = 0;
         for (int zz = 0; zz < numMetavoxelsZ; zz++)
         {
-            for (int yy = 0; yy < numMetavoxelsY; yy++)
+            //for (int yy = 0; yy < numMetavoxelsY; yy++)
+            //{
+            //    for (int xx = 0; xx < numMetavoxelsX; xx++)
+            //    {
+            foreach (Vector3 vv in sortedMVSliceFromEye)
             {
-                for (int xx = 0; xx < numMetavoxelsX; xx++)
-                {
-                    if (mvGrid[zz, yy, xx].mCovered)
-                    {
-                        bool setPass = matRayMarch.SetPass(0); // [eureka] should be done for every drawmeshnow call apparently..!
-                        if (!setPass)
-                        {
-                            Debug.LogError("material set pass returned false;..");
-                        }
+                int xx = (int)vv.x, yy = (int)vv.y;
 
-                        //Debug.Log("rendering mv " + xx + "," + yy +"," + zz);
-                        matRayMarch.SetTexture("_VolumeTexture", mvFillTextures[zz, yy, xx]);
-                        Matrix4x4 mvToWorld = Matrix4x4.TRS(mvGrid[zz, yy, xx].mPos, 
-                                                            mvGrid[zz, yy, xx].mRot,
-                                                            mvScale );
-                        matRayMarch.SetMatrix("_MetavoxelToWorld", mvToWorld);
-                        matRayMarch.SetMatrix("_WorldToMetavoxel", mvToWorld.inverse);   
-                        matRayMarch.SetVector("_MetavoxelIndex", new Vector3(xx, yy, zz));
-                        matRayMarch.SetVector("_MetavoxelSize", mvScale);
-                        
-                        Graphics.DrawMeshNow(cubeMesh, Vector3.zero, Quaternion.identity);
+                if (mvGrid[zz, yy, xx].mCovered)
+                {
+                    bool setPass = matRayMarch.SetPass(0); // [eureka] should be done for every drawmeshnow call apparently..!
+                    if (!setPass)
+                    {
+                        Debug.LogError("material set pass returned false;..");
                     }
 
+                    //Debug.Log("rendering mv " + xx + "," + yy +"," + zz);
+                    matRayMarch.SetTexture("_VolumeTexture", mvFillTextures[zz, yy, xx]);
+                    Matrix4x4 mvToWorld = Matrix4x4.TRS(mvGrid[zz, yy, xx].mPos,
+                                                        mvGrid[zz, yy, xx].mRot,
+                                                        mvScale);
+                    matRayMarch.SetMatrix("_MetavoxelToWorld", mvToWorld);
+                    matRayMarch.SetMatrix("_WorldToMetavoxel", mvToWorld.inverse);
+                    matRayMarch.SetVector("_MetavoxelIndex", new Vector3(xx, yy, zz));
+
+                    Graphics.DrawMeshNow(cubeMesh, Vector3.zero, Quaternion.identity);
+                    //count++;
+                    //if (count >= 1)
+                    //    break;
                 }
+
             }
+            //if (count >= 1)
+            //    break;
+
+            //    }
+            //}
         }
     }
 
@@ -539,7 +598,7 @@ public class MetavoxelManager : MonoBehaviour {
 
     }
 
-
+    #if UNITY_EDITOR 
     void OnDrawGizmos()
     {
         for (int zz = 0; zz < numMetavoxelsZ; zz++)
@@ -608,7 +667,7 @@ public class MetavoxelManager : MonoBehaviour {
             }
         }
     }
-
+#endif
 
     void SaveFillTexture(int xx, int yy, int zz)
     {

@@ -9,7 +9,6 @@
 		Pass{
 		Cull Off ZWrite Off ZTest Off
 		CGPROGRAM
-// Upgrade NOTE: excluded shader from DX11 and Xbox360; has structs without semantics (struct v2f members pos)	
 		#pragma target 5.0
 		#pragma exclude_renderers flash gles opengl
 		#pragma enable_d3d11_debug_symbols
@@ -71,13 +70,16 @@
 			//// i.pos.xy represents the pixel position within the metavoxel grid facing the light.
 			//// convert to a [0, _NumVoxels] range for use within the metavoxel
 			//float2 svpos = i.pos.xy - float2(_MetavoxelIndex.x * _NumVoxels, _MetavoxelIndex.y * _NumVoxels);
-			float lightPassthrough;
+			float lightTransmittedByVoxel, lightIncidentOnVoxel;
 
 			if (_MetavoxelIndex.z == 0.0)
-				lightPassthrough = _InitLightIntensity;
+				lightTransmittedByVoxel = _InitLightIntensity;
 			else
-				lightPassthrough = lightPropogationTex[int2(i.pos.xy + _MetavoxelIndex.xy * _NumVoxels)];
+				lightTransmittedByVoxel = lightPropogationTex[int2(i.pos.xy + _MetavoxelIndex.xy * _NumVoxels)];
 
+			lightIncidentOnVoxel = lightTransmittedByVoxel;
+
+			float3 ambientLight = float3(0.1, 0.12, 0.1);
 			float4 clearColor = float4(0.0f, 0.0f, 0.0, 0);
 			float4 voxelColor;
 			float4 particleColor;
@@ -114,14 +116,14 @@
 							// use ramp texture to "color" voxel based on the displacement of the sphere from the center
 							// [interior] white-yellow-red-black [surface]
 							particleColor.xyz = tex2D(_RampTexture, float2(d/ro,1.0)); 
-							particleColor.a = 1.0; // cubeColor.x;
+							particleColor.a = cubeColor.x;
 				
 							//Blend
 							/*voxelColor.rgb += max((1 - voxelColor.a), 0) * particleColor.rgb;
 							voxelColor.a += particleColor.a;	*/
 							voxelColor.rgb = max(voxelColor.rgb, particleColor.rgb);
 							voxelColor.a += particleColor.a;
-							lightPassthrough -= particleColor.a;
+							lightTransmittedByVoxel -= particleColor.a;
 
 						} // actual coverage test
 
@@ -129,11 +131,17 @@
 
 				} // per particle
 
+				
+				// lighting calc
+				voxelColor.rgb = voxelColor.rgb *lightIncidentOnVoxel;//  +ambientLight;
+
 				volumeTex[int3(i.pos.xy, slice)] = voxelColor;
+
+				lightIncidentOnVoxel = lightTransmittedByVoxel;
 
 			} // per slice
 
-			lightPropogationTex[int2(i.pos.xy + _MetavoxelIndex.xy * _NumVoxels)] = lightPassthrough;
+			lightPropogationTex[int2(i.pos.xy + _MetavoxelIndex.xy * _NumVoxels)] = lightTransmittedByVoxel;
 			
 			discard;
 			return float4(1.0f, 0.0f, 1.0f, 1.0f);

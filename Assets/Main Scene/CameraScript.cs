@@ -8,6 +8,7 @@ public class CameraScript : MonoBehaviour {
     public RenderTexture mainSceneRT;
     public RenderTexture rayMarchRT;
     public Camera theCam;
+    public float camMoveSpeed;
 
     private bool moveLight;
     private bool drawMetavoxelGrid;
@@ -26,7 +27,8 @@ public class CameraScript : MonoBehaviour {
             mvMgrs[ii++] = l.GetComponentInChildren<MetavoxelManager>();
         }
 
-        CreateResources();        
+        CreateResources();
+        camera.depthTextureMode = DepthTextureMode.Depth;
     }
 	
 	// Update is called once per frame
@@ -136,6 +138,16 @@ public class CameraScript : MonoBehaviour {
         {
             transform.RotateAround(Vector3.zero, Vector3.right, Time.deltaTime * cameraSpeed);
         }
+
+        //if (Input.GetMouseButtonDown(0))
+        //{
+        //    transform.Translate(transform.forward * Time.deltaTime * camMoveSpeed);
+        //}
+        //else if (Input.GetMouseButtonDown(1))
+        //{
+        //    transform.Translate(-transform.forward * Time.deltaTime * camMoveSpeed);
+        //}
+     
 
     }
 }
