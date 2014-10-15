@@ -3,11 +3,11 @@
 		_VolumeTexture("Metavoxel fill data", 3D) = "" {}
 		_LightPropogationTexture("Light Propogation", 2D) = "" {}
 		_NumVoxels("Num voxels in metavoxel", Float) = 8
-			_NumSteps("Num steps in raymarch", Int) = 8
+		_NumSteps("Num steps in raymarch", Int) = 8
 	}
 	SubShader
 		{
-			//Tags {"Queue" = "Geometry"}
+			Tags {"Queue" = "Transparent"}
 			Pass
 			{
 				Cull Front ZWrite Off ZTest Less
@@ -56,10 +56,11 @@
 				};
 
 				v2f vert(appdata_base i) {
-					// transform metavoxel from model -> world -> eye -> proj space
+					// every vertex submitted is in a unit-metavoxel space
+					// transform from model -> world -> eye -> proj space
 					v2f o;
-					o.pos = mul(mul(UNITY_MATRIX_VP, _MetavoxelToWorld), i.vertex);
-					o.worldPos = mul(_MetavoxelToWorld, i.vertex);
+					o.pos = mul(mul(UNITY_MATRIX_VP, _MetavoxelToWorld), i.vertex); // clip space
+					o.worldPos = mul(_MetavoxelToWorld, i.vertex); // world space
 					return o;
 				}
 
@@ -79,10 +80,9 @@
 					float screenHalfWidth = (_ScreenRes.x / _ScreenRes.y) * screenHalfHeight;
 
 					// -- Normalize the pixel position to a [-1, 1] range to help find its world space position
-					float2 pixelNormPos = (2 * i.pos.xy - _ScreenRes) / _ScreenRes; // [0, w] to [-1, 1]
-					float3 pixelWorldPos = _CameraWorldPos + mul(_CameraToWorld, float3(pixelNormPos * float2(screenHalfWidth, screenHalfHeight), _Near));
-					float3 rayDir = normalize(pixelWorldPos - _CameraWorldPos);
-
+					float2 pixelNormPos = (2 * i.pos.xy - _ScreenRes) / _ScreenRes; // [0, wh] to [-1, 1]
+					float3 pixelWorldPos = _CameraWorldPos + mul(_CameraToWorld, float3(pixelNormPos * float2(screenHalfWidth, screenHalfHeight), _Near)); // pixel lies on the near plane
+					float3 rayDir = normalize(i.worldPos - _CameraWorldPos);
 					// Since we cull front-facing triangles, the geometry corresponding to this fragment is a back-facing one and thus
 					// represents the ray's world space exit position for this metavoxel
 					float3 rayExit = i.worldPos;
@@ -92,59 +92,50 @@
 					float3 mvRayOrigin = mul(_WorldToMetavoxel, float4(pixelWorldPos, 1)); // w = 1 for points since they do need to be translated!
 					float3 mvRayExit = mul(_WorldToMetavoxel, float4(rayExit, 1));
 
-
-
 					bool eyeInsideMv = true;
-					if (abs(mvRayOrigin.x) > _MetavoxelSize.x / 2 || abs(mvRayOrigin.y) > _MetavoxelSize.y / 2 || abs(mvRayOrigin.z) > _MetavoxelSize.z / 2)
+					if (abs(mvRayOrigin.x) > 0.5 || abs(mvRayOrigin.y) > 0.5 || abs(mvRayOrigin.z) > 0.5)
 						eyeInsideMv = false;
-
-					if (!eyeInsideMv) {
-						// find first intersection point of ray & mv [todo -- bad approx below]
-						mvRayOrigin = mvRayExit -(mvRayDir *  _MetavoxelSize.x);
-					}
 
 					// Find the first intersection of the ray with the metavoxel -- do we need to do this?
 					// [todo] we could be inside metavoxel.. account for that...
 					float4 result = float4(0, 0, 0, 0);
 
 					int step;
-					float3 mvRayPos = mvRayOrigin;
+					float3 mvRayPos = mvRayExit;
 					float transmittance = 1.0f;
 					int outsideCounter = 0;
+					int transparentVoxel = 0;
 
 					for (step = 0; step < 50; step++) {
 						float blendFactor;
 
-						if (abs(mvRayPos.x) > _MetavoxelSize.x / 2 || abs(mvRayPos.y) > _MetavoxelSize.y / 2 || abs(mvRayPos.z) > _MetavoxelSize.z / 2)
+						if (abs(mvRayPos.x) > 0.5 || abs(mvRayPos.y) > 0.5 || abs(mvRayPos.z) > 0.5)
 						{
 							// point outside mv
 							outsideCounter++;
 						}
 						else {
-
-
 							// convert from mv space to sampling space, i.e., [-mvSize/2, mvSize/2] -> [0,1]
-							float3 samplePos = (2 * mvRayPos + _MetavoxelSize) / (2 * _MetavoxelSize);
+							//float3 samplePos = (2 * mvRayPos + _MetavoxelSize) / (2 * _MetavoxelSize);
+							float3 samplePos = (2 * mvRayPos + 1.0) / 2.0; //[-0.5, 0.5] -->[0, 1]
 							float4 voxelColor = tex3D(_VolumeTexture, float3(samplePos.x, samplePos.y, samplePos.z));
 
-							/*if (voxelColor.a > 0.31)
-								result = float4(0, 1, 0, 1);*/
-							// use the `under` operator to blend resultaaaaa
-							result.rgb += transmittance * voxelColor;						
-							transmittance *= (1 - voxelColor.a);
+							if (voxelColor.a < 0.05)
+								transparentVoxel++;
 
-							// copying dougs blend approach (dont undertsand the rcp part yet [todo])
-							//blendFactor = rcp(1 + voxelColor.a); // a -> [0, infinity]
-							//transmittance *= blendFactor;
+							// blending samples back-to-front, so use the `over` operator
+							result.rgb = voxelColor.a * voxelColor.rgb + (1 - voxelColor.a) * result.rgb; // a1*C1 + (1 - a1)*C0  (C1,a1) over (C0,a0)
+							transmittance *= (1 - voxelColor.a); // a1 + a0
 
-
-							//result = lerp(voxelColor.rgb, result, blendFactor);
+							// use the `under` operator to blend result
+							//result.rgb += transmittance * voxelColor;						
+							//transmittance *= (1 - voxelColor.a);
 						}
-						mvRayPos += mvRayDir * (_MetavoxelSize.x / 50);
+						mvRayPos -= mvRayDir * (1/50.0);
 					}
 
-					//return float4(outsideCounter / 50.0, 0, 0, 0.4);					
 					return float4(result.rgb, 1 - transmittance);
+					//return float4(outsideCounter / 50.0, 1 - (transparentVoxel / (50.0 - outsideCounter)), transparentVoxel/50.0 , 0.5); // visualize ray march & sampling behavior
 				
 				} // frag
 

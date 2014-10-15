@@ -28,7 +28,7 @@
 			int		mIndex;
 		};
 		
-		// UAVs
+		// UAvoxelToSphere
 		RWTexture3D<float4> volumeTex;
 		RWTexture2D<float> lightPropogationTex;
 
@@ -55,7 +55,8 @@
 			float3 voxelPos = float3(svPos, zSlice);
 			float4 normPos = float4((voxelPos - _NumVoxels/2) / _NumVoxels, 1.0);
 
-			return mul(normPos, transpose(_MetavoxelToWorld));
+			return mul(_MetavoxelToWorld, normPos);
+			//return mul(normPos, transpose(_MetavoxelToWorld));
 		}
 
 
@@ -92,10 +93,10 @@
 
 				for (pp = 0; pp < _NumParticles; pp++) {
 					float4 voxelWorldPos = get_voxel_world_pos(i.pos.xy, slice);
-					float3 vs = _Particles[pp].mWorldPos - voxelWorldPos;
-					float ri = _Particles[pp].mRadius / 4; // inner radius of sphere
+					float3 voxelToSphere = _Particles[pp].mWorldPos - voxelWorldPos;
+					float ri = _Particles[pp].mRadius / 6; // inner radius of sphere
 					float ro = _Particles[pp].mRadius; // outer radius of sphere			
-					float dSqVoxelSphere = dot(vs, vs);
+					float dSqVoxelSphere = dot(voxelToSphere, voxelToSphere);
 
 					// outer coverage test -- check if sphere's outer radius covers the voxel center
 					if (dSqVoxelSphere <= (ro * ro)) {						
@@ -103,7 +104,8 @@
 
 						
 						// find sampling position for cube map in the particle's local space
-						float3 texCoord = mul(-vs, _Particles[pp].mWorldToLocal);						
+						//float3 texCoord = mul(-voxelToSphere, _Particles[pp].mWorldToLocal);						
+						float3 texCoord = mul(_Particles[pp].mWorldToLocal, -voxelToSphere);						
 						float4 cubeColor = texCUBE(_DisplacementTexture, texCoord);
 
 						// d = displacement of sphere from center along the voxel-sphere direction
