@@ -109,7 +109,7 @@ public class CameraScript : MonoBehaviour {
 
         if (!mainSceneRT)
         {
-            mainSceneRT = new RenderTexture(Screen.width, Screen.height, 0, RenderTextureFormat.ARGB32);
+            mainSceneRT = new RenderTexture(Screen.width, Screen.height, 24, RenderTextureFormat.ARGB32);
             mainSceneRT.useMipMap = false;
             mainSceneRT.isVolume = false;
             mainSceneRT.enableRandomWrite = false;

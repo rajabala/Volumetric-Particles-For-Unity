@@ -125,7 +125,7 @@
 
 							// blending samples back-to-front, so use the `over` operator
 							result.rgb = voxelColor.a * voxelColor.rgb + (1 - voxelColor.a) * result.rgb; // a1*C1 + (1 - a1)*C0  (C1,a1) over (C0,a0)
-							transmittance *= (1 - voxelColor.a); // a1 + a0
+							transmittance *= (1 - voxelColor.a);
 
 							// use the `under` operator to blend result
 							//result.rgb += transmittance * voxelColor;						
