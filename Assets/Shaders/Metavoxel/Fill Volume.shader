@@ -135,7 +135,7 @@
 
 				
 				// lighting calc
-				voxelColor.rgb = voxelColor.rgb *lightIncidentOnVoxel;//  +ambientLight;
+				voxelColor.rgb = voxelColor.rgb *lightIncidentOnVoxel + ambientLight;
 
 				volumeTex[int3(i.pos.xy, slice)] = voxelColor;
 

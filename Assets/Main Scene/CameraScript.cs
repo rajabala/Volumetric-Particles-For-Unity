@@ -3,22 +3,30 @@ using System.Collections;
 
 public class CameraScript : MonoBehaviour {
     public Light[] mLights;
-    public float cameraSpeed;
-    public Material matDepthBlend;
-    public RenderTexture mainSceneRT;
-    public RenderTexture rayMarchRT;
-    public Camera theCam;
-    public float camMoveSpeed;
 
-    private bool moveLight;
+    // Camera look/move state
+    public float lookSpeed, moveSpeed;
+    private float rotationX, rotationY;
+    private bool moveCamera, moveLight;
+    private Vector3 startPos; private Quaternion startRot;
+
+    // Render targets & material to blend them
+    public Material matBlendParticles;
+    public RenderTexture mainSceneRT;
+    public RenderTexture particlesRT;
+ 
     private bool drawMetavoxelGrid;
     private bool rayMarchVoxels;
     private MetavoxelManager[] mvMgrs;
 
     // Use this for initialization
 	void Start () {
-        moveLight = false;
-        drawMetavoxelGrid = true;
+        rotationX = rotationY = 0.0f;
+        startPos = transform.position;
+        startRot = transform.rotation;
+        moveCamera = true; moveLight = false;
+
+        drawMetavoxelGrid = false;
         rayMarchVoxels = true;
 
         mvMgrs = new MetavoxelManager[mLights.Length];
@@ -27,8 +35,7 @@ public class CameraScript : MonoBehaviour {
             mvMgrs[ii++] = l.GetComponentInChildren<MetavoxelManager>();
         }
 
-        CreateResources();
-        camera.depthTextureMode = DepthTextureMode.Depth;
+        CreateResources();       
     }
 	
 	// Update is called once per frame
@@ -49,11 +56,12 @@ public class CameraScript : MonoBehaviour {
 
     void OnPreRender()
     {
-        RenderTexture.active = rayMarchRT;
+        // Since we don't directly render to the back buffer, we need to clear the render targets used every frame.
+        RenderTexture.active = particlesRT;
         GL.Clear(false, true, new Color(0f,0f,0f,0f));
 
-        //RenderTexture.active = mainSceneRT;
-        //GL.Clear(true, true, Color.black);
+        RenderTexture.active = mainSceneRT;
+        GL.Clear(true, true, Color.black);
         camera.targetTexture = mainSceneRT;
     }
 
@@ -63,16 +71,17 @@ public class CameraScript : MonoBehaviour {
         // Use the camera's existing depth buffer to depth-test the particles, while
         // writing the ray marched volume into a separate color buffer that's blended
         // with the main scene in OnRenderImage(..)
-
-        Graphics.SetRenderTarget(rayMarchRT.colorBuffer, mainSceneRT.depthBuffer);
+        Graphics.SetRenderTarget(particlesRT.colorBuffer, mainSceneRT.depthBuffer);
 
         if (rayMarchVoxels)
         {
+            // fill particlesRT with the ray marched volume (the loop is per directional light source)
             foreach (MetavoxelManager mgr in mvMgrs)
                 mgr.RenderMetavoxels();
         }
 
-        Graphics.Blit(rayMarchRT, mainSceneRT, matDepthBlend);
+        // blend the particles onto the main (opaque) scene. [todo] what happens to billboarded particles on the main scene? when're they rendered?
+        Graphics.Blit(particlesRT, mainSceneRT, matBlendParticles);
 
         if (drawMetavoxelGrid)
         {
@@ -80,14 +89,10 @@ public class CameraScript : MonoBehaviour {
                 mgr.DrawMetavoxelGrid();
         }
 
+        // need to set the targetTexture to null, else the Blit doesn't work
         camera.targetTexture = null;
-        Graphics.Blit(mainSceneRT, null as RenderTexture);
+        Graphics.Blit(mainSceneRT, null as RenderTexture); // copy to back buffer
     }
-
-    //void OnRenderImage(RenderTexture src, RenderTexture dst)
-    //{
-
-    //}
 
     void OnGUI()
     {
@@ -98,13 +103,13 @@ public class CameraScript : MonoBehaviour {
     // ---- private methods ----------------
     void CreateResources()
     {
-        if (!rayMarchRT)
+        if (!particlesRT)
         {
-            rayMarchRT = new RenderTexture(Screen.width, Screen.height, 0, RenderTextureFormat.ARGB32);
-            rayMarchRT.useMipMap = false;
-            rayMarchRT.isVolume = false;
-            rayMarchRT.enableRandomWrite = false;
-            rayMarchRT.Create();
+            particlesRT = new RenderTexture(Screen.width, Screen.height, 0, RenderTextureFormat.ARGB32);
+            particlesRT.useMipMap = false;
+            particlesRT.isVolume = false;
+            particlesRT.enableRandomWrite = false;
+            particlesRT.Create();
         }
 
         if (!mainSceneRT)
@@ -119,35 +124,33 @@ public class CameraScript : MonoBehaviour {
     }
 
 
-
     void ProcessInput()
     {
-        if (Input.GetKey(KeyCode.A))
+        if (moveCamera)
         {
-            transform.RotateAround(Vector3.zero, -Vector3.up, Time.deltaTime * cameraSpeed);
-        }
-        else if (Input.GetKey(KeyCode.D))
-        {
-            transform.RotateAround(Vector3.zero, Vector3.up, Time.deltaTime * cameraSpeed);
-        }
-        if (Input.GetKey(KeyCode.W))
-        {
-            transform.RotateAround(Vector3.zero, -Vector3.right, Time.deltaTime * cameraSpeed);
-        }
-        else if (Input.GetKey(KeyCode.S))
-        {
-            transform.RotateAround(Vector3.zero, Vector3.right, Time.deltaTime * cameraSpeed);
+            rotationX += Input.GetAxis("Mouse X") * lookSpeed;
+            rotationY += Input.GetAxis("Mouse Y") * lookSpeed;
+            rotationY = Mathf.Clamp(rotationY, -90, 90);
+
+            transform.localRotation = Quaternion.AngleAxis(rotationX, -Vector3.up);
+            transform.localRotation *= Quaternion.AngleAxis(rotationY, Vector3.right);
+
+            transform.position += transform.forward * Input.GetAxis("Vertical") * moveSpeed;
+            transform.position += transform.right * Input.GetAxis("Horizontal") * moveSpeed;
         }
 
-        //if (Input.GetMouseButtonDown(0))
-        //{
-        //    transform.Translate(transform.forward * Time.deltaTime * camMoveSpeed);
-        //}
-        //else if (Input.GetMouseButtonDown(1))
-        //{
-        //    transform.Translate(-transform.forward * Time.deltaTime * camMoveSpeed);
-        //}
-     
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            transform.position = startPos;
+            transform.rotation = startRot;
+            rotationX = rotationY = 0.0f;
+        }
+
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            moveCamera = !moveCamera;
+        }
+
 
     }
 }
