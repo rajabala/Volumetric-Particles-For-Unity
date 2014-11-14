@@ -24,7 +24,7 @@ public class CameraScript : MonoBehaviour {
         rotationX = rotationY = 0.0f;
         startPos = transform.position;
         startRot = transform.rotation;
-        moveCamera = true; moveLight = false;
+        moveCamera = false; moveLight = false;
 
         drawMetavoxelGrid = false;
         rayMarchVoxels = true;

@@ -2,8 +2,6 @@
 	Properties {
 		_DisplacementTexture("Displaced sphere", Cube) = "white" {}
 		_RampTexture("Ramp Texture", 2D) = "" {}
-		_NumVoxels("Num voxels in metavoxel", Float) = 8
-		_InitLightIntensity("Init light intensity", Float) = 1.0
 	}
 	SubShader {
 		Pass{
@@ -17,23 +15,25 @@
 
 		#include "UnityCG.cginc"
 
-		samplerCUBE _DisplacementTexture;
-		sampler2D _RampTexture;
 
 		// particle
 		struct particle {
 			float4x4 mWorldToLocal;
 			float3	mWorldPos;
-			float	mRadius; // 
+			float	mRadius;
 			int		mIndex;
 		};
 		
-		// UAvoxelToSphere
+		// UAVs
 		RWTexture3D<float4> volumeTex;
 		RWTexture2D<float> lightPropogationTex;
 
 		// Buffers
-		StructuredBuffer<particle> _Particles;						
+		StructuredBuffer<particle> _Particles;		
+
+		// Textures
+		samplerCUBE _DisplacementTexture;
+		sampler2D _RampTexture;
 		
 		// Metavoxel uniforms
 		float4x4 _MetavoxelToWorld;	
@@ -94,7 +94,7 @@
 				for (pp = 0; pp < _NumParticles; pp++) {
 					float4 voxelWorldPos = get_voxel_world_pos(i.pos.xy, slice);
 					float3 voxelToSphere = _Particles[pp].mWorldPos - voxelWorldPos;
-					float ri = _Particles[pp].mRadius / 6; // inner radius of sphere
+					float ri = _Particles[pp].mRadius / 2; // inner radius of sphere
 					float ro = _Particles[pp].mRadius; // outer radius of sphere			
 					float dSqVoxelSphere = dot(voxelToSphere, voxelToSphere);
 
@@ -111,39 +111,36 @@
 						// d = displacement of sphere from center along the voxel-sphere direction
 						float d = ri + (ro - ri) * cubeColor.x;//  ro - cubeColor.x * (ro - ri); // 0.0 ---> ro, 1.0 --> ri, sample --> ?
 
-						particleColor = tex2D(_RampTexture, float2(d / ro, 1.0));
 
 						// actual coverage test -- check if the displaced sphere intersects voxel center
 						if ((d*d) >= dSqVoxelSphere) {
 							// use ramp texture to "color" voxel based on the displacement of the sphere from the center
 							// [interior] white-yellow-red-black [surface]
-							particleColor.xyz = tex2D(_RampTexture, float2(d/ro,1.0)); 
-							particleColor.a = cubeColor.x;
+							particleColor.xyz = tex2D(_RampTexture, float2( (d - ri)/(ro - ri), 1.0));
+							particleColor.a = 1 - cubeColor.x;
 				
 							//Blend
 							/*voxelColor.rgb += max((1 - voxelColor.a), 0) * particleColor.rgb;
 							voxelColor.a += particleColor.a;	*/
-							voxelColor.rgb = max(voxelColor.rgb, particleColor.rgb);
+							voxelColor.rgb = particleColor.rgb; // max(voxelColor.rgb, particleColor.rgb);
 							voxelColor.a += particleColor.a;
-							lightTransmittedByVoxel -= particleColor.a;
-
 						} // actual coverage test
 
 					} // fast coverage test
 
 				} // per particle
 
-				
 				// lighting calc
-				voxelColor.rgb = voxelColor.rgb *lightIncidentOnVoxel + ambientLight;
-
+				voxelColor.rgb = voxelColor.rgb + ambientLight;
 				volumeTex[int3(i.pos.xy, slice)] = voxelColor;
 
+
+				lightTransmittedByVoxel *= (1 - voxelColor.a);
 				lightIncidentOnVoxel = lightTransmittedByVoxel;
 
 			} // per slice
 
-			lightPropogationTex[int2(i.pos.xy + _MetavoxelIndex.xy * _NumVoxels)] = lightTransmittedByVoxel;
+			lightPropogationTex[int2(i.pos.xy + _MetavoxelIndex.xy * _NumVoxels)] = 1.0;// lightTransmittedByVoxel;
 			
 			discard;
 			return float4(1.0f, 0.0f, 1.0f, 1.0f);

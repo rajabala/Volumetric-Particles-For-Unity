@@ -45,7 +45,7 @@ Material:
       data:
         first:
           name: _NumVoxels
-        second: 16
+        second: 32
       data:
         first:
           name: _InitLightIntensity

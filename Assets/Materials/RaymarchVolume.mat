@@ -38,11 +38,11 @@ Material:
       data:
         first:
           name: _NumVoxels
-        second: 16
+        second: 32
       data:
         first:
           name: _NumSteps
-        second: 10
+        second: 32
     m_Colors:
       data:
         first:

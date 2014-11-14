@@ -6,6 +6,18 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
+/*
+ * Attach this script to a (dummy) camera on a directional light source.
+ * 
+ * 
+ * 
+ * 
+ * 
+ */
+
+
+
+
 // The world is divided into metavoxels, each of which is made up of voxels.
 // This metavoxel grid is oriented to face the light and each metavoxel has a list of
 // the particles it covers
@@ -51,6 +63,7 @@ public class MetavoxelManager : MonoBehaviour {
     public int numMetavoxelsX, numMetavoxelsY, numMetavoxelsZ; // # metavoxels in the grid along x, y & z
     public int numVoxelsInMetavoxel; // affects the size of the 3D texture used to fill a metavoxel
     public int updateInterval;
+    public int rayMarchSteps;
 
     public Material matFillVolume;
     public Material matRayMarch;
@@ -70,6 +83,8 @@ public class MetavoxelManager : MonoBehaviour {
     private RenderTexture[, ,] mvFillTextures;
 
     private List<Vector3> sortedMVSliceFromEye;
+    private BoundingBox pBounds;
+
     // temp prototyping stuff
     private Vector3 mvScale;
     private List<GameObject> mvQuads;
@@ -87,6 +102,8 @@ public class MetavoxelManager : MonoBehaviour {
         //mvGridZ = (int)((far - near) / mvSizeZ);
 
         GameObject particleParent = GameObject.Find("Particles");
+        pBounds = particleParent.GetComponent<BoundingBox>();
+
         particles = new Transform[particleParent.transform.childCount];
 
         for (int ii = 0; ii < particleParent.transform.childCount; ii++) {
@@ -171,7 +188,7 @@ public class MetavoxelManager : MonoBehaviour {
         cubeMesh = new Mesh();
         cubeMesh.vertices = cubeVertices;
         cubeMesh.uv = cubeUVs;
-        cubeMesh.triangles = new int[] {// back (make it ccw?)
+        cubeMesh.triangles = new int[] {// back
                                         3, 2, 1,
                                         3, 1, 0,
                                         // front,
@@ -430,7 +447,7 @@ public class MetavoxelManager : MonoBehaviour {
     }
 
  
-    // if light moves, update grid orientations
+    // Since particles will generally be 
     void UpdateMetavoxelGrid()
     {
         for (int zz = 0; zz < numMetavoxelsZ; zz++)
@@ -447,7 +464,10 @@ public class MetavoxelManager : MonoBehaviour {
 
 
     void FillMetavoxels(RenderTexture src, RenderTexture dst)
-    {   
+    {
+        Graphics.SetRenderTarget(lightPropogationUAV);
+        GL.Clear(false, true, Color.black);
+
         // process the metavoxels in order of Z-slice closest to light to farthest
         for (int zz = 0; zz < numMetavoxelsZ; zz++)
         {
@@ -464,7 +484,9 @@ public class MetavoxelManager : MonoBehaviour {
     }
 
 
-    // Each metavoxel that has particles in it needs to be filled with volume info (opacity, color, density, temperature...) [todo]
+    // Each metavoxel that has particles in it needs to be filled with volume info (opacity for now)
+    // Since nothing is rendered to the screen while filling the metavoxel volume textures up, we have to resort to
+
     void FillMetavoxel(int xx, int yy, int zz, RenderTexture src, RenderTexture dst)
     {
         Graphics.ClearRandomWriteTargets();
@@ -475,8 +497,7 @@ public class MetavoxelManager : MonoBehaviour {
             mvFillTextures[zz, yy, xx].Create();
         
         // don't need to clear the mv fill texture since we write to every pixel on it (on every depth slice)
-        // regardless of whether that pixel is covered or not.
-        
+        // regardless of whether that pixel is covered or not.       
         Graphics.SetRenderTarget(rtCam);
         Graphics.SetRandomWriteTarget(1, mvFillTextures[zz, yy, xx]);
         Graphics.SetRandomWriteTarget(2, lightPropogationUAV);
@@ -531,7 +552,6 @@ public class MetavoxelManager : MonoBehaviour {
         {
             for (int xx = 0; xx < numMetavoxelsX; xx++)
             {
-                
                 Vector3 distFromEye = mvGrid[0, yy, xx].mPos - cameraPos;
                 sortedMVSliceFromEye.Add(new Vector3(xx, yy, Vector3.Dot(distFromEye, distFromEye)));
             }
@@ -549,22 +569,29 @@ public class MetavoxelManager : MonoBehaviour {
 
         // Resources
         matRayMarch.SetTexture("_LightPropogationTexture", lightPropogationUAV);
+        matRayMarch.SetFloat("_InitLightIntensity", 1.0f);
 
         // Metavoxel grid uniforms
         matRayMarch.SetFloat("_NumVoxels", numVoxelsInMetavoxel);
         matRayMarch.SetVector("_MetavoxelSize", mvScale);
 
         // Camera uniforms
-        matRayMarch.SetMatrix("_CameraToWorld", Camera.main.transform.localToWorldMatrix);
         matRayMarch.SetVector("_CameraWorldPos", Camera.main.transform.position);
+        // Unity sets the _CameraToWorld and _WorldToCamera constant buffers by default - but these would be on the metavoxel camera
+        // that's attached to the directional light. We're interested in the main camera's matrices, not the pseudo-mv cam!
+        matRayMarch.SetMatrix("_CameraToWorldMatrix", Camera.main.cameraToWorldMatrix);
+        matRayMarch.SetMatrix("_WorldToCameraMatrix", Camera.main.worldToCameraMatrix);
         matRayMarch.SetFloat("_Fov", Camera.main.fieldOfView);
         matRayMarch.SetFloat("_Near", Camera.main.nearClipPlane);
         matRayMarch.SetFloat("_Far", Camera.main.farClipPlane);
         matRayMarch.SetVector("_ScreenRes", new Vector2(Screen.width,
                                                         Screen.height));
+        matRayMarch.SetVector("_CameraLookAt", Camera.main.transform.forward);
 
         // Ray march uniforms
-        matRayMarch.SetInt("_NumSteps", 10);
+        matRayMarch.SetInt("_NumSteps", rayMarchSteps);
+        matRayMarch.SetVector("_AABBMin", pBounds.aabb.min);
+        matRayMarch.SetVector("_AABBMax", pBounds.aabb.max);
 
         int showPrettyColors_i = 0;
         if (showPrettyColors)
@@ -734,6 +761,8 @@ public class MetavoxelManager : MonoBehaviour {
     #if UNITY_EDITOR 
     void OnDrawGizmos()
     {
+        Gizmos.color = Color.blue;
+
         for (int zz = 0; zz < numMetavoxelsZ; zz++)
         {
             for (int yy = 0; yy < numMetavoxelsY; yy++)
