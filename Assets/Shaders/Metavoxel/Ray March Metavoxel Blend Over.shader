@@ -2,7 +2,6 @@
 	Properties{
 		_VolumeTexture("Metavoxel fill data", 3D) = "" {}
 		_LightPropogationTexture("Light Propogation", 2D) = "" {}
-		_NumVoxels("Num voxels in metavoxel", Float) = 8
 		_NumSteps("Num steps in raymarch", Int) = 50
 	}
 	SubShader
@@ -36,11 +35,9 @@
 				float _NumVoxels; // metavoxel's voxel dimensions
 
 				// Camera uniforms
-				float4x4 _CameraToWorld;	
-				float4x4 _CameraToWorldMatrix;
+				float4x4 _CameraToWorldMatrix; // need to explicitly define this to get the main camera's matrices
 				float4x4 _WorldToCameraMatrix;
 				float3 _CameraWorldPos;
-				float3 _CameraLookAt;
 				float _Fov;
 				float _Near;
 				float _Far;
@@ -52,7 +49,6 @@
 				float3 _AABBMax;
 
 				// tmp
-				int _NumParticles;
 				int _ShowPrettyColors;
 
 				struct v2f {
@@ -73,10 +69,6 @@
 				struct Ray {
 					float3 o; // origin
 					float3 d; // direction (normalized)
-				};
-				
-				struct Plane {
-					float a, b, c, d;
 				};
 				
 				
@@ -123,14 +115,13 @@
 					float screenHalfWidth  = (_ScreenRes.x / _ScreenRes.y) * screenHalfHeight;
 
 					// -- Normalize the pixel position to a [-1, 1] range to help find its world space position
-					float2 pixelNormPos = (2 * i.pos.xy - _ScreenRes) / _ScreenRes; // [0, wh] to [-1, 1]
-					float3 pixelWorldPos = _CameraWorldPos + mul(_CameraToWorld, float3(pixelNormPos * float2(screenHalfWidth, screenHalfHeight), _Near)); // pixel lies on the near plane
+//					float2 pixelNormPos = (2 * i.pos.xy - _ScreenRes) / _ScreenRes; // [0, wh] to [-1, 1]
+//					float3 pixelWorldPos = _CameraWorldPos + mul(_CameraToWorldMatrix, float3(pixelNormPos * float2(screenHalfWidth, screenHalfHeight), _Near)); // pixel lies on the near plane
 
-					float3 rayDir = normalize(pixelWorldPos - _CameraWorldPos);
 					// Since we cull front-facing triangles, the geometry corresponding to this fragment is a back-facing one and thus
 					// represents the ray's world space exit position for this metavoxel
-					float3 rayExit = i.worldPos;
-
+					float3 rayDir = normalize(i.worldPos - _CameraWorldPos);
+					
 					Ray csRay; // camera space
 					csRay.o = float3(0, 0, 0); // camera is at the origin in camera space.
 					csRay.d = normalize(mul(_WorldToCameraMatrix, float4(rayDir, 0)));			

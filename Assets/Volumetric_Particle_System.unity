@@ -842,7 +842,8 @@ MonoBehaviour:
   updateInterval: 1
   rayMarchSteps: 32
   matFillVolume: {fileID: 2100000, guid: 742e800cae20c4547bc14935a578e998, type: 2}
-  matRayMarch: {fileID: 2100000, guid: 14e5eb7c9a4acf34688b8fbd737f2365, type: 2}
+  matRayMarchOver: {fileID: 2100000, guid: 14e5eb7c9a4acf34688b8fbd737f2365, type: 2}
+  matRayMarchUnder: {fileID: 2100000, guid: 98638f28235c80d4eb0bd30969960c4a, type: 2}
   testLightPlane: {fileID: 1314314053}
   testQuad: {fileID: 100000, guid: 9b3913a0e73d9d647a0b714eb80a70bd, type: 2}
   mvLineColor: {fileID: 2100000, guid: e091f90250c3ccc4eb5732506a7b76f6, type: 2}

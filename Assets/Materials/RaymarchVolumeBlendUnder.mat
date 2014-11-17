@@ -6,8 +6,8 @@ Material:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: RaymarchVolume
-  m_Shader: {fileID: 4800000, guid: bc89dda340d8b4c45b565b66a9088d40, type: 3}
+  m_Name: RaymarchVolumeBlendUnder
+  m_Shader: {fileID: 4800000, guid: c45774e1ea16457429495fa0db9b0362, type: 3}
   m_ShaderKeywords: []
   m_CustomRenderQueue: -1
   m_SavedProperties:
@@ -35,10 +35,6 @@ Material:
           m_Scale: {x: 1, y: 1}
           m_Offset: {x: 0, y: 0}
     m_Floats:
-      data:
-        first:
-          name: _NumVoxels
-        second: 32
       data:
         first:
           name: _NumSteps

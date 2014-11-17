@@ -45,9 +45,6 @@ public class MvDistComparer : IComparer<Vector3>
 {
     public int Compare(Vector3 x, Vector3 y)
     {
-        if (x == null || y == null)
-            return 0;
-
         if (x.z > y.z)
             return 1;
        
@@ -66,8 +63,9 @@ public class MetavoxelManager : MonoBehaviour {
     public int rayMarchSteps;
 
     public Material matFillVolume;
-    public Material matRayMarch;
-    
+    public Material matRayMarchOver;
+	public Material matRayMarchUnder;
+	
     public GameObject testLightPlane;
     public GameObject testQuad;
 
@@ -107,7 +105,6 @@ public class MetavoxelManager : MonoBehaviour {
         particles = new Transform[particleParent.transform.childCount];
 
         for (int ii = 0; ii < particleParent.transform.childCount; ii++) {
-            Transform child = particleParent.transform.GetChild(ii);
             particles[ii] = particleParent.transform.GetChild(ii);
             particles[ii].gameObject.SetActive(false);
         }
@@ -542,7 +539,7 @@ public class MetavoxelManager : MonoBehaviour {
         Graphics.ClearRandomWriteTargets();
     }
 
-    // The ray march step uses alpha blending and imposes order requirements
+    // The ray march step uses alpha blending and imposes order requirements 
     void SortMetavoxelSlicesFromEye()
     {
         sortedMVSliceFromEye.Clear();
@@ -562,57 +559,31 @@ public class MetavoxelManager : MonoBehaviour {
     }
 
     // Submit a cube from the perspective of the main camera
-    // This function is called 
+    // This function is called from CameraScript.cs
     public void RenderMetavoxels()
     {
         SortMetavoxelSlicesFromEye();
+		SetRaymarchConstants();
 
-        // Resources
-        matRayMarch.SetTexture("_LightPropogationTexture", lightPropogationUAV);
-        matRayMarch.SetFloat("_InitLightIntensity", 1.0f);
+		Vector3 lsCameraPos = transform.worldToLocalMatrix.MultiplyPoint3x4 (Camera.main.transform.position);
 
-        // Metavoxel grid uniforms
-        matRayMarch.SetFloat("_NumVoxels", numVoxelsInMetavoxel);
-        matRayMarch.SetVector("_MetavoxelSize", mvScale);
+		float zBoundary = lsCameraPos.z;
+		Debug.Log (zBoundary);
 
-        // Camera uniforms
-        matRayMarch.SetVector("_CameraWorldPos", Camera.main.transform.position);
-        // Unity sets the _CameraToWorld and _WorldToCamera constant buffers by default - but these would be on the metavoxel camera
-        // that's attached to the directional light. We're interested in the main camera's matrices, not the pseudo-mv cam!
-        matRayMarch.SetMatrix("_CameraToWorldMatrix", Camera.main.cameraToWorldMatrix);
-        matRayMarch.SetMatrix("_WorldToCameraMatrix", Camera.main.worldToCameraMatrix);
-        matRayMarch.SetFloat("_Fov", Camera.main.fieldOfView);
-        matRayMarch.SetFloat("_Near", Camera.main.nearClipPlane);
-        matRayMarch.SetFloat("_Far", Camera.main.farClipPlane);
-        matRayMarch.SetVector("_ScreenRes", new Vector2(Screen.width,
-                                                        Screen.height));
-        matRayMarch.SetVector("_CameraLookAt", Camera.main.transform.forward);
+		Material m = matRayMarchOver;
 
-        // Ray march uniforms
-        matRayMarch.SetInt("_NumSteps", rayMarchSteps);
-        matRayMarch.SetVector("_AABBMin", pBounds.aabb.min);
-        matRayMarch.SetVector("_AABBMax", pBounds.aabb.max);
-
-        int showPrettyColors_i = 0;
-        if (showPrettyColors)
-            showPrettyColors_i = 1;
-
-        matRayMarch.SetInt("_ShowPrettyColors", showPrettyColors_i);
-
-        //int count = 0;
         for (int zz = 0; zz < numMetavoxelsZ; zz++)
         {
-            //for (int yy = 0; yy < numMetavoxelsY; yy++)
-            //{
-            //    for (int xx = 0; xx < numMetavoxelsX; xx++)
-            //    {
+			if (zz > zBoundary)
+				m = matRayMarchUnder;
+
             foreach (Vector3 vv in sortedMVSliceFromEye)
             {
                 int xx = (int)vv.x, yy = (int)vv.y;
 
                 if (mvGrid[zz, yy, xx].mCovered)
                 {
-                    bool setPass = matRayMarch.SetPass(0); // [eureka] should be done for every drawmeshnow call apparently..!
+					bool setPass = m.SetPass(0); // [eureka] should be done for every drawmeshnow call apparently..!
                     if (!setPass)
                     {
                         Debug.LogError("material set pass returned false;..");
@@ -620,13 +591,13 @@ public class MetavoxelManager : MonoBehaviour {
 
                     //Debug.Log("rendering mv " + xx + "," + yy +"," + zz);
                     mvFillTextures[zz, yy, xx].filterMode = FilterMode.Trilinear;
-                    matRayMarch.SetTexture("_VolumeTexture", mvFillTextures[zz, yy, xx]);
+					m.SetTexture("_VolumeTexture", mvFillTextures[zz, yy, xx]);
                     Matrix4x4 mvToWorld = Matrix4x4.TRS(mvGrid[zz, yy, xx].mPos,
                                                         mvGrid[zz, yy, xx].mRot,
                                                         mvScale);
-                    matRayMarch.SetMatrix("_MetavoxelToWorld", mvToWorld);
-                    matRayMarch.SetMatrix("_WorldToMetavoxel", mvToWorld.inverse);
-                    matRayMarch.SetVector("_MetavoxelIndex", new Vector3(xx, yy, zz));
+					m.SetMatrix("_MetavoxelToWorld", mvToWorld);
+					m.SetMatrix("_WorldToMetavoxel", mvToWorld.inverse);
+					m.SetVector("_MetavoxelIndex", new Vector3(xx, yy, zz));
 
                     Graphics.DrawMeshNow(mesh, Vector3.zero, Quaternion.identity);
                 }
@@ -635,8 +606,47 @@ public class MetavoxelManager : MonoBehaviour {
         }
     }
 
-    // Called from Maincamera.OnRenderImage()
-    // Cheap hack to check if fill volume is working. It doesn't "render" the quads as such.
+
+	void SetRaymarchConstants()
+	{
+		Material[] over_under = {matRayMarchOver, matRayMarchUnder};
+
+		foreach (Material m in over_under) {
+			// Resources
+			m.SetTexture("_LightPropogationTexture", lightPropogationUAV);
+			m.SetFloat("_InitLightIntensity", 1.0f);
+			
+			// Metavoxel grid uniforms
+			m.SetFloat("_NumVoxels", numVoxelsInMetavoxel);
+			m.SetVector("_MetavoxelSize", mvScale);
+			
+			// Camera uniforms
+			m.SetVector("_CameraWorldPos", Camera.main.transform.position);
+			// Unity sets the _CameraToWorld and _WorldToCamera constant buffers by default - but these would be on the metavoxel camera
+			// that's attached to the directional light. We're interested in the main camera's matrices, not the pseudo-mv cam!
+			m.SetMatrix("_CameraToWorldMatrix", Camera.main.cameraToWorldMatrix);
+			m.SetMatrix("_WorldToCameraMatrix", Camera.main.worldToCameraMatrix);
+			m.SetFloat("_Fov", Camera.main.fieldOfView);
+			m.SetFloat("_Near", Camera.main.nearClipPlane);
+			m.SetFloat("_Far", Camera.main.farClipPlane);
+			m.SetVector("_ScreenRes", new Vector2(Screen.width, Screen.height));
+			
+			// Ray march uniforms
+			m.SetInt("_NumSteps", rayMarchSteps);
+			m.SetVector("_AABBMin", pBounds.aabb.min);
+			m.SetVector("_AABBMax", pBounds.aabb.max);
+			
+			int showPrettyColors_i = 0;
+			if (showPrettyColors)
+				showPrettyColors_i = 1;
+			
+			m.SetInt("_ShowPrettyColors", showPrettyColors_i);
+		}
+	}
+	
+	
+	// Called from Maincamera.OnRenderImage()
+	// Cheap hack to check if fill volume is working. It doesn't "render" the quads as such.
     // Only instantiates them. Since this camera doesn't "see" anything (via cullmask), it
     // ends up being rendered by the main camera.
     void CreateMetavoxelQuads()
