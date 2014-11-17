@@ -1,4 +1,4 @@
-﻿Shader "Custom/RayMarch Metavoxel" {
+﻿Shader "Custom/RayMarchMetavoxelBlendOver" {
 	Properties{
 		_VolumeTexture("Metavoxel fill data", 3D) = "" {}
 		_LightPropogationTexture("Light Propogation", 2D) = "" {}
