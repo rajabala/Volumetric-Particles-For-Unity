@@ -34,6 +34,7 @@
 		// Textures
 		samplerCUBE _DisplacementTexture;
 		sampler2D _RampTexture;
+		sampler2D _CameraDepthTexture;
 		
 		// Metavoxel uniforms
 		float4x4 _MetavoxelToWorld;	
@@ -107,7 +108,7 @@
 						//float3 texCoord = mul(-voxelToSphere, _Particles[pp].mWorldToLocal);						
 						float3 texCoord = mul(_Particles[pp].mWorldToLocal, -voxelToSphere);						
 						float4 cubeColor = texCUBE(_DisplacementTexture, texCoord);
-
+					
 						// d = displacement of sphere from center along the voxel-sphere direction
 						float d = ri + (ro - ri) * cubeColor.x;//  ro - cubeColor.x * (ro - ri); // 0.0 ---> ro, 1.0 --> ri, sample --> ?
 
@@ -119,10 +120,7 @@
 							particleColor.xyz = tex2D(_RampTexture, float2( (d - ri)/(ro - ri), 1.0));
 							particleColor.a = 1 - cubeColor.x;
 				
-							//Blend
-							/*voxelColor.rgb += max((1 - voxelColor.a), 0) * particleColor.rgb;
-							voxelColor.a += particleColor.a;	*/
-							voxelColor.rgb = particleColor.rgb; // max(voxelColor.rgb, particleColor.rgb);
+							voxelColor.rgb = max(voxelColor.rgb, particleColor.rgb);
 							voxelColor.a += particleColor.a;
 						} // actual coverage test
 
@@ -131,11 +129,11 @@
 				} // per particle
 
 				// lighting calc
-				voxelColor.rgb = voxelColor.rgb + ambientLight;
+				voxelColor.rgb = voxelColor.rgb * lightIncidentOnVoxel + ambientLight;
 				volumeTex[int3(i.pos.xy, slice)] = voxelColor;
 
 
-				lightTransmittedByVoxel *= (1 - voxelColor.a);
+				lightTransmittedByVoxel *= 1 / (1 + voxelColor.a);
 				lightIncidentOnVoxel = lightTransmittedByVoxel;
 
 			} // per slice

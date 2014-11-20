@@ -35,7 +35,10 @@ public class CameraScript : MonoBehaviour {
             mvMgrs[ii++] = l.GetComponentInChildren<MetavoxelManager>();
         }
 
-        CreateResources();       
+        CreateResources();
+
+        camera.depthTextureMode = DepthTextureMode.Depth; // this makes the depth buffer available for all the shaders as _CameraDepthTexture
+        // [perf threat] Unity is going to do a Z-prepass simply because of this line. 
     }
 	
 	// Update is called once per frame
