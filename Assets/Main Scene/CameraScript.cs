@@ -26,7 +26,7 @@ public class CameraScript : MonoBehaviour {
         startRot = transform.rotation;
         moveCamera = false; moveLight = false;
 
-        drawMetavoxelGrid = false;
+        drawMetavoxelGrid = true;
         rayMarchVoxels = true;
 
         mvMgrs = new MetavoxelManager[mLights.Length];

@@ -38,7 +38,7 @@
 		
 		// Metavoxel uniforms
 		float4x4 _MetavoxelToWorld;	
-		float4x4 _WorldToLight;
+		float4x4 _WorldToLight; // [unused]
 		float3 _MetavoxelIndex;
 		float3 _MetavoxelGridDim;
 		float _NumVoxels; // metavoxel's voxel dimensions
