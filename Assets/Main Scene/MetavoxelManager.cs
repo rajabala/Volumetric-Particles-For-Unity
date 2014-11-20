@@ -452,7 +452,6 @@ public class MetavoxelManager : MonoBehaviour {
         ParticleSystem.Particle[] parts = new ParticleSystem.Particle[ps.maxParticles];
         int numParticles = ps.GetParticles(parts);
 
-        Debug.Log("particles emitted = " + numParticles);
         for (int zz = 0; zz < numMetavoxelsZ; zz++)
         {
             for (int yy = 0; yy < numMetavoxelsY; yy++)
@@ -472,16 +471,16 @@ public class MetavoxelManager : MonoBehaviour {
                         // xform particle to mv space
                         Vector3 wsParticlePos = theParticleSystem.transform.localToWorldMatrix.MultiplyPoint3x4(parts[pp].position);
                         Vector3 mvParticlePos = worldToMetavoxelMatrix.MultiplyPoint3x4(wsParticlePos);
-
+                        float radius = (parts[pp].size / 2f) / mvScale.x;
                         bool particle_intersects_metavoxel = MathUtil.DoesBoxIntersectSphere(new Vector3(-0.5f, -0.5f, -0.5f),
                                                                                              new Vector3( 0.5f,  0.5f,  0.5f),
                                                                                              mvParticlePos,
-                                                                                             parts[pp].size/2);
+                                                                                             radius);
 
                         if (particle_intersects_metavoxel)
                         {
                             mvGrid[zz, yy, xx].mParticlesCovered.Add(parts[pp]);
-                            Debug.Log("particle " + pp + "with radius "+ parts[pp].size/2f + " at mvpos= " + mvParticlePos + " intersects mv (" + xx + "," + yy + "," + zz);
+                           // Debug.Log("particle " + pp + "with radius "+ parts[pp].size/2f + " at mvpos= " + mvParticlePos + " intersects mv (" + xx + "," + yy + "," + zz);
                         }
 
                         // sphere - cube intersection test
@@ -892,26 +891,21 @@ public class MetavoxelManager : MonoBehaviour {
                 {
                     List<Vector3> points = new List<Vector3>();
 
-                    Vector3 wsPosBeforeRotation = new Vector3((xx - numMetavoxelsX / 2) * mvSizeX,
-                                                  (yy - numMetavoxelsY / 2) * mvSizeY,
-                                                  (zz - numMetavoxelsZ / 2) * mvSizeZ);
+                    mvLineColor.SetPass(0);
+                    Vector3 mvPos = mvGrid[zz, yy, xx].mPos;
+                    Quaternion q = mvGrid[zz, yy, xx].mRot;
 
 
-                    Quaternion q = new Quaternion();
-                    q.SetLookRotation(-transform.forward, transform.up);
-
-                    Vector3 mvPos = q * wsPosBeforeRotation;
-
-
+                    float halfWidth = mvSizeX * 0.5f, halfHeight = mvSizeY * 0.5f, halfDepth = mvSizeZ * 0.5f;
                     // back, front --> Z ; top, bot --> Y ; left, right --> X
-                    Vector3 offBotLeftBack = q * new Vector3(-mvSizeX * 0.5f, -mvSizeY * 0.5f, -mvSizeZ * 0.5f),
-                            offBotLeftFront = q * new Vector3(-mvSizeX * 0.5f, -mvSizeY * 0.5f, mvSizeZ * 0.5f),
-                            offTopLeftBack = q * new Vector3(-mvSizeX * 0.5f, mvSizeY * 0.5f, -mvSizeZ * 0.5f),
-                            offTopLeftFront = q * new Vector3(-mvSizeX * 0.5f, mvSizeY * 0.5f, mvSizeZ * 0.5f),
-                            offBotRightBack = q * new Vector3(mvSizeX * 0.5f, -mvSizeY * 0.5f, -mvSizeZ * 0.5f),
-                            offBotRightFront = q * new Vector3(mvSizeX * 0.5f, -mvSizeY * 0.5f, mvSizeZ * 0.5f),
-                            offTopRightBack = q * new Vector3(mvSizeX * 0.5f, mvSizeY * 0.5f, -mvSizeZ * 0.5f),
-                            offTopRightFront = q * new Vector3(mvSizeX * 0.5f, mvSizeY * 0.5f, mvSizeZ * 0.5f);
+                    Vector3 offBotLeftBack = q * new Vector3(-halfWidth, -halfHeight, halfDepth),
+                            offBotLeftFront = q * new Vector3(-halfWidth, -halfHeight, -halfDepth),
+                            offTopLeftBack = q * new Vector3(-halfWidth, halfHeight, halfDepth),
+                            offTopLeftFront = q * new Vector3(-halfWidth, halfHeight, -halfDepth),
+                            offBotRightBack = q * new Vector3(halfWidth, -halfHeight, halfDepth),
+                            offBotRightFront = q * new Vector3(halfWidth, -halfHeight, -halfDepth),
+                            offTopRightBack = q * new Vector3(halfWidth, halfHeight, halfDepth),
+                            offTopRightFront = q * new Vector3(halfWidth, halfHeight, -halfDepth);
 
                     // left 
                     points.Add(mvPos + offBotLeftBack);
