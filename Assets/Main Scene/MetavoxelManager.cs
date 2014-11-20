@@ -53,6 +53,8 @@ public class MvDistComparer : IComparer<Vector3>
         return -1;
     }
 }
+
+
 [RequireComponent(typeof(Camera))] // needs to be attached to a game object that has a camera component
 
 // Class that creates, updates, fills and renders a sparse metavoxel grid
@@ -443,12 +445,14 @@ public class MetavoxelManager : MonoBehaviour {
         }
     }
 
+    
     void UpdateMetavoxelParticleCoverage()
     {
         ParticleSystem ps = theParticleSystem.GetComponent<ParticleSystem>();
         ParticleSystem.Particle[] parts = new ParticleSystem.Particle[ps.maxParticles];
         int numParticles = ps.GetParticles(parts);
 
+        Debug.Log("particles emitted = " + numParticles);
         for (int zz = 0; zz < numMetavoxelsZ; zz++)
         {
             for (int yy = 0; yy < numMetavoxelsY; yy++)
@@ -457,26 +461,46 @@ public class MetavoxelManager : MonoBehaviour {
                 {
                     mvGrid[zz, yy, xx].mParticlesCovered.Clear();
 
-                    for (int ii = 0; ii < numParticles; ii++)
-                    {
-                        // sphere - cube intersection test
-                        Vector3 wsPos = theParticleSystem.transform.localToWorldMatrix.MultiplyPoint3x4(parts[ii].position);
-                        float dSphereCubeSq = (wsPos - mvGrid[zz, yy, xx].mPos).sqrMagnitude;
-                        float dMinSq = Mathf.Pow(mvSizeX / 2f + parts[ii].size, 2f); // [todo: assuming mv is a cube -- its not.. sides can be diff lengths based on scale]
-                        float dMaxSq = Mathf.Pow(mvSizeX / Mathf.Sqrt(2) + parts[ii].size, 2f);
+                    Matrix4x4 worldToMetavoxelMatrix = Matrix4x4.TRS(   mvGrid[zz, yy, xx].mPos, 
+                                                                        mvGrid[zz, yy, xx].mRot,
+                                                                        mvScale).inverse;
 
-                        if (dSphereCubeSq <= dMinSq)
+                    for (int pp = 0; pp < numParticles; pp++)
+                    {
+                        // find corners of the metavoxel
+
+                        // xform particle to mv space
+                        Vector3 wsParticlePos = theParticleSystem.transform.localToWorldMatrix.MultiplyPoint3x4(parts[pp].position);
+                        Vector3 mvParticlePos = worldToMetavoxelMatrix.MultiplyPoint3x4(wsParticlePos);
+
+                        bool particle_intersects_metavoxel = MathUtil.DoesBoxIntersectSphere(new Vector3(-0.5f, -0.5f, -0.5f),
+                                                                                             new Vector3( 0.5f,  0.5f,  0.5f),
+                                                                                             mvParticlePos,
+                                                                                             parts[pp].size/2);
+
+                        if (particle_intersects_metavoxel)
                         {
-                            mvGrid[zz, yy, xx].mParticlesCovered.Add(parts[ii]);
+                            mvGrid[zz, yy, xx].mParticlesCovered.Add(parts[pp]);
+                            Debug.Log("particle " + pp + "with radius "+ parts[pp].size/2f + " at mvpos= " + mvParticlePos + " intersects mv (" + xx + "," + yy + "," + zz);
                         }
-                        else if (dSphereCubeSq > dMaxSq)
-                        {
-                            continue; // definitely does not intersect
-                        }
-                        else
-                        {
-                            // [todo: sphere-cube test]
-                        }
+
+                        // sphere - cube intersection test
+                        //float dSphereCubeSq = (wsParticlePos - mvGrid[zz, yy, xx].mPos).sqrMagnitude;
+                        //float dMinSq = Mathf.Pow(mvSizeX / 2f + parts[pp].size, 2f); // [todo: assuming mv is a cube -- its not.. sides can be diff lengths based on scale]
+                        //float dMaxSq = Mathf.Pow(mvSizeX / Mathf.Sqrt(2) + parts[pp].size, 2f);
+
+                        //if (dSphereCubeSq <= dMinSq)
+                        //{
+                        //    mvGrid[zz, yy, xx].mParticlesCovered.Add(parts[pp]);
+                        //}
+                        //else if (dSphereCubeSq > dMaxSq)
+                        //{
+                        //    continue; // definitely does not intersect
+                        //}
+                        //else
+                        //{
+                        //    // [todo: sphere-cube test]
+                        //}
                     }
 
 
@@ -558,12 +582,14 @@ public class MetavoxelManager : MonoBehaviour {
 
         int index = 0;
 
+        Debug.Log("Filling MV(" + xx + "," + yy + "," + zz+ " has " + numParticles);
         foreach (ParticleSystem.Particle p in mvGrid[zz, yy, xx].mParticlesCovered)
         {
             Vector3 wsPos = theParticleSystem.transform.localToWorldMatrix.MultiplyPoint3x4(p.position);
-            dpArray[index].mWorldToLocal = Matrix4x4.TRS(wsPos, theParticleSystem.transform.rotation, new Vector3(p.size, p.size, p.size));
-            dpArray[index].mWorldPos = p.position;
-            dpArray[index].mRadius = p.size / 2.0f; // sphere, so any dim will do          
+            float pRadius = p.size / 2f;
+            dpArray[index].mWorldToLocal = Matrix4x4.TRS(wsPos, Quaternion.identity, new Vector3(pRadius, pRadius, pRadius)).inverse;
+            dpArray[index].mWorldPos = wsPos;
+            dpArray[index].mRadius = pRadius;// / 2.0f; // sphere, so any dim will do          
         }
 
         //foreach (Transform p in mvGrid[zz, yy, xx].mParticlesCovered)
