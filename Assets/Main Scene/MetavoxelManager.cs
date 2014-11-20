@@ -26,8 +26,10 @@ public struct MetaVoxel
     public Vector3 mPos;
     public Quaternion mRot;
     public bool mCovered;
-    public List<Transform> mParticlesCovered;
+    public List<ParticleSystem.Particle> mParticlesCovered;
 }
+
+
 
 // When "filling a metavoxel" using the "Fill Volume" shader, we send per-particle-info
 // for use in the voxel-particle coverage test
@@ -36,7 +38,7 @@ public struct DisplacedParticle
     public Matrix4x4 mWorldToLocal;
     public Vector3 mWorldPos;
     public float mRadius;
-    public int mIndex;
+    public float mOpacity;
 }
 
 
@@ -65,15 +67,17 @@ public class MetavoxelManager : MonoBehaviour {
     public Material matFillVolume;
     public Material matRayMarchOver;
 	public Material matRayMarchUnder;
-	
+
+    public GameObject theParticleSystem;
     public GameObject testLightPlane;
     public GameObject testQuad;
+
 
     public Material mvLineColor;
     
     // State
     private MetaVoxel[,,] mvGrid;
-    private Transform[] particles;
+    //private Transform[] particles;
 
     // Resources
     private RenderTexture lightPropogationUAV;
@@ -81,10 +85,12 @@ public class MetavoxelManager : MonoBehaviour {
     private RenderTexture[, ,] mvFillTextures;
 
     private List<Vector3> sortedMVSliceFromEye;
-    private BoundingBox pBounds;
+    //private BoundingBox pBounds;
+    private AABBForParticles pBounds;
 
     // Light movement detection
     private Quaternion lastLightRot;
+
 
     // temp prototyping stuff
     private Vector3 mvScale;
@@ -92,8 +98,8 @@ public class MetavoxelManager : MonoBehaviour {
     private GameObject quadDaddy;
     private bool renderQuads;
     private bool showPrettyColors;
-    public Mesh cubeMesh;
-    public Mesh mesh;
+    private Mesh cubeMesh;
+    private Mesh mesh;
     public Vector3[] cubeVertices;
     public Vector2[] cubeUVs;
 
@@ -103,15 +109,16 @@ public class MetavoxelManager : MonoBehaviour {
         //mvGridZ = (int)((far - near) / mvSizeZ);
         mvScale = new Vector3(mvSizeX, mvSizeY, mvSizeZ); // [care] used in CreateResources
 
-        GameObject particleParent = GameObject.Find("Particles");
-        pBounds = particleParent.GetComponent<BoundingBox>();
+        //GameObject particleParent = GameObject.Find("Particles");
+        //pBounds = particleParent.GetComponent<BoundingBox>();
 
-        particles = new Transform[particleParent.transform.childCount];
+        //particles = new Transform[particleParent.transform.childCount];
 
-        for (int ii = 0; ii < particleParent.transform.childCount; ii++) {
-            particles[ii] = particleParent.transform.GetChild(ii);
-            particles[ii].gameObject.SetActive(false);
-        }
+        //for (int ii = 0; ii < particleParent.transform.childCount; ii++) {
+        //    particles[ii] = particleParent.transform.GetChild(ii);
+        //    particles[ii].gameObject.SetActive(false);
+        //}
+        pBounds = theParticleSystem.GetComponent<AABBForParticles>();
         
         CreateResources();
 
@@ -371,7 +378,7 @@ public class MetavoxelManager : MonoBehaviour {
             {
                 for (int xx = 0; xx < numMetavoxelsX; xx++)
                 {
-                    mvGrid[zz, yy, xx].mParticlesCovered = new List<Transform>();
+                    mvGrid[zz, yy, xx].mParticlesCovered = new List<ParticleSystem.Particle>();
                     CreateFillTexture(xx, yy, zz);
                 }
             }
@@ -438,6 +445,10 @@ public class MetavoxelManager : MonoBehaviour {
 
     void UpdateMetavoxelParticleCoverage()
     {
+        ParticleSystem ps = theParticleSystem.GetComponent<ParticleSystem>();
+        ParticleSystem.Particle[] parts = new ParticleSystem.Particle[ps.maxParticles];
+        int numParticles = ps.GetParticles(parts);
+
         for (int zz = 0; zz < numMetavoxelsZ; zz++)
         {
             for (int yy = 0; yy < numMetavoxelsY; yy++)
@@ -446,16 +457,17 @@ public class MetavoxelManager : MonoBehaviour {
                 {
                     mvGrid[zz, yy, xx].mParticlesCovered.Clear();
 
-                    foreach (Transform p in particles)
+                    for (int ii = 0; ii < numParticles; ii++)
                     {
                         // sphere - cube intersection test
-                        float dSphereCubeSq = (p.position - mvGrid[zz, yy, xx].mPos).sqrMagnitude;
-                        float dMinSq = Mathf.Pow(mvSizeX / 2f + p.localScale.x, 2f); // [todo: assuming mv is a cube -- its not.. sides can be diff lengths based on scale]
-                        float dMaxSq = Mathf.Pow(mvSizeX / Mathf.Sqrt(2) + p.localScale.x, 2f);
+                        Vector3 wsPos = theParticleSystem.transform.localToWorldMatrix.MultiplyPoint3x4(parts[ii].position);
+                        float dSphereCubeSq = (wsPos - mvGrid[zz, yy, xx].mPos).sqrMagnitude;
+                        float dMinSq = Mathf.Pow(mvSizeX / 2f + parts[ii].size, 2f); // [todo: assuming mv is a cube -- its not.. sides can be diff lengths based on scale]
+                        float dMaxSq = Mathf.Pow(mvSizeX / Mathf.Sqrt(2) + parts[ii].size, 2f);
 
                         if (dSphereCubeSq <= dMinSq)
                         {
-                            mvGrid[zz, yy, xx].mParticlesCovered.Add(p);
+                            mvGrid[zz, yy, xx].mParticlesCovered.Add(parts[ii]);
                         }
                         else if (dSphereCubeSq > dMaxSq)
                         {
@@ -465,8 +477,31 @@ public class MetavoxelManager : MonoBehaviour {
                         {
                             // [todo: sphere-cube test]
                         }
-
                     }
+
+
+
+                    //foreach (Transform p in particles)
+                    //{
+                    //    // sphere - cube intersection test
+                    //    float dSphereCubeSq = (p.position - mvGrid[zz, yy, xx].mPos).sqrMagnitude;
+                    //    float dMinSq = Mathf.Pow(mvSizeX / 2f + p.localScale.x, 2f); // [todo: assuming mv is a cube -- its not.. sides can be diff lengths based on scale]
+                    //    float dMaxSq = Mathf.Pow(mvSizeX / Mathf.Sqrt(2) + p.localScale.x, 2f);
+
+                    //    if (dSphereCubeSq <= dMinSq)
+                    //    {
+                    //        mvGrid[zz, yy, xx].mParticlesCovered.Add(p);
+                    //    }
+                    //    else if (dSphereCubeSq > dMaxSq)
+                    //    {
+                    //        continue; // definitely does not intersect
+                    //    }
+                    //    else
+                    //    {
+                    //        // [todo: sphere-cube test]
+                    //    }
+
+                    //}
 
                     if (mvGrid[zz, yy, xx].mParticlesCovered.Count == 0)
                         mvGrid[zz, yy, xx].mCovered = false;
@@ -522,15 +557,24 @@ public class MetavoxelManager : MonoBehaviour {
         DisplacedParticle[] dpArray = new DisplacedParticle[numParticles];
 
         int index = 0;
-        foreach (Transform p in mvGrid[zz, yy, xx].mParticlesCovered)
+
+        foreach (ParticleSystem.Particle p in mvGrid[zz, yy, xx].mParticlesCovered)
         {
-            dpArray[index].mWorldToLocal = p.worldToLocalMatrix;
+            Vector3 wsPos = theParticleSystem.transform.localToWorldMatrix.MultiplyPoint3x4(p.position);
+            dpArray[index].mWorldToLocal = Matrix4x4.TRS(wsPos, theParticleSystem.transform.rotation, new Vector3(p.size, p.size, p.size));
             dpArray[index].mWorldPos = p.position;
-            dpArray[index].mRadius = p.localScale.x / 2.0f; // sphere, so any dim will do          
-            string pi = p.name[1].ToString();
-            dpArray[index].mIndex = int.Parse(pi);
-            index++;
+            dpArray[index].mRadius = p.size / 2.0f; // sphere, so any dim will do          
         }
+
+        //foreach (Transform p in mvGrid[zz, yy, xx].mParticlesCovered)
+        //{
+        //    dpArray[index].mWorldToLocal = p.worldToLocalMatrix;
+        //    dpArray[index].mWorldPos = p.position;
+        //    dpArray[index].mRadius = p.localScale.x / 2.0f; // sphere, so any dim will do          
+        //    string pi = p.name[1].ToString();
+        //    dpArray[index].mIndex = int.Parse(pi);
+        //    index++;
+        //}
 
         //Debug.Log("MV " + xx + yy + zz + " : Particles covered = " + mvGrid[zz, yy, xx].mParticlesCovered.Count);
 

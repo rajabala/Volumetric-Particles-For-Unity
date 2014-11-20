@@ -21,7 +21,7 @@
 			float4x4 mWorldToLocal;
 			float3	mWorldPos;
 			float	mRadius;
-			int		mIndex;
+			float	mOpacity;
 		};
 		
 		// UAVs
