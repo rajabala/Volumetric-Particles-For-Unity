@@ -22,6 +22,11 @@
 #pragma fragment frag
 
 #include "UnityCG.cginc"
+#define green float4(0.0, 0.5, 0.0, 0.5)
+#define yellow float4(0.5, 0.5, 0.0, 0.5)
+#define orange float4(0.5, 0.4, 0.0, 0.5)
+#define red float4(0.5, 0.0, 0.0, 0.5)
+
 
 				sampler3D _VolumeTexture;
 				sampler2D _LightPropogationTexture;
@@ -33,6 +38,7 @@
 				float3 _MetavoxelGridDim;
 				float3 _MetavoxelSize;
 				float _NumVoxels; // metavoxel's voxel dimensions
+				float _ParticleCoverageRatio; 
 
 				// Camera uniforms
 				float4x4 _CameraToWorldMatrix; // need to explicitly define this to get the main camera's matrices
@@ -102,12 +108,21 @@
 				// For each fragment, we have to iterate through all the particles covered
 				// by the MV and fill the voxel column by iterating through each voxel slice.
 				// [todo] this can be parallelized.
-				float4 
+				float4
 				frag(v2f i) : COLOR
 				{					
-					if (_ShowPrettyColors == 1) // Color metavoxels that are covered by particles
-						return float4(_MetavoxelIndex.xyz * 0.3f, 0.7f);
-
+					if (_ShowPrettyColors == 1) // Color metavoxels that are covered by particles 
+					{
+						if (_ParticleCoverageRatio < 0.25)
+							return green;
+						else if (_ParticleCoverageRatio < 0.5)
+							return yellow;
+						else if (_ParticleCoverageRatio < 0.75)
+							return orange;
+						else
+							return red;
+						//return float4(_MetavoxelIndex.xyz * 0.3f, 0.7f);
+					}
 
 					// Find ray direction from camera through this pixel
 					// -- Find half width and height of the near plane in world units

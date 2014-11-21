@@ -25,7 +25,6 @@ public struct MetaVoxel
 {
     public Vector3 mPos;
     public Quaternion mRot;
-    public bool mCovered;
     public List<ParticleSystem.Particle> mParticlesCovered;
 }
 
@@ -64,7 +63,7 @@ public class MvDistComparer : IComparer<Vector3>
 // Class that creates, updates, fills and renders a sparse metavoxel grid
 // Attach this to the camera child of a directional light source
 public class MetavoxelManager : MonoBehaviour {
-    public int mvSizeX, mvSizeY, mvSizeZ; // world units
+    public Vector3 mvScale;// world units
     public int numMetavoxelsX, numMetavoxelsY, numMetavoxelsZ; // # metavoxels in the grid along x, y & z
     public int numVoxelsInMetavoxel; // affects the size of the 3D texture used to fill a metavoxel
     public int updateInterval;
@@ -78,31 +77,26 @@ public class MetavoxelManager : MonoBehaviour {
     public GameObject testLightPlane;
     public GameObject testQuad;
 
-
     public Material mvLineColor;
     
     // State
     private MetaVoxel[,,] mvGrid;
-    //private Transform[] particles;
 
     // Resources
-    private RenderTexture lightPropogationUAV;
     private  RenderTexture rtCam; // bind this as RT for this cam. we don't sample/use it though..
-    private RenderTexture[, ,] mvFillTextures;
+    private RenderTexture[, ,] mvFillTextures; // 3D textures that hold metavoxel fill data
+    private RenderTexture lightPropogationUAV; // Light propogation texture used while filling metavoxels
 
-    private List<Vector3> sortedMVSliceFromEye;
-    //private BoundingBox pBounds;
     private AABBForParticles pBounds;
+    private ParticleSystem ps;
+    private int numParticlesEmitted;
 
     // Light movement detection
     private Quaternion lastLightRot;
 
-
     // temp prototyping stuff
-    private Vector3 mvScale;
     private List<GameObject> mvQuads;
     private GameObject quadDaddy;
-    private bool renderQuads;
     private bool showPrettyColors;
     private Mesh cubeMesh;
     private Mesh mesh;
@@ -110,32 +104,19 @@ public class MetavoxelManager : MonoBehaviour {
     public Vector2[] cubeUVs;
 
 	
-	void Start () {        
-        //float near = Camera.main.nearClipPlane, far = Camera.main.farClipPlane;
-        //mvGridZ = (int)((far - near) / mvSizeZ);
-        mvScale = new Vector3(mvSizeX, mvSizeY, mvSizeZ); // [care] used in CreateResources
-
-        //GameObject particleParent = GameObject.Find("Particles");
-        //pBounds = particleParent.GetComponent<BoundingBox>();
-
-        //particles = new Transform[particleParent.transform.childCount];
-
-        //for (int ii = 0; ii < particleParent.transform.childCount; ii++) {
-        //    particles[ii] = particleParent.transform.GetChild(ii);
-        //    particles[ii].gameObject.SetActive(false);
-        //}
-        pBounds = theParticleSystem.GetComponent<AABBForParticles>();
-        
+	void Start () {
         CreateResources();
+
+        pBounds = theParticleSystem.GetComponent<AABBForParticles>();
+        ps = theParticleSystem.GetComponent<ParticleSystem>();
+        
 
         // Don't do unnecessary work on the camera. We don't use rtCam.
         this.camera.clearFlags = CameraClearFlags.Nothing;
         this.camera.cullingMask = 0;
 
         CreateTempResources();
-        renderQuads = false;
         showPrettyColors = false;
-        sortedMVSliceFromEye = new List<Vector3>();
 
         lastLightRot = transform.rotation;
 	}
@@ -162,12 +143,6 @@ public class MetavoxelManager : MonoBehaviour {
 
             UpdateMetavoxelParticleCoverage();
             FillMetavoxels(src, dst);
-
-            //[todo - phase out]
-            if (renderQuads)
-                CreateMetavoxelQuads();
-            else
-                DestroyMetavoxelQuads();
         }
         
     }
@@ -175,8 +150,7 @@ public class MetavoxelManager : MonoBehaviour {
 
     void OnGUI()
     {
-        renderQuads = GUI.Toggle(new Rect(25, 50, 200, 30), renderQuads, "Render metavoxels as quads");
-        showPrettyColors = GUI.Toggle(new Rect(25, 100, 200, 30), showPrettyColors, "Show pretty colors");
+        showPrettyColors = GUI.Toggle(new Rect(25, 50, 200, 30), showPrettyColors, "Show pretty colors");
     }
 
 
@@ -201,10 +175,6 @@ public class MetavoxelManager : MonoBehaviour {
 
     void CreateTempResources()
     {
-        mvQuads = new List<GameObject>();
-        quadDaddy = new GameObject("quadDaddy");
-        quadDaddy.transform.position = Vector3.zero;
-        quadDaddy.transform.rotation = Quaternion.identity;
 
         cubeMesh = new Mesh();
         cubeMesh.vertices = cubeVertices;
@@ -452,9 +422,8 @@ public class MetavoxelManager : MonoBehaviour {
     
     void UpdateMetavoxelParticleCoverage()
     {
-        ParticleSystem ps = theParticleSystem.GetComponent<ParticleSystem>();
         ParticleSystem.Particle[] parts = new ParticleSystem.Particle[ps.maxParticles];
-        int numParticles = ps.GetParticles(parts);
+        numParticlesEmitted = ps.GetParticles(parts);
 
         for (int zz = 0; zz < numMetavoxelsZ; zz++)
         {
@@ -468,7 +437,7 @@ public class MetavoxelManager : MonoBehaviour {
                                                                         mvGrid[zz, yy, xx].mRot,
                                                                         mvScale).inverse;
 
-                    for (int pp = 0; pp < numParticles; pp++)
+                    for (int pp = 0; pp < numParticlesEmitted; pp++)
                     {
                         // xform particle to mv space
                         Vector3 wsParticlePos = theParticleSystem.transform.localToWorldMatrix.MultiplyPoint3x4(parts[pp].position);
@@ -484,39 +453,11 @@ public class MetavoxelManager : MonoBehaviour {
                             mvGrid[zz, yy, xx].mParticlesCovered.Add(parts[pp]);
                            // Debug.Log("particle " + pp + "with radius "+ parts[pp].size/2f + " at mvpos= " + mvParticlePos + " intersects mv (" + xx + "," + yy + "," + zz);
                         }
-                    }
+                    } // pp
 
-
-
-                    //foreach (Transform p in particles)
-                    //{
-                    //    // sphere - cube intersection test
-                    //    float dSphereCubeSq = (p.position - mvGrid[zz, yy, xx].mPos).sqrMagnitude;
-                    //    float dMinSq = Mathf.Pow(mvSizeX / 2f + p.localScale.x, 2f); // [todo: assuming mv is a cube -- its not.. sides can be diff lengths based on scale]
-                    //    float dMaxSq = Mathf.Pow(mvSizeX / Mathf.Sqrt(2) + p.localScale.x, 2f);
-
-                    //    if (dSphereCubeSq <= dMinSq)
-                    //    {
-                    //        mvGrid[zz, yy, xx].mParticlesCovered.Add(p);
-                    //    }
-                    //    else if (dSphereCubeSq > dMaxSq)
-                    //    {
-                    //        continue; // definitely does not intersect
-                    //    }
-                    //    else
-                    //    {
-                    //        // [todo: sphere-cube test]
-                    //    }
-
-                    //}
-
-                    if (mvGrid[zz, yy, xx].mParticlesCovered.Count == 0)
-                        mvGrid[zz, yy, xx].mCovered = false;
-                    else
-                        mvGrid[zz, yy, xx].mCovered = true;
-                }
-            }
-        }        
+                } // xx
+            } // yy
+        } // zz       
     }
 
 
@@ -532,7 +473,7 @@ public class MetavoxelManager : MonoBehaviour {
             {
                 for (int xx = 0; xx < numMetavoxelsX; xx++)
                 {
-                    if (mvGrid[zz, yy, xx].mCovered)
+                    if (mvGrid[zz, yy, xx].mParticlesCovered.Count != 0)
                         FillMetavoxel(xx, yy, zz, src, dst);
                 }
             }
@@ -575,18 +516,6 @@ public class MetavoxelManager : MonoBehaviour {
             index++;
         }
 
-        //foreach (Transform p in mvGrid[zz, yy, xx].mParticlesCovered)
-        //{
-        //    dpArray[index].mWorldToLocal = p.worldToLocalMatrix;
-        //    dpArray[index].mWorldPos = p.position;
-        //    dpArray[index].mRadius = p.localScale.x / 2.0f; // sphere, so any dim will do          
-        //    string pi = p.name[1].ToString();
-        //    dpArray[index].mIndex = int.Parse(pi);
-        //    index++;
-        //}
-
-        //Debug.Log("MV " + xx + yy + zz + " : Particles covered = " + mvGrid[zz, yy, xx].mParticlesCovered.Count);
-
         ComputeBuffer dpBuffer = new ComputeBuffer(numParticles,
                                                    Marshal.SizeOf(dpArray[0]));
         dpBuffer.SetData(dpArray);
@@ -611,9 +540,9 @@ public class MetavoxelManager : MonoBehaviour {
     }
 
     // The ray march step uses alpha blending and imposes order requirements 
-    void SortMetavoxelSlicesFarToNearFromEye()
+    List<Vector3> SortMetavoxelSlicesFarToNearFromEye()
     {
-        sortedMVSliceFromEye.Clear();
+        List<Vector3> mvPerSliceFarToNear = new List<Vector3>() ;
         Vector3 cameraPos = Camera.main.transform.position;
 
         for (int yy = 0; yy < numMetavoxelsY; yy++)
@@ -621,19 +550,21 @@ public class MetavoxelManager : MonoBehaviour {
             for (int xx = 0; xx < numMetavoxelsX; xx++)
             {
                 Vector3 distFromEye = mvGrid[0, yy, xx].mPos - cameraPos;
-                sortedMVSliceFromEye.Add(new Vector3(xx, yy, Vector3.Dot(distFromEye, distFromEye)));
+                mvPerSliceFarToNear.Add(new Vector3(xx, yy, Vector3.Dot(distFromEye, distFromEye)));
             }
         }
 
         MvDistComparer mvdc = new MvDistComparer();
-        sortedMVSliceFromEye.Sort(mvdc);
+        mvPerSliceFarToNear.Sort(mvdc);
+
+        return mvPerSliceFarToNear;
     }
 
     // Submit a cube from the perspective of the main camera
     // This function is called from CameraScript.cs
     public void RenderMetavoxels()
     {
-        SortMetavoxelSlicesFarToNearFromEye();
+        List<Vector3> mvPerSliceFarToNear = SortMetavoxelSlicesFarToNearFromEye();
 		SetRaymarchConstants();
 
 		Vector3 lsCameraPos = transform.worldToLocalMatrix.MultiplyPoint3x4 (Camera.main.transform.position);
@@ -644,12 +575,12 @@ public class MetavoxelManager : MonoBehaviour {
         // (a) increasing order along the direction of the light
         // (b) farthest-to-nearest from the camera per slice
         for (int zz = 0; zz < zBoundary; zz++)
-        {           
-            foreach (Vector3 vv in sortedMVSliceFromEye)
+        {
+            foreach (Vector3 vv in mvPerSliceFarToNear)
             {
                 int xx = (int)vv.x, yy = (int)vv.y;
 
-                if (mvGrid[zz, yy, xx].mCovered)
+                if (mvGrid[zz, yy, xx].mParticlesCovered.Count != 0)
                 {
                     RenderMetavoxel(xx, yy, zz, matRayMarchOver);
                 }
@@ -661,15 +592,15 @@ public class MetavoxelManager : MonoBehaviour {
         // (a) increasing order along the direction of the light
         // (b) nearest-to-farthest from the camera per slice
 
-        sortedMVSliceFromEye.Reverse(); // make it nearest-to-farthest
+        mvPerSliceFarToNear.Reverse(); // make it nearest-to-farthest
 
         for (int zz = zBoundary; zz < numMetavoxelsZ; zz++)
         {
-            foreach (Vector3 vv in sortedMVSliceFromEye)
+            foreach (Vector3 vv in mvPerSliceFarToNear)
             {
                 int xx = (int)vv.x, yy = (int)vv.y;
 
-                if (mvGrid[zz, yy, xx].mCovered)
+                if (mvGrid[zz, yy, xx].mParticlesCovered.Count != 0)
                 {
                     RenderMetavoxel(xx, yy, zz, matRayMarchUnder);
                 }
@@ -734,57 +665,9 @@ public class MetavoxelManager : MonoBehaviour {
         m.SetMatrix("_MetavoxelToWorld", mvToWorld);
         m.SetMatrix("_WorldToMetavoxel", mvToWorld.inverse);
         m.SetVector("_MetavoxelIndex", new Vector3(xx, yy, zz));
+        m.SetFloat("_ParticleCoverageRatio", mvGrid[zz, yy, xx].mParticlesCovered.Count / (float)numParticlesEmitted);
 
         Graphics.DrawMeshNow(mesh, Vector3.zero, Quaternion.identity);
-    }
-
-
-	// Called from Maincamera.OnRenderImage()
-	// Cheap hack to check if fill volume is working. It doesn't "render" the quads as such.
-    // Only instantiates them. Since this camera doesn't "see" anything (via cullmask), it
-    // ends up being rendered by the main camera.
-    void CreateMetavoxelQuads()
-    {
-        DestroyMetavoxelQuads();
-
-        // Draw a bunch of alpha blended quads that're textured with the voxel's 3D fill info
-        for (int zz = 0; zz < numMetavoxelsZ; zz++)
-        {
-            for (int yy = 0; yy < numMetavoxelsY; yy++)
-            {
-                for (int xx = 0; xx < numMetavoxelsX; xx++)
-                {
-                    if (mvGrid[zz, yy, xx].mCovered)
-                    {
-                        for (int slice = 0; slice < numVoxelsInMetavoxel; slice ++)
-                        {
-                            GameObject quad = GameObject.Instantiate(testQuad) as GameObject;
-                            quad.name = "MV_" + xx + yy + zz + "_s" + slice;
-                            quad.transform.parent = quadDaddy.transform;
-                            quad.renderer.material.SetTexture("_Volume", mvFillTextures[zz, yy, xx]);
-                            quad.renderer.material.SetInt("_Slice", slice);
-                            quad.renderer.material.SetInt("_NumVoxels", numVoxelsInMetavoxel);
-
-                            quad.transform.rotation = mvGrid[zz, yy, xx].mRot;
-                            Vector3 sliceOffset = quad.transform.forward * (slice - numVoxelsInMetavoxel/2)/numVoxelsInMetavoxel;
-                            quad.transform.position = mvGrid[zz, yy, xx].mPos + sliceOffset * mvSizeX;
-                            quad.transform.localScale = new Vector3(mvSizeX, mvSizeY, 1);
-                            mvQuads.Add(quad);
-                        }
-                    }
-                       
-                }
-            }
-        }
-    }
-
-    void DestroyMetavoxelQuads()
-    {
-        foreach (GameObject g in mvQuads)
-        {
-            Destroy(g);
-        }
-        mvQuads.Clear();
     }
 
 
@@ -803,16 +686,16 @@ public class MetavoxelManager : MonoBehaviour {
         }
     }
 
+
     void DrawMetavoxel(int xx, int yy, int zz)
     {
         List<Vector3> points = new List<Vector3>();
-
         mvLineColor.SetPass(0);
         Vector3 mvPos = mvGrid[zz, yy, xx].mPos;
         Quaternion q = mvGrid[zz, yy, xx].mRot;
    
 
-        float halfWidth = mvSizeX * 0.5f, halfHeight = mvSizeY * 0.5f, halfDepth = mvSizeZ * 0.5f;
+        float halfWidth = mvScale.x * 0.5f, halfHeight = mvScale.y * 0.5f, halfDepth = mvScale.z * 0.5f;
         // back, front --> Z ; top, bot --> Y ; left, right --> X
         Vector3 offBotLeftBack = q * new Vector3(-halfWidth,    -halfHeight, halfDepth),
                 offBotLeftFront = q * new Vector3(-halfWidth,   -halfHeight, -halfDepth),
@@ -877,12 +760,12 @@ public class MetavoxelManager : MonoBehaviour {
 
 
                     Vector3 lsWorldOrigin = transform.worldToLocalMatrix.MultiplyPoint3x4(Vector3.zero); // xform origin to light space
-                    Vector3 lsOffset = Vector3.Scale(new Vector3(numMetavoxelsX / 2 - xx, numMetavoxelsY / 2 - yy, numMetavoxelsZ / 2 - zz), new Vector3(mvSizeX, mvSizeY, mvSizeZ));
+                    Vector3 lsOffset = Vector3.Scale(new Vector3(numMetavoxelsX / 2 - xx, numMetavoxelsY / 2 - yy, numMetavoxelsZ / 2 - zz), new Vector3(mvScale.x, mvScale.y, mvScale.z));
                     Vector3 mvPos = transform.localToWorldMatrix.MultiplyPoint3x4(lsWorldOrigin - lsOffset);
                     Quaternion q = new Quaternion();
                     q.SetLookRotation(-transform.forward, transform.up);
 
-                    float halfWidth = mvSizeX * 0.5f, halfHeight = mvSizeY * 0.5f, halfDepth = mvSizeZ * 0.5f;
+                    float halfWidth = mvScale.x * 0.5f, halfHeight = mvScale.y * 0.5f, halfDepth = mvScale.z * 0.5f;
                     // back, front --> Z ; top, bot --> Y ; left, right --> X
                     Vector3 offBotLeftBack = q * new Vector3(-halfWidth, -halfHeight, halfDepth),
                             offBotLeftFront = q * new Vector3(-halfWidth, -halfHeight, -halfDepth),
