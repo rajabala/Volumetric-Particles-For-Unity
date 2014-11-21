@@ -68,6 +68,7 @@ public class MetavoxelManager : MonoBehaviour {
     public int numVoxelsInMetavoxel; // affects the size of the 3D texture used to fill a metavoxel
     public int updateInterval;
     public int rayMarchSteps;
+    public int numBorderVoxels; // per end (i.e. a value of 1 means 2 voxels per dimension are border voxels)
 
     public Material matFillVolume;
     public Material matRayMarchOver;
@@ -79,8 +80,9 @@ public class MetavoxelManager : MonoBehaviour {
 
     public Material mvLineColor;
     
-    // State
+    // MV Grid state
     private MetaVoxel[,,] mvGrid;
+    private Vector3 mvScaleWithBorder;
 
     // Resources
     private  RenderTexture rtCam; // bind this as RT for this cam. we don't sample/use it though..
@@ -107,6 +109,8 @@ public class MetavoxelManager : MonoBehaviour {
 	void Start () {
         CreateResources();
 
+        mvScaleWithBorder = mvScale * numVoxelsInMetavoxel / (numVoxelsInMetavoxel - 2 * numBorderVoxels);
+        Debug.Log("scale with border is " + mvScaleWithBorder);
         pBounds = theParticleSystem.GetComponent<AABBForParticles>();
         ps = theParticleSystem.GetComponent<ParticleSystem>();
         
@@ -435,14 +439,14 @@ public class MetavoxelManager : MonoBehaviour {
 
                     Matrix4x4 worldToMetavoxelMatrix = Matrix4x4.TRS(   mvGrid[zz, yy, xx].mPos, 
                                                                         mvGrid[zz, yy, xx].mRot,
-                                                                        mvScale).inverse;
+                                                                        mvScaleWithBorder).inverse;
 
                     for (int pp = 0; pp < numParticlesEmitted; pp++)
                     {
                         // xform particle to mv space
                         Vector3 wsParticlePos = theParticleSystem.transform.localToWorldMatrix.MultiplyPoint3x4(parts[pp].position);
                         Vector3 mvParticlePos = worldToMetavoxelMatrix.MultiplyPoint3x4(wsParticlePos);
-                        float radius = (parts[pp].size / 2f) / mvScale.x;
+                        float radius = (parts[pp].size / 2f) / mvScaleWithBorder.x;
                         bool particle_intersects_metavoxel = MathUtil.DoesBoxIntersectSphere(new Vector3(-0.5f, -0.5f, -0.5f),
                                                                                              new Vector3( 0.5f,  0.5f,  0.5f),
                                                                                              mvParticlePos,
@@ -488,7 +492,7 @@ public class MetavoxelManager : MonoBehaviour {
         matFillVolume.SetFloat("_NumVoxels", numVoxelsInMetavoxel);
         matFillVolume.SetFloat("_InitLightIntensity", 100.0f);
         matFillVolume.SetVector("_MetavoxelGridDim", new Vector3(numMetavoxelsX, numMetavoxelsY, numMetavoxelsZ));
-        matFillVolume.SetFloat("_OpacityFactor", 2000f);
+        matFillVolume.SetFloat("_OpacityFactor", 20f);
     }
 
     // Each metavoxel that has particles in it needs to be filled with volume info (opacity for now)
@@ -532,9 +536,9 @@ public class MetavoxelManager : MonoBehaviour {
 
         // Set material state
         matFillVolume.SetPass(0);
-        matFillVolume.SetMatrix("_MetavoxelToWorld", Matrix4x4.TRS(mvGrid[zz, yy, xx].mPos,
+        matFillVolume.SetMatrix("_MetavoxelToWorld", Matrix4x4.TRS( mvGrid[zz, yy, xx].mPos,
                                                                     mvGrid[zz, yy, xx].mRot,
-                                                                    mvScale));
+                                                                    mvScaleWithBorder)); // need to fill the border voxels of this metavoxel too (so we need to make it "seem" bigger
         matFillVolume.SetVector("_MetavoxelIndex", new Vector3(xx, yy, zz));
         matFillVolume.SetInt("_NumParticles", numParticles);
         matFillVolume.SetBuffer("_Particles", dpBuffer);
@@ -626,11 +630,11 @@ public class MetavoxelManager : MonoBehaviour {
 		foreach (Material m in over_under) {
 			// Resources
 			m.SetTexture("_LightPropogationTexture", lightPropogationUAV);
-			m.SetFloat("_InitLightIntensity", 1.0f);
 			
 			// Metavoxel grid uniforms
 			m.SetFloat("_NumVoxels", numVoxelsInMetavoxel);
-			m.SetVector("_MetavoxelSize", mvScale);
+			//m.SetVector("_MetavoxelSize", mvScale);
+            m.SetInt("_MetavoxelBorderSize", numBorderVoxels);
 			
 			// Camera uniforms
 			m.SetVector("_CameraWorldPos", Camera.main.transform.position);
@@ -669,7 +673,7 @@ public class MetavoxelManager : MonoBehaviour {
         m.SetTexture("_VolumeTexture", mvFillTextures[zz, yy, xx]);
         Matrix4x4 mvToWorld = Matrix4x4.TRS(mvGrid[zz, yy, xx].mPos,
                                             mvGrid[zz, yy, xx].mRot,
-                                            mvScale);
+                                            mvScale); // border should NOT be included here. we want to rasterize only the pixels covered by the metavoxel
         m.SetMatrix("_MetavoxelToWorld", mvToWorld);
         m.SetMatrix("_WorldToMetavoxel", mvToWorld.inverse);
         m.SetVector("_MetavoxelIndex", new Vector3(xx, yy, zz));

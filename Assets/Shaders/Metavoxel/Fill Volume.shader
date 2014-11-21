@@ -57,7 +57,6 @@
 			float4 normPos = float4((voxelPos - _NumVoxels/2) / _NumVoxels, 1.0);
 
 			return mul(_MetavoxelToWorld, normPos);
-			//return mul(normPos, transpose(_MetavoxelToWorld));
 		}
 
 
@@ -72,12 +71,9 @@
 			//// i.pos.xy represents the pixel position within the metavoxel grid facing the light.
 			//// convert to a [0, _NumVoxels] range for use within the metavoxel
 			//float2 svpos = i.pos.xy - float2(_MetavoxelIndex.x * _NumVoxels, _MetavoxelIndex.y * _NumVoxels);
-			float lightTransmittedByVoxel, lightIncidentOnVoxel;
+			float lightIncidentOnVoxel, lightIncidentOnPreviousVoxel;
 
-			if (_MetavoxelIndex.z == 0.0)
-				lightIncidentOnVoxel = _InitLightIntensity;
-			else
-				lightIncidentOnVoxel = lightPropogationTex[int2(i.pos.xy + _MetavoxelIndex.xy * _NumVoxels)];
+			lightIncidentOnPreviousVoxel = lightIncidentOnVoxel = _InitLightIntensity * lightPropogationTex[int2(i.pos.xy + _MetavoxelIndex.xy * _NumVoxels)];
 
 			float3 ambientLight = float3(0.1, 0.12, 0.1);
 			float4 clearColor = float4(0.0f, 0.0f, 0.0, 0);
@@ -95,7 +91,7 @@
 				for (pp = 0; pp < _NumParticles; pp++) {
 					float4 voxelWorldPos = get_voxel_world_pos(i.pos.xy, slice);
 					float3 voxelToSphere = _Particles[pp].mWorldPos - voxelWorldPos;
-					float ri = _Particles[pp].mRadius / 8; // inner radius of sphere
+					float ri = _Particles[pp].mRadius / 6; // inner radius of sphere
 					float ro = _Particles[pp].mRadius; // outer radius of sphere			
 					float dSqVoxelSphere = dot(voxelToSphere, voxelToSphere);
 
@@ -104,13 +100,12 @@
 						// use perlin noise to "displace" the sphere  [todo]
 
 						
-						// find sampling position for cube map in the particle's local space
-						//float3 texCoord = mul(-voxelToSphere, _Particles[pp].mWorldToLocal);						
+						// find sampling position for cube map in the particle's local space					
 						float3 texCoord = mul(_Particles[pp].mWorldToLocal, -voxelToSphere);						
 						float4 cubeColor = texCUBE(_DisplacementTexture, texCoord);
 					
 						// d = displacement of sphere from center along the voxel-sphere direction
-						float d = ri + (ro - ri) * cubeColor.x;//  ro - cubeColor.x * (ro - ri); // 0.0 ---> ro, 1.0 --> ri, sample --> ?
+						float d = ri + (ro - ri) * cubeColor.x; // d = [ri, ro] when cubeColor = [0.0, 1.0]
 
 
 						// actual coverage test -- check if the displaced sphere intersects voxel center
@@ -131,15 +126,15 @@
 				} // per particle
 
 				// lighting calc
-				voxelColor.rgb = voxelColor.rgb * lightIncidentOnVoxel + ambientLight;
+				voxelColor.rgb = voxelColor.rgb  + ambientLight;
 				volumeTex[int3(i.pos.xy, slice)] = voxelColor;
 
-				lightTransmittedByVoxel = lightIncidentOnVoxel / (1.0 + voxelOpacity);
-				lightIncidentOnVoxel = lightTransmittedByVoxel;
+				lightIncidentOnPreviousVoxel = lightIncidentOnVoxel;
+				lightIncidentOnVoxel *= rcp(1.0 + voxelOpacity);
 
 			} // per slice
 
-			lightPropogationTex[int2(i.pos.xy + _MetavoxelIndex.xy * _NumVoxels)] = lightTransmittedByVoxel;
+			lightPropogationTex[int2(i.pos.xy + _MetavoxelIndex.xy * _NumVoxels)] = lightIncidentOnPreviousVoxel; // exclude the exit border voxel to prevent inconsistencies in next metavoxel
 			
 			discard;
 			return float4(1.0f, 0.0f, 1.0f, 1.0f);

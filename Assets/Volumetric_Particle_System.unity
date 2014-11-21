@@ -459,7 +459,7 @@ Light:
   serializedVersion: 3
   m_Type: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: .600000024
+  m_Intensity: 1
   m_Range: 10
   m_SpotAngle: 30
   m_CookieSize: 10
@@ -690,12 +690,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mvScale: {x: 2, y: 2, z: 2}
-  numMetavoxelsX: 10
-  numMetavoxelsY: 10
-  numMetavoxelsZ: 10
+  numMetavoxelsX: 4
+  numMetavoxelsY: 4
+  numMetavoxelsZ: 4
   numVoxelsInMetavoxel: 32
   updateInterval: 1
-  rayMarchSteps: 32
+  rayMarchSteps: 64
+  numBorderVoxels: 1
   matFillVolume: {fileID: 2100000, guid: 742e800cae20c4547bc14935a578e998, type: 2}
   matRayMarchOver: {fileID: 2100000, guid: 14e5eb7c9a4acf34688b8fbd737f2365, type: 2}
   matRayMarchUnder: {fileID: 2100000, guid: 98638f28235c80d4eb0bd30969960c4a, type: 2}

@@ -30,14 +30,17 @@
 				sampler3D _VolumeTexture;
 				sampler2D _LightPropogationTexture;
 
+				// Raymarch pass constants
+				float _NumVoxels; // metavoxel's voxel dimensions
+				int _MetavoxelBorderSize;
+				//float3 _MetavoxelScale;
+
 				// Metavoxel uniforms
 				float4x4 _MetavoxelToWorld;
 				float4x4 _WorldToMetavoxel;
-				float3 _MetavoxelIndex;
-				float3 _MetavoxelGridDim;
-				float3 _MetavoxelSize;
-				float _NumVoxels; // metavoxel's voxel dimensions
-				float _ParticleCoverageRatio; 
+				//float3 _MetavoxelIndex;
+				//float3 _MetavoxelGridDim;
+				float _ParticleCoverageRatio;
 
 				// Camera uniforms
 				float4x4 _CameraToWorldMatrix; // need to explicitly define this to get the main camera's matrices
@@ -120,7 +123,6 @@
 							return orange;
 						else
 							return red;
-						//return float4(_MetavoxelIndex.xyz * 0.3f, 0.7f);
 					}
 
 
@@ -148,12 +150,12 @@
 					float stepSize = abs((tfar - tnear) / (float)(_NumSteps)); 
 					int exitIndex = floor((tmvexit.x - tnear) / stepSize);
 
-					float4 result = float4(0, 0, 0, 0);
+					float3 result = float3(0, 0, 0);
 					float transmittance = 1.0f;
 					int step;
 					float4x4 CameraToMetavoxel = mul(_WorldToMetavoxel, _CameraToWorldMatrix);
 					float3 csRayPos = (tnear + stepSize*exitIndex) * csRay.d;
-					[unroll(32)]
+					[unroll(64)]
 					for (step = exitIndex; step >= 0; step--) {
 						// convert from mv space to sampling space, i.e., [-mvSize/2, mvSize/2] -> [0,1]
 						float3 mvRayPos = mul(CameraToMetavoxel, float4(csRayPos, 1));
@@ -163,9 +165,14 @@
 						}
 
 						float3 samplePos = (2 * mvRayPos + 1.0) / 2.0; //[-0.5, 0.5] -->[0, 1]
-						float4 voxelColor = tex3D(_VolumeTexture, float3(samplePos.x, samplePos.y, samplePos.z));
+						// adjust for the metavoxel border -- the border voxels are only for filtering
+						float borderVoxelOffset = _MetavoxelBorderSize / _NumVoxels; // [0, 1] ---> [offset, 1 - offset]
 
-						// blending samples back-to-front, so use the `over` operator
+						samplePos = clamp(samplePos, borderVoxelOffset, 1.0 - borderVoxelOffset);
+
+						float4 voxelColor = tex3D(_VolumeTexture, samplePos);
+
+						// blending individual samples back-to-front, so use the `over` operator
 						result.rgb = voxelColor.a * voxelColor.rgb + (1 - voxelColor.a) * result.rgb; // a1*C1 + (1 - a1)*C0  (C1,a1) over (C0,a0)
 						transmittance *= (1 - voxelColor.a);
 
