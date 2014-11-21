@@ -49,7 +49,7 @@ Material:
       data:
         first:
           name: _InitLightIntensity
-        second: 1
+        second: 100
     m_Colors:
       data:
         first:

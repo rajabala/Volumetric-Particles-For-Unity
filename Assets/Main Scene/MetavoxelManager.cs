@@ -486,7 +486,7 @@ public class MetavoxelManager : MonoBehaviour {
     void SetFillPassConstants()
     {
         matFillVolume.SetFloat("_NumVoxels", numVoxelsInMetavoxel);
-        matFillVolume.SetFloat("_InitLightIntensity", 1.0f);
+        matFillVolume.SetFloat("_InitLightIntensity", 100.0f);
         matFillVolume.SetVector("_MetavoxelGridDim", new Vector3(numMetavoxelsX, numMetavoxelsY, numMetavoxelsZ));
         matFillVolume.SetFloat("_OpacityFactor", 2000f);
     }

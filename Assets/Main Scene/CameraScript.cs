@@ -3,10 +3,10 @@ using System.Collections;
 
 public class CameraScript : MonoBehaviour {
     public Light[] mLights;
-
-    // Camera look/move state
     public float lookSpeed, moveSpeed;
-    private float rotationX, rotationY;
+    public GUIText controlsText, beingMovedText;
+
+    private float camRotationX, camRotationY, lightRotationX, lightRotationY;
     private bool moveCamera, moveLight;
     private Vector3 startPos; private Quaternion startRot;
 
@@ -21,12 +21,12 @@ public class CameraScript : MonoBehaviour {
 
     // Use this for initialization
 	void Start () {
-        rotationX = rotationY = 0.0f;
+        camRotationX = camRotationY = 0.0f;
         startPos = transform.position;
         startRot = transform.rotation;
-        moveCamera = false; moveLight = false;
+        moveCamera = moveLight = false;
 
-        drawMetavoxelGrid = true;
+        drawMetavoxelGrid = false;
         rayMarchVoxels = true;
 
         mvMgrs = new MetavoxelManager[mLights.Length];
@@ -36,6 +36,7 @@ public class CameraScript : MonoBehaviour {
         }
 
         CreateResources();
+        controlsText.pixelOffset = new Vector2(Screen.width / 3, 0);
 
         camera.depthTextureMode = DepthTextureMode.Depth; // this makes the depth buffer available for all the shaders as _CameraDepthTexture
         // [perf threat] Unity is going to do a Z-prepass simply because of this line. 
@@ -132,29 +133,64 @@ public class CameraScript : MonoBehaviour {
         if (moveCamera)
         {
             // fps'ish free cam
-            rotationX += Input.GetAxis("Mouse X") * lookSpeed;
-            rotationY += Input.GetAxis("Mouse Y") * lookSpeed;
-            rotationY = Mathf.Clamp(rotationY, -90, 90); // can't do a backflip of course.
+            camRotationX += Input.GetAxis("Mouse X") * lookSpeed;
+            camRotationY += Input.GetAxis("Mouse Y") * lookSpeed;
+            camRotationY = Mathf.Clamp(camRotationY, -90, 90); // can't do a backflip of course.
 
             // Unity's screen space coordinate convention has the origin on the bottom left
             // Using the camera's up and right vector can lose one degree of freedom and cause the gimbal lock!
-            transform.localRotation = Quaternion.AngleAxis(rotationX,  Vector3.up);
-            transform.localRotation *= Quaternion.AngleAxis(rotationY, -Vector3.right);
+            transform.localRotation = Quaternion.AngleAxis(camRotationX,  Vector3.up);
+            transform.localRotation *= Quaternion.AngleAxis(camRotationY, -Vector3.right);
 
             transform.position += transform.forward * Input.GetAxis("Vertical") * moveSpeed;
             transform.position += transform.right * Input.GetAxis("Horizontal") * moveSpeed;
         }
+        else if (moveLight)
+        {
+            // fps'ish free cam
+            lightRotationX += Input.GetAxis("Mouse X") * lookSpeed;
+            lightRotationY += Input.GetAxis("Mouse Y") * lookSpeed;
+
+            // Unity's screen space coordinate convention has the origin on the bottom left
+            // Using the camera's up and right vector can lose one degree of freedom and cause the gimbal lock!
+            mLights[0].transform.localRotation = Quaternion.AngleAxis(lightRotationX, Vector3.up);
+            mLights[0].transform.localRotation *= Quaternion.AngleAxis(lightRotationY, -Vector3.right);
+        }
+
 
         if (Input.GetKeyDown(KeyCode.R))
         {
             transform.position = startPos;
             transform.rotation = startRot;
-            rotationX = rotationY = 0.0f;
+            camRotationX = camRotationY = 0.0f;
         }
 
         if (Input.GetKeyDown(KeyCode.C))
         {
             moveCamera = !moveCamera;
+            if (moveCamera)
+            {
+                moveLight = false;
+                beingMovedText.text = "Moving camera..";
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            moveLight = !moveLight;
+            if (moveLight)
+            {
+                moveCamera = false;
+                beingMovedText.text = "Moving light..";
+            }
+        }
+
+        if (!moveCamera && !moveLight)
+            beingMovedText.text = "";
+
+        if (Input.GetKeyDown(KeyCode.H))
+        {
+            controlsText.gameObject.SetActive(!controlsText.gameObject.activeSelf);
         }
 
 
