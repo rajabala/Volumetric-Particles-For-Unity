@@ -29,7 +29,11 @@ public struct MetaVoxel
     public List<ParticleSystem.Particle> mParticlesCovered;
 }
 
-
+public struct TmpParticle
+{
+    public Vector3 pos;
+    public float radius;
+}
 
 // When "filling a metavoxel" using the "Fill Volume" shader, we send per-particle-info
 // for use in the voxel-particle coverage test
@@ -37,7 +41,7 @@ public struct DisplacedParticle
 {
     public Matrix4x4 mWorldToLocal;
     public Vector3 mWorldPos;
-    public float mRadius;
+    public float mRadius; // world units
     public float mOpacity;
 }
 
@@ -466,8 +470,6 @@ public class MetavoxelManager : MonoBehaviour {
 
                     for (int pp = 0; pp < numParticles; pp++)
                     {
-                        // find corners of the metavoxel
-
                         // xform particle to mv space
                         Vector3 wsParticlePos = theParticleSystem.transform.localToWorldMatrix.MultiplyPoint3x4(parts[pp].position);
                         Vector3 mvParticlePos = worldToMetavoxelMatrix.MultiplyPoint3x4(wsParticlePos);
@@ -482,24 +484,6 @@ public class MetavoxelManager : MonoBehaviour {
                             mvGrid[zz, yy, xx].mParticlesCovered.Add(parts[pp]);
                            // Debug.Log("particle " + pp + "with radius "+ parts[pp].size/2f + " at mvpos= " + mvParticlePos + " intersects mv (" + xx + "," + yy + "," + zz);
                         }
-
-                        // sphere - cube intersection test
-                        //float dSphereCubeSq = (wsParticlePos - mvGrid[zz, yy, xx].mPos).sqrMagnitude;
-                        //float dMinSq = Mathf.Pow(mvSizeX / 2f + parts[pp].size, 2f); // [todo: assuming mv is a cube -- its not.. sides can be diff lengths based on scale]
-                        //float dMaxSq = Mathf.Pow(mvSizeX / Mathf.Sqrt(2) + parts[pp].size, 2f);
-
-                        //if (dSphereCubeSq <= dMinSq)
-                        //{
-                        //    mvGrid[zz, yy, xx].mParticlesCovered.Add(parts[pp]);
-                        //}
-                        //else if (dSphereCubeSq > dMaxSq)
-                        //{
-                        //    continue; // definitely does not intersect
-                        //}
-                        //else
-                        //{
-                        //    // [todo: sphere-cube test]
-                        //}
                     }
 
 
@@ -581,14 +565,14 @@ public class MetavoxelManager : MonoBehaviour {
 
         int index = 0;
 
-        Debug.Log("Filling MV(" + xx + "," + yy + "," + zz+ " has " + numParticles);
+        //Debug.Log("Meta voxel " + xx + "," + yy + "," + zz + " convers " + mvGrid[zz, yy, xx].mParticlesCovered.Count);
         foreach (ParticleSystem.Particle p in mvGrid[zz, yy, xx].mParticlesCovered)
         {
-            Vector3 wsPos = theParticleSystem.transform.localToWorldMatrix.MultiplyPoint3x4(p.position);
-            float pRadius = p.size / 2f;
-            dpArray[index].mWorldToLocal = Matrix4x4.TRS(wsPos, Quaternion.identity, new Vector3(pRadius, pRadius, pRadius)).inverse;
+            Vector3 wsPos = theParticleSystem.transform.localToWorldMatrix.MultiplyPoint3x4(p.position); 
+            dpArray[index].mWorldToLocal = Matrix4x4.TRS(wsPos, Quaternion.identity, new Vector3(p.size, p.size, p.size)).inverse;
             dpArray[index].mWorldPos = wsPos;
-            dpArray[index].mRadius = pRadius;// / 2.0f; // sphere, so any dim will do          
+            dpArray[index].mRadius = p.size / 2f;     
+            index++;
         }
 
         //foreach (Transform p in mvGrid[zz, yy, xx].mParticlesCovered)
@@ -891,10 +875,12 @@ public class MetavoxelManager : MonoBehaviour {
                 {
                     List<Vector3> points = new List<Vector3>();
 
-                    mvLineColor.SetPass(0);
-                    Vector3 mvPos = mvGrid[zz, yy, xx].mPos;
-                    Quaternion q = mvGrid[zz, yy, xx].mRot;
 
+                    Vector3 lsWorldOrigin = transform.worldToLocalMatrix.MultiplyPoint3x4(Vector3.zero); // xform origin to light space
+                    Vector3 lsOffset = Vector3.Scale(new Vector3(numMetavoxelsX / 2 - xx, numMetavoxelsY / 2 - yy, numMetavoxelsZ / 2 - zz), new Vector3(mvSizeX, mvSizeY, mvSizeZ));
+                    Vector3 mvPos = transform.localToWorldMatrix.MultiplyPoint3x4(lsWorldOrigin - lsOffset);
+                    Quaternion q = new Quaternion();
+                    q.SetLookRotation(-transform.forward, transform.up);
 
                     float halfWidth = mvSizeX * 0.5f, halfHeight = mvSizeY * 0.5f, halfDepth = mvSizeZ * 0.5f;
                     // back, front --> Z ; top, bot --> Y ; left, right --> X

@@ -832,12 +832,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8baae8a2fe103a640bbd718cd9d3a590, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mvSizeX: 3
-  mvSizeY: 3
-  mvSizeZ: 3
-  numMetavoxelsX: 2
-  numMetavoxelsY: 2
-  numMetavoxelsZ: 2
+  mvSizeX: 2
+  mvSizeY: 2
+  mvSizeZ: 2
+  numMetavoxelsX: 10
+  numMetavoxelsY: 10
+  numMetavoxelsZ: 10
   numVoxelsInMetavoxel: 32
   updateInterval: 1
   rayMarchSteps: 32
@@ -1067,7 +1067,7 @@ ParticleSystem:
         m_PostInfinity: 2
       minMaxState: 0
     startSpeed:
-      scalar: 2
+      scalar: 1
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -1261,13 +1261,13 @@ ParticleSystem:
       minMaxState: 0
     gravityModifier: 0
     inheritVelocity: 0
-    maxNumParticles: 4
+    maxNumParticles: 15
   ShapeModule:
     serializedVersion: 2
     enabled: 1
-    type: 0
+    type: 4
     radius: .00999999978
-    angle: 25
+    angle: 14
     length: 5
     boxX: 1
     boxY: 1
@@ -1328,15 +1328,15 @@ ParticleSystem:
         serializedVersion: 2
         m_Curve:
         - time: 0
-          value: 1
-          inSlope: 0
-          outSlope: 0
-          tangentMode: 0
+          value: .732919216
+          inSlope: .267080784
+          outSlope: .267080784
+          tangentMode: 10
         - time: 1
           value: 1
-          inSlope: 0
-          outSlope: 0
-          tangentMode: 0
+          inSlope: .267080784
+          outSlope: .267080784
+          tangentMode: 10
         m_PreInfinity: 2
         m_PostInfinity: 2
       minCurve:
@@ -2070,7 +2070,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1946669431}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -.726343572, y: 0, z: 0, w: .687331855}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -2299,8 +2299,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2017214303}
-  m_LocalRotation: {x: .0234750956, y: 0, z: 0, w: .999724507}
-  m_LocalPosition: {x: 0, y: 1, z: -10}
+  m_LocalRotation: {x: .0606056079, y: .0156781189, z: -.000952049682, w: .998038232}
+  m_LocalPosition: {x: -.0580073744, y: 1.60133874, z: -5.7426486}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}

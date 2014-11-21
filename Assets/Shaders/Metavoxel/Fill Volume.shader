@@ -118,7 +118,7 @@
 							// use ramp texture to "color" voxel based on the displacement of the sphere from the center
 							// [interior] white-yellow-red-black [surface]
 							particleColor.xyz = tex2D(_RampTexture, float2( (d - ri)/(ro - ri), 1.0));
-							particleColor.a = 1 - cubeColor.x;
+							particleColor.a = 1 - cubeColor.x;// particle gets more transparent as we move away from the center
 				
 							voxelColor.rgb = max(voxelColor.rgb, particleColor.rgb);
 							voxelColor.a += particleColor.a;
@@ -129,7 +129,7 @@
 				} // per particle
 
 				// lighting calc
-				voxelColor.rgb = voxelColor.rgb * lightIncidentOnVoxel + ambientLight;
+				voxelColor.rgb = voxelColor.rgb  + ambientLight;
 				volumeTex[int3(i.pos.xy, slice)] = voxelColor;
 
 
@@ -138,7 +138,7 @@
 
 			} // per slice
 
-			lightPropogationTex[int2(i.pos.xy + _MetavoxelIndex.xy * _NumVoxels)] = 1.0;// lightTransmittedByVoxel;
+			lightPropogationTex[int2(i.pos.xy + _MetavoxelIndex.xy * _NumVoxels)] = lightTransmittedByVoxel;
 			
 			discard;
 			return float4(1.0f, 0.0f, 1.0f, 1.0f);
