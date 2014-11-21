@@ -464,7 +464,8 @@ public class MetavoxelManager : MonoBehaviour {
     void FillMetavoxels(RenderTexture src, RenderTexture dst)
     {
         Graphics.SetRenderTarget(lightPropogationUAV);
-        GL.Clear(false, true, Color.black);
+        GL.Clear(false, true, Color.red);
+        SetFillPassConstants();
 
         // process the metavoxels in order of Z-slice closest to light to farthest
         for (int zz = 0; zz < numMetavoxelsZ; zz++)
@@ -481,6 +482,14 @@ public class MetavoxelManager : MonoBehaviour {
 
     }
 
+
+    void SetFillPassConstants()
+    {
+        matFillVolume.SetFloat("_NumVoxels", numVoxelsInMetavoxel);
+        matFillVolume.SetFloat("_InitLightIntensity", 1.0f);
+        matFillVolume.SetVector("_MetavoxelGridDim", new Vector3(numMetavoxelsX, numMetavoxelsY, numMetavoxelsZ));
+        matFillVolume.SetFloat("_OpacityFactor", 2000f);
+    }
 
     // Each metavoxel that has particles in it needs to be filled with volume info (opacity for now)
     // Since nothing is rendered to the screen while filling the metavoxel volume textures up, we have to resort to
@@ -512,7 +521,8 @@ public class MetavoxelManager : MonoBehaviour {
             Vector3 wsPos = theParticleSystem.transform.localToWorldMatrix.MultiplyPoint3x4(p.position); 
             dpArray[index].mWorldToLocal = Matrix4x4.TRS(wsPos, Quaternion.identity, new Vector3(p.size, p.size, p.size)).inverse;
             dpArray[index].mWorldPos = wsPos;
-            dpArray[index].mRadius = p.size / 2f;     
+            dpArray[index].mRadius = p.size / 2f;
+            dpArray[index].mOpacity = p.lifetime / p.startLifetime; // [time-particle-will-remain-alive / particle-lifetime] use this to make particles less "dense" as they meet their end.
             index++;
         }
 
@@ -521,15 +531,13 @@ public class MetavoxelManager : MonoBehaviour {
         dpBuffer.SetData(dpArray);
 
         // Set material state
-        matFillVolume.SetPass(0); 
-        matFillVolume.SetFloat("_NumVoxels", numVoxelsInMetavoxel);
-        matFillVolume.SetInt("_NumParticles", numParticles);
-        matFillVolume.SetVector("_MetavoxelIndex", new Vector3(xx, yy, zz));
-        matFillVolume.SetVector("_MetavoxelGridDim", new Vector3(numMetavoxelsX, numMetavoxelsY, numMetavoxelsZ));
-        matFillVolume.SetBuffer("_Particles", dpBuffer);
-        matFillVolume.SetMatrix("_MetavoxelToWorld", Matrix4x4.TRS( mvGrid[zz, yy, xx].mPos, 
+        matFillVolume.SetPass(0);
+        matFillVolume.SetMatrix("_MetavoxelToWorld", Matrix4x4.TRS(mvGrid[zz, yy, xx].mPos,
                                                                     mvGrid[zz, yy, xx].mRot,
                                                                     mvScale));
+        matFillVolume.SetVector("_MetavoxelIndex", new Vector3(xx, yy, zz));
+        matFillVolume.SetInt("_NumParticles", numParticles);
+        matFillVolume.SetBuffer("_Particles", dpBuffer);
         // end test--
         Graphics.Blit(src, src, matFillVolume);
 
@@ -565,7 +573,7 @@ public class MetavoxelManager : MonoBehaviour {
     public void RenderMetavoxels()
     {
         List<Vector3> mvPerSliceFarToNear = SortMetavoxelSlicesFarToNearFromEye();
-		SetRaymarchConstants();
+		SetRaymarchPassConstants();
 
 		Vector3 lsCameraPos = transform.worldToLocalMatrix.MultiplyPoint3x4 (Camera.main.transform.position);
         float lsFirstZSlice = transform.worldToLocalMatrix.MultiplyPoint3x4(mvGrid[0, 0, 0].mPos).z;
@@ -611,7 +619,7 @@ public class MetavoxelManager : MonoBehaviour {
     }
 
 
-	void SetRaymarchConstants()
+	void SetRaymarchPassConstants()
 	{
 		Material[] over_under = {matRayMarchOver, matRayMarchUnder};
 

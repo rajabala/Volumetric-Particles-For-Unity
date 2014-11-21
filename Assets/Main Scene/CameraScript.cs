@@ -131,12 +131,15 @@ public class CameraScript : MonoBehaviour {
     {
         if (moveCamera)
         {
+            // fps'ish free cam
             rotationX += Input.GetAxis("Mouse X") * lookSpeed;
             rotationY += Input.GetAxis("Mouse Y") * lookSpeed;
-            rotationY = Mathf.Clamp(rotationY, -90, 90);
+            rotationY = Mathf.Clamp(rotationY, -90, 90); // can't do a backflip of course.
 
-            transform.localRotation = Quaternion.AngleAxis(rotationX, -Vector3.up);
-            transform.localRotation *= Quaternion.AngleAxis(rotationY, Vector3.right);
+            // Unity's screen space coordinate convention has the origin on the bottom left
+            // Using the camera's up and right vector can lose one degree of freedom and cause the gimbal lock!
+            transform.localRotation = Quaternion.AngleAxis(rotationX,  Vector3.up);
+            transform.localRotation *= Quaternion.AngleAxis(rotationY, -Vector3.right);
 
             transform.position += transform.forward * Input.GetAxis("Vertical") * moveSpeed;
             transform.position += transform.right * Input.GetAxis("Horizontal") * moveSpeed;

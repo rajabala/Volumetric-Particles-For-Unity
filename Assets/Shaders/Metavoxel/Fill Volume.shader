@@ -25,27 +25,27 @@
 		};
 		
 		// UAVs
-		RWTexture3D<float4> volumeTex;
-		RWTexture2D<float> lightPropogationTex;
+		RWTexture3D<float4> volumeTex; // out
+		RWTexture2D<float> lightPropogationTex; // in-out
 
 		// Buffers
-		StructuredBuffer<particle> _Particles;		
+		StructuredBuffer<particle> _Particles; // in
 
 		// Textures
 		samplerCUBE _DisplacementTexture;
 		sampler2D _RampTexture;
-		sampler2D _CameraDepthTexture;
 		
-		// Metavoxel uniforms
+		// Metavoxel specific uniforms
 		float4x4 _MetavoxelToWorld;	
 		float4x4 _WorldToLight; // [unused]
 		float3 _MetavoxelIndex;
-		float3 _MetavoxelGridDim;
-		float _NumVoxels; // metavoxel's voxel dimensions
 		int _NumParticles;
 
-		// Other uniforms
+		// Uniforms over entire fill pass
+		float _NumVoxels; // (nv) each metavoxel is made up of nv * nv * nv voxels
 		float _InitLightIntensity;
+		float _OpacityFactor;
+		float3 _MetavoxelGridDim;
 
 		// helper methods
 		float4 get_voxel_world_pos(float2 svPos, float zSlice)
@@ -75,15 +75,14 @@
 			float lightTransmittedByVoxel, lightIncidentOnVoxel;
 
 			if (_MetavoxelIndex.z == 0.0)
-				lightTransmittedByVoxel = _InitLightIntensity;
+				lightIncidentOnVoxel = _InitLightIntensity;
 			else
-				lightTransmittedByVoxel = lightPropogationTex[int2(i.pos.xy + _MetavoxelIndex.xy * _NumVoxels)];
-
-			lightIncidentOnVoxel = lightTransmittedByVoxel;
+				lightIncidentOnVoxel = lightPropogationTex[int2(i.pos.xy + _MetavoxelIndex.xy * _NumVoxels)];
 
 			float3 ambientLight = float3(0.1, 0.12, 0.1);
 			float4 clearColor = float4(0.0f, 0.0f, 0.0, 0);
 			float4 voxelColor;
+			float voxelOpacity;
 			float4 particleColor;
 
 			// The indices to the UAV are in the range [0, width),  [0, height), [0, depth]
@@ -91,11 +90,12 @@
 			// i.e., i.pos is already in "image space"
 			for (slice = 0; slice < _NumVoxels; slice++) {
 				voxelColor = clearColor;
+				voxelOpacity = 0.0f;
 
 				for (pp = 0; pp < _NumParticles; pp++) {
 					float4 voxelWorldPos = get_voxel_world_pos(i.pos.xy, slice);
 					float3 voxelToSphere = _Particles[pp].mWorldPos - voxelWorldPos;
-					float ri = _Particles[pp].mRadius / 2; // inner radius of sphere
+					float ri = _Particles[pp].mRadius / 8; // inner radius of sphere
 					float ro = _Particles[pp].mRadius; // outer radius of sphere			
 					float dSqVoxelSphere = dot(voxelToSphere, voxelToSphere);
 
@@ -118,10 +118,12 @@
 							// use ramp texture to "color" voxel based on the displacement of the sphere from the center
 							// [interior] white-yellow-red-black [surface]
 							particleColor.xyz = tex2D(_RampTexture, float2( (d - ri)/(ro - ri), 1.0));
-							particleColor.a = 1 - cubeColor.x;// particle gets more transparent as we move away from the center
+							particleColor.a = (1 - cubeColor.x) * _Particles[pp].mOpacity;// particle gets more transparent as we move away from the center
 				
 							voxelColor.rgb = max(voxelColor.rgb, particleColor.rgb);
 							voxelColor.a += particleColor.a;
+
+							voxelOpacity += _OpacityFactor * _Particles[pp].mOpacity;
 						} // actual coverage test
 
 					} // fast coverage test
@@ -129,11 +131,10 @@
 				} // per particle
 
 				// lighting calc
-				voxelColor.rgb = voxelColor.rgb  + ambientLight;
+				voxelColor.rgb = voxelColor.rgb * lightIncidentOnVoxel + ambientLight;
 				volumeTex[int3(i.pos.xy, slice)] = voxelColor;
 
-
-				lightTransmittedByVoxel *= 1 / (1 + voxelColor.a);
+				lightTransmittedByVoxel = lightIncidentOnVoxel / (1.0 + voxelOpacity);
 				lightIncidentOnVoxel = lightTransmittedByVoxel;
 
 			} // per slice
