@@ -46,6 +46,7 @@
 		float _InitLightIntensity;
 		float _OpacityFactor;
 		float3 _MetavoxelGridDim;
+		float _DisplacementScale;
 
 		// helper methods
 		float4 get_voxel_world_pos(float2 svPos, float zSlice)
@@ -104,9 +105,10 @@
 						float3 texCoord = mul(_Particles[pp].mWorldToLocal, -voxelToSphere);						
 						float4 cubeColor = texCUBE(_DisplacementTexture, texCoord);
 					
-						// d = displacement of sphere from center along the voxel-sphere direction
-						float d = ri + (ro - ri) * cubeColor.x; // d = [ri, ro] when cubeColor = [0.0, 1.0]
+						float netDisplacement = cubeColor.x * _DisplacementScale;
 
+						// d = displacement of sphere from center along the voxel-sphere direction
+						float d = ri + (ro - ri) * netDisplacement; // d = [ri, ro] when cubeColor = [0.0, 1.0]
 
 						// actual coverage test -- check if the displaced sphere intersects voxel center
 						if ((d*d) >= dSqVoxelSphere) {

@@ -1972,5 +1972,3 @@ MonoBehaviour:
   controlsText: {fileID: 1581667316}
   beingMovedText: {fileID: 957975254}
   matBlendParticles: {fileID: 2100000, guid: 81bb6726bf20108478e2d39eedcfffce, type: 2}
-  mainSceneRT: {fileID: 0}
-  particlesRT: {fileID: 0}

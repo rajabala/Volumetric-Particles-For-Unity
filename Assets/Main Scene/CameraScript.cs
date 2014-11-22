@@ -6,18 +6,19 @@ public class CameraScript : MonoBehaviour {
     public float lookSpeed, moveSpeed;
     public GUIText controlsText, beingMovedText;
 
-    private float camRotationX, camRotationY, lightRotationX, lightRotationY;
-    private bool moveCamera, moveLight;
-    private Vector3 startPos; private Quaternion startRot;
-
     // Render targets & material to blend them
     public Material matBlendParticles;
-    public RenderTexture mainSceneRT;
-    public RenderTexture particlesRT;
- 
+    private RenderTexture mainSceneRT;
+    private RenderTexture particlesRT;
+
+    // Scene controls (GUI elements + toggle controls)
+    private bool moveCamera, moveLight;
     private bool drawMetavoxelGrid;
     private bool rayMarchVoxels;
     private MetavoxelManager[] mvMgrs;
+
+    private float camRotationX, camRotationY, lightRotationX, lightRotationY;
+    private Vector3 startPos; private Quaternion startRot;
 
     // Use this for initialization
 	void Start () {
@@ -100,8 +101,8 @@ public class CameraScript : MonoBehaviour {
 
     void OnGUI()
     {
-        drawMetavoxelGrid = GUI.Toggle(new Rect(25, 25, 100, 30), drawMetavoxelGrid, "Show mv grid");
-        rayMarchVoxels = GUI.Toggle(new Rect(25, 75, 150, 30), rayMarchVoxels, "Ray march voxels");
+        drawMetavoxelGrid   = GUI.Toggle(new Rect(25, 25, 100, 30), drawMetavoxelGrid, "Show mv grid");
+        rayMarchVoxels      = GUI.Toggle(new Rect(25, 75, 150, 30), rayMarchVoxels, "Ray march voxels");
     }
 
     // ---- private methods ----------------

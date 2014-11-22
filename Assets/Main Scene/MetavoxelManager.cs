@@ -96,10 +96,11 @@ public class MetavoxelManager : MonoBehaviour {
     // Light movement detection
     private Quaternion lastLightRot;
 
-    // temp prototyping stuff
-    private List<GameObject> mvQuads;
-    private GameObject quadDaddy;
+    // GUI controls
     private bool showPrettyColors;
+    private float displacementScale;
+
+    // temp prototyping stuff
     private Mesh cubeMesh;
     private Mesh mesh;
     public Vector3[] cubeVertices;
@@ -155,6 +156,7 @@ public class MetavoxelManager : MonoBehaviour {
     void OnGUI()
     {
         showPrettyColors = GUI.Toggle(new Rect(25, 50, 200, 30), showPrettyColors, "Show pretty colors");
+        displacementScale = GUI.HorizontalSlider(new Rect(25, 125, 100, 30), displacementScale, 0.0f, 1.0f);
     }
 
 
@@ -493,6 +495,7 @@ public class MetavoxelManager : MonoBehaviour {
         matFillVolume.SetFloat("_InitLightIntensity", 100.0f);
         matFillVolume.SetVector("_MetavoxelGridDim", new Vector3(numMetavoxelsX, numMetavoxelsY, numMetavoxelsZ));
         matFillVolume.SetFloat("_OpacityFactor", 20f);
+        matFillVolume.SetFloat("_DisplacementScale", displacementScale);
     }
 
     // Each metavoxel that has particles in it needs to be filled with volume info (opacity for now)
