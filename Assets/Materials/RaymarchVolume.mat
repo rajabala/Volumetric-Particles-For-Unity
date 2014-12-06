@@ -6,9 +6,10 @@ Material:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: RaymarchVolumeBlendOver
+  m_Name: RaymarchVolume
   m_Shader: {fileID: 4800000, guid: bc89dda340d8b4c45b565b66a9088d40, type: 3}
-  m_ShaderKeywords: []
+  m_ShaderKeywords:
+  - BLEND_UNDER
   m_CustomRenderQueue: -1
   m_SavedProperties:
     serializedVersion: 2

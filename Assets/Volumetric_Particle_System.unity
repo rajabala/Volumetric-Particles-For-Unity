@@ -490,7 +490,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1569223725}
-  m_LocalRotation: {x: .173648193, y: 0, z: 0, w: .984807789}
+  m_LocalRotation: {x: .162945583, y: 0, z: 0, w: .986635089}
   m_LocalPosition: {x: -3.5317452, y: 6.40367079, z: 1.65509796}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -689,7 +689,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8baae8a2fe103a640bbd718cd9d3a590, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mvScale: {x: 2, y: 2, z: 2}
+  mvScale: {x: 4, y: 4, z: 4}
   numMetavoxelsX: 4
   numMetavoxelsY: 4
   numMetavoxelsZ: 4
@@ -1048,7 +1048,7 @@ ParticleSystem:
       minMaxState: 0
     gravityModifier: 0
     inheritVelocity: 0
-    maxNumParticles: 15
+    maxNumParticles: 10
   ShapeModule:
     serializedVersion: 2
     enabled: 1

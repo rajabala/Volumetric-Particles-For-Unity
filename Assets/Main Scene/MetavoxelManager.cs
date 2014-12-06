@@ -95,6 +95,7 @@ public class MetavoxelManager : MonoBehaviour {
 
     // Light movement detection
     private Quaternion lastLightRot;
+    private Light dirLight;
 
     // GUI controls
     private bool showPrettyColors;
@@ -111,7 +112,6 @@ public class MetavoxelManager : MonoBehaviour {
         CreateResources();
 
         mvScaleWithBorder = mvScale * numVoxelsInMetavoxel / (numVoxelsInMetavoxel - 2 * numBorderVoxels);
-        Debug.Log("scale with border is " + mvScaleWithBorder);
         pBounds = theParticleSystem.GetComponent<AABBForParticles>();
         ps = theParticleSystem.GetComponent<ParticleSystem>();
         
@@ -124,6 +124,9 @@ public class MetavoxelManager : MonoBehaviour {
         showPrettyColors = false;
 
         lastLightRot = transform.rotation;
+        dirLight = transform.parent.GetComponent<Light>();
+        if (dirLight == null)
+            Debug.LogError("script must be attached a to camera that has a dir light parent");
 	}
 	
 
@@ -156,7 +159,8 @@ public class MetavoxelManager : MonoBehaviour {
     void OnGUI()
     {
         showPrettyColors = GUI.Toggle(new Rect(25, 50, 200, 30), showPrettyColors, "Show pretty colors");
-        displacementScale = GUI.HorizontalSlider(new Rect(25, 125, 100, 30), displacementScale, 0.0f, 1.0f);
+        GUI.Label(new Rect(25, 100, 150, 50), "Displacement Scale [" + displacementScale + "]");
+        displacementScale = GUI.HorizontalSlider(new Rect(175, 105, 100, 30), displacementScale, 0.0f, 1.0f);
     }
 
 
@@ -438,27 +442,25 @@ public class MetavoxelManager : MonoBehaviour {
                 for (int xx = 0; xx < numMetavoxelsX; xx++)
                 {
                     mvGrid[zz, yy, xx].mParticlesCovered.Clear();
-
+                    
                     Matrix4x4 worldToMetavoxelMatrix = Matrix4x4.TRS(   mvGrid[zz, yy, xx].mPos, 
                                                                         mvGrid[zz, yy, xx].mRot,
-                                                                        mvScaleWithBorder).inverse;
+                                                                        mvScaleWithBorder).inverse; // Account for the border of the metavoxel while scaling
 
                     for (int pp = 0; pp < numParticlesEmitted; pp++)
                     {
-                        // xform particle to mv space
+                        // xform particle to mv space to make it a sphere-aabb intersection test
                         Vector3 wsParticlePos = theParticleSystem.transform.localToWorldMatrix.MultiplyPoint3x4(parts[pp].position);
                         Vector3 mvParticlePos = worldToMetavoxelMatrix.MultiplyPoint3x4(wsParticlePos);
                         float radius = (parts[pp].size / 2f) / mvScaleWithBorder.x;
+
                         bool particle_intersects_metavoxel = MathUtil.DoesBoxIntersectSphere(new Vector3(-0.5f, -0.5f, -0.5f),
                                                                                              new Vector3( 0.5f,  0.5f,  0.5f),
                                                                                              mvParticlePos,
                                                                                              radius);
 
-                        if (particle_intersects_metavoxel)
-                        {
-                            mvGrid[zz, yy, xx].mParticlesCovered.Add(parts[pp]);
-                           // Debug.Log("particle " + pp + "with radius "+ parts[pp].size/2f + " at mvpos= " + mvParticlePos + " intersects mv (" + xx + "," + yy + "," + zz);
-                        }
+                        if (particle_intersects_metavoxel)                        
+                            mvGrid[zz, yy, xx].mParticlesCovered.Add(parts[pp]);                          
                     } // pp
 
                 } // xx
@@ -492,7 +494,8 @@ public class MetavoxelManager : MonoBehaviour {
     void SetFillPassConstants()
     {
         matFillVolume.SetFloat("_NumVoxels", numVoxelsInMetavoxel);
-        matFillVolume.SetFloat("_InitLightIntensity", 100.0f);
+        matFillVolume.SetFloat("_InitLightIntensity", 1.0f);
+        matFillVolume.SetVector("_LightColor", dirLight.color);
         matFillVolume.SetVector("_MetavoxelGridDim", new Vector3(numMetavoxelsX, numMetavoxelsY, numMetavoxelsZ));
         matFillVolume.SetFloat("_OpacityFactor", 20f);
         matFillVolume.SetFloat("_DisplacementScale", displacementScale);
@@ -530,7 +533,11 @@ public class MetavoxelManager : MonoBehaviour {
             dpArray[index].mWorldPos = wsPos;
             dpArray[index].mRadius = p.size / 2f;
             dpArray[index].mOpacity = p.lifetime / p.startLifetime; // [time-particle-will-remain-alive / particle-lifetime] use this to make particles less "dense" as they meet their end.
+
+            //Debug.Log("voxel in particle space is " + dpArray[index].mWorldToLocal.MultiplyPoint3x4(mvGrid[zz, yy, xx].mPos));
+
             index++;
+
         }
 
         ComputeBuffer dpBuffer = new ComputeBuffer(numParticles,
@@ -586,6 +593,7 @@ public class MetavoxelManager : MonoBehaviour {
         float lsFirstZSlice = transform.worldToLocalMatrix.MultiplyPoint3x4(mvGrid[0, 0, 0].mPos).z;
         int zBoundary = Mathf.Clamp( (int)(lsCameraPos.z - lsFirstZSlice), 0, numMetavoxelsZ - 1);
 
+        matRayMarchOver.EnableKeyword("BLEND_UNDER");
         // Render metavoxel slices to the "left" of the camera in
         // (a) increasing order along the direction of the light
         // (b) farthest-to-nearest from the camera per slice

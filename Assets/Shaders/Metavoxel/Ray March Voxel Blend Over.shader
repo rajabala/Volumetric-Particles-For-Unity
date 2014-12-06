@@ -1,4 +1,4 @@
-﻿Shader "Custom/RayMarchMetavoxelBlendOver" {
+﻿Shader "Custom/RayMarchMetavoxel" {
 	Properties{
 		_VolumeTexture("Metavoxel fill data", 3D) = "" {}
 		_LightPropogationTexture("Light Propogation", 2D) = "" {}
@@ -164,7 +164,7 @@
 							break;  // point outside mv
 						}
 
-						float3 samplePos = (2 * mvRayPos + 1.0) / 2.0; //[-0.5, 0.5] -->[0, 1]
+						float3 samplePos = mvRayPos + 0.5; //[-0.5, 0.5] -->[0, 1]
 						// adjust for the metavoxel border -- the border voxels are only for filtering
 						float borderVoxelOffset = _MetavoxelBorderSize / _NumVoxels; // [0, 1] ---> [offset, 1 - offset]
 
