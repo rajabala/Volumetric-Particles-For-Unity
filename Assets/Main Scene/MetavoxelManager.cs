@@ -379,7 +379,7 @@ public class MetavoxelManager : MonoBehaviour {
     {
         // Note that constructing a RenderTexture object does not create the hardware representation immediately. The actual render texture is created upon first use or when Create is called manually
         // file:///C:/Program%20Files%20(x86)/Unity/Editor/Data/Documentation/html/en/ScriptReference/RenderTexture-ctor.html
-        mvFillTextures[zz, yy, xx] = new RenderTexture(numVoxelsInMetavoxel, numVoxelsInMetavoxel, 0 /* no need depth surface, just color*/, RenderTextureFormat.ARGB32);
+        mvFillTextures[zz, yy, xx] = new RenderTexture(numVoxelsInMetavoxel, numVoxelsInMetavoxel, 0 /* no need depth surface, just color*/, RenderTextureFormat.ARGBFloat);
         mvFillTextures[zz, yy, xx].isVolume = true;
         mvFillTextures[zz, yy, xx].volumeDepth = numVoxelsInMetavoxel;
         mvFillTextures[zz, yy, xx].generateMips = false;
@@ -497,7 +497,7 @@ public class MetavoxelManager : MonoBehaviour {
         matFillVolume.SetFloat("_InitLightIntensity", 1.0f);
         matFillVolume.SetVector("_LightColor", dirLight.color);
         matFillVolume.SetVector("_MetavoxelGridDim", new Vector3(numMetavoxelsX, numMetavoxelsY, numMetavoxelsZ));
-        matFillVolume.SetFloat("_OpacityFactor", 20f);
+        matFillVolume.SetFloat("_OpacityFactor", 200f);
         matFillVolume.SetFloat("_DisplacementScale", displacementScale);
     }
 

@@ -143,9 +143,12 @@
 					csRay.o = float3(0, 0, 0); // camera is at the origin in camera space.
 					csRay.d = normalize(mul(_WorldToCameraMatrix, float4(rayDir, 0)));			
 
+					// Find the intersection of the ray with a camera-AABB of the ENTIRE volume
 					float tnear, tfar;
 					bool rayVolumeIntersects = IntersectBox(csRay, _AABBMin, _AABBMax, tnear, tfar);
 
+					// The pixel we're working on is an exit point for the ray (we're rendering only backfaces of the metavoxel cubes).
+					// Find its 't' w.r.t the ray from the camera
 					float3 tmvexit = mul(_WorldToCameraMatrix, float4(i.worldPos, 1)) / csRay.d;
 					float stepSize = abs((tfar - tnear) / (float)(_NumSteps)); 
 					int exitIndex = floor((tmvexit.x - tnear) / stepSize);
@@ -153,8 +156,13 @@
 					float3 result = float3(0, 0, 0);
 					float transmittance = 1.0f;
 					int step;
+
+					// Sample uniformly along the ray starting from the current metavoxel's exit index (along the ray), 
+					// and moving towards the camera while stopping once we're no longer within the current metavoxel.
+					// Blend the samples back-to-front in the process
 					float4x4 CameraToMetavoxel = mul(_WorldToMetavoxel, _CameraToWorldMatrix);
 					float3 csRayPos = (tnear + stepSize*exitIndex) * csRay.d;
+				
 					[unroll(64)]
 					for (step = exitIndex; step >= 0; step--) {
 						// convert from mv space to sampling space, i.e., [-mvSize/2, mvSize/2] -> [0,1]
@@ -171,15 +179,31 @@
 						samplePos = clamp(samplePos, borderVoxelOffset, 1.0 - borderVoxelOffset);
 
 						float4 voxelColor = tex3D(_VolumeTexture, samplePos);
+						float3 color = voxelColor.rgb;
+						float  density = voxelColor.a;
 
+						float blendFactor = rcp(1.0 + density);
+
+						result.rgb = lerp(color, result.rgb, blendFactor);
+						transmittance *= blendFactor;
 						// blending individual samples back-to-front, so use the `over` operator
-						result.rgb = voxelColor.a * voxelColor.rgb + (1 - voxelColor.a) * result.rgb; // a1*C1 + (1 - a1)*C0  (C1,a1) over (C0,a0)
-						transmittance *= (1 - voxelColor.a);
+						//result.rgb = voxelColor.a * voxelColor.rgb + (1 - voxelColor.a) * result.rgb; // a1*C1 + (1 - a1)*C0  (C1,a1) over (C0,a0)
+						//transmittance *= (1 - voxelColor.a);
 
 						csRayPos -= (stepSize * csRay.d);
 					}
 
+					/*int stepsTaken = exitIndex - step;
+					if (stepsTaken < 2)
+						return green;
+					if (stepsTaken < 5)
+						return yellow;
+					if (stepsTaken < 15)
+						return orange;
+					return red;*/
+
 					return float4(result.rgb, 1 - transmittance);
+					// return float4(result.rgb, transmittance);
 				
 				} // frag
 

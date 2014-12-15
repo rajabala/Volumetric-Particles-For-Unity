@@ -82,7 +82,7 @@
 
 			float voxelParticleDistSq = dot(2 * psVoxelPos,  2 * psVoxelPos); // make it [0, 1]
 			float baseDensity = smoothstep(netDisplacement, 0.7 * netDisplacement, voxelParticleDistSq); // how dense is this particle at the current voxel? (density decreases as we move to the edge of the particle)
-			float density = baseDensity * opacity; //* _OpacityFactor;
+			float density = baseDensity * opacity * _OpacityFactor;
 
 			v.density = density;
 			v.ao = netDisplacement;
@@ -155,11 +155,8 @@
 				float diffuseCoeff = 0.5;
 				float4 voxelColor;
 	
-				if (voxelColumn[slice].density > 0.01)
-					voxelColor = float4(lightIncidentOnVoxel * _LightColor * diffuseCoeff  +  voxelColumn[slice].ao * ambientColor, voxelColumn[slice].density);
-				else
-					voxelColor= float4(0.0,0,0,0.0);
-
+				voxelColor = float4(lightIncidentOnVoxel * _LightColor * diffuseCoeff  +  voxelColumn[slice].ao * ambientColor, voxelColumn[slice].density);
+				
 				volumeTex[int3(i.pos.xy, slice)]	=	voxelColor;
 
 				lightIncidentOnPreviousVoxel = lightIncidentOnVoxel;

@@ -27,6 +27,7 @@
 #define orange float4(0.5, 0.4, 0.0, 0.5)
 #define red float4(0.5, 0.0, 0.0, 0.5)
 
+
 				sampler3D _VolumeTexture;
 				sampler2D _LightPropogationTexture;
 
@@ -64,8 +65,8 @@
 					float3 worldPos : TEXCOORD;
 				};
 
-				v2f	
-				vert(appdata_base i) {
+				v2f
+					vert(appdata_base i) {
 					// every vertex submitted is in a unit-metavoxel space
 					// transform from model -> world -> eye -> proj space
 					v2f o;
@@ -78,11 +79,11 @@
 					float3 o; // origin
 					float3 d; // direction (normalized)
 				};
-				
-				
+
+
 				bool
-				IntersectBox(Ray r, float3 boxmin, float3 boxmax, 
-							 out float tnear, out float tfar)
+					IntersectBox(Ray r, float3 boxmin, float3 boxmax,
+					out float tnear, out float tfar)
 				{
 					// compute intersection of ray with all six bbox planes
 					float3 invR = 1.0 / r.d;
@@ -110,9 +111,9 @@
 				// For each fragment, we have to iterate through all the particles covered
 				// by the MV and fill the voxel column by iterating through each voxel slice.
 				// [todo] this can be parallelized.
-				float4 
-				frag(v2f i) : COLOR
-				{					
+				float4
+					frag(v2f i) : COLOR
+				{
 					if (_ShowPrettyColors == 1) // Color metavoxels that are covered by particles 
 					{
 						if (_ParticleCoverageRatio < 0.25)
@@ -125,36 +126,43 @@
 							return red;
 					}
 
-
 					// Find ray direction from camera through this pixel
 					// -- Find half width and height of the near plane in world units
 					float screenHalfHeight = _Near * tan(radians(_Fov / 2));
-					float screenHalfWidth  = (_ScreenRes.x / _ScreenRes.y) * screenHalfHeight;
+					float screenHalfWidth = (_ScreenRes.x / _ScreenRes.y) * screenHalfHeight;
 
 					// -- Normalize the pixel position to a [-1, 1] range to help find its world space position
-//					float2 pixelNormPos = (2 * i.pos.xy - _ScreenRes) / _ScreenRes; // [0, wh] to [-1, 1]
-//					float3 pixelWorldPos = _CameraWorldPos + mul(_CameraToWorldMatrix, float3(pixelNormPos * float2(screenHalfWidth, screenHalfHeight), _Near)); // pixel lies on the near plane
+					//					float2 pixelNormPos = (2 * i.pos.xy - _ScreenRes) / _ScreenRes; // [0, wh] to [-1, 1]
+					//					float3 pixelWorldPos = _CameraWorldPos + mul(_CameraToWorldMatrix, float3(pixelNormPos * float2(screenHalfWidth, screenHalfHeight), _Near)); // pixel lies on the near plane
 
 					// Since we cull front-facing triangles, the geometry corresponding to this fragment is a back-facing one and thus
 					// represents the ray's world space exit position for this metavoxel
 					float3 rayDir = normalize(i.worldPos - _CameraWorldPos);
-					
+
 					Ray csRay; // camera space
 					csRay.o = float3(0, 0, 0); // camera is at the origin in camera space.
-					csRay.d = normalize(mul(_WorldToCameraMatrix, float4(rayDir, 0)));			
+					csRay.d = normalize(mul(_WorldToCameraMatrix, float4(rayDir, 0)));
 
+					// Find the intersection of the ray with a camera-AABB of the ENTIRE volume
 					float tnear, tfar;
 					bool rayVolumeIntersects = IntersectBox(csRay, _AABBMin, _AABBMax, tnear, tfar);
 
+					// The pixel we're working on is an exit point for the ray (we're rendering only backfaces of the metavoxel cubes).
+					// Find its 't' w.r.t the ray from the camera
 					float3 tmvexit = mul(_WorldToCameraMatrix, float4(i.worldPos, 1)) / csRay.d;
-					float stepSize = abs((tfar - tnear) / (float)(_NumSteps)); 
+					float stepSize = abs((tfar - tnear) / (float)(_NumSteps));
 					int exitIndex = floor((tmvexit.x - tnear) / stepSize);
 
 					float3 result = float3(0, 0, 0);
 					float transmittance = 1.0f;
 					int step;
+
+					// Sample uniformly along the ray starting from the current metavoxel's exit index (along the ray), 
+					// and moving towards the camera while stopping once we're no longer within the current metavoxel.
+					// Blend the samples back-to-front in the process
 					float4x4 CameraToMetavoxel = mul(_WorldToMetavoxel, _CameraToWorldMatrix);
 					float3 csRayPos = (tnear + stepSize*exitIndex) * csRay.d;
+
 					[unroll(64)]
 					for (step = exitIndex; step >= 0; step--) {
 						// convert from mv space to sampling space, i.e., [-mvSize/2, mvSize/2] -> [0,1]
@@ -164,27 +172,42 @@
 							break;  // point outside mv
 						}
 
-						float3 samplePos = mvRayPos + 0.5; //[-0.5, 0.5] -->[0, 1]
+						float3 samplePos = (2 * mvRayPos + 1.0) / 2.0; //[-0.5, 0.5] -->[0, 1]
 						// adjust for the metavoxel border -- the border voxels are only for filtering
 						float borderVoxelOffset = _MetavoxelBorderSize / _NumVoxels; // [0, 1] ---> [offset, 1 - offset]
 
 						samplePos = clamp(samplePos, borderVoxelOffset, 1.0 - borderVoxelOffset);
 
 						float4 voxelColor = tex3D(_VolumeTexture, samplePos);
+						float3 color = voxelColor.rgb;
+						float  density = voxelColor.a;
 
+						float blendFactor = rcp(1.0 + density);
+
+						result.rgb = lerp(color, result.rgb, blendFactor);
+						transmittance *= blendFactor;
 						// blending individual samples back-to-front, so use the `over` operator
-						result.rgb = voxelColor.a * voxelColor.rgb + (1 - voxelColor.a) * result.rgb; // a1*C1 + (1 - a1)*C0  (C1,a1) over (C0,a0)
-						transmittance *= (1 - voxelColor.a);
+						//result.rgb = voxelColor.a * voxelColor.rgb + (1 - voxelColor.a) * result.rgb; // a1*C1 + (1 - a1)*C0  (C1,a1) over (C0,a0)
+						//transmittance *= (1 - voxelColor.a);
 
 						csRayPos -= (stepSize * csRay.d);
 					}
 
+					/*int stepsTaken = exitIndex - step;
+					if (stepsTaken < 2)
+						return green;
+					if (stepsTaken < 5)
+						return yellow;
+					if (stepsTaken < 15)
+						return orange;
+					return red;*/
+					
 					return float4(result.rgb, 1 - transmittance);
-				
+					//return float4(result.rgb, transmittance);
+
 				} // frag
 
 					ENDCG
 			} // Pass
 		}FallBack Off
 }
- 
