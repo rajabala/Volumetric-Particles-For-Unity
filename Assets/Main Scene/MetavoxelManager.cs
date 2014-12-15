@@ -72,6 +72,7 @@ public class MetavoxelManager : MonoBehaviour {
     public float opacityFactor;
     public Vector3 ambientColor;
     public bool fadeOutParticles;
+    public int volumeTextureAnisoLevel; 
 
     public Material matFillVolume;
     public Material matRayMarchOver;
@@ -685,7 +686,10 @@ public class MetavoxelManager : MonoBehaviour {
         }
 
         //Debug.Log("rendering mv " + xx + "," + yy +"," + zz);
-        mvFillTextures[zz, yy, xx].filterMode = FilterMode.Trilinear;
+        mvFillTextures[zz, yy, xx].filterMode = FilterMode.Bilinear;
+        mvFillTextures[zz, yy, xx].wrapMode = TextureWrapMode.Clamp;
+        mvFillTextures[zz, yy, xx].anisoLevel = volumeTextureAnisoLevel;
+
         m.SetTexture("_VolumeTexture", mvFillTextures[zz, yy, xx]);
         Matrix4x4 mvToWorld = Matrix4x4.TRS(mvGrid[zz, yy, xx].mPos,
                                             mvGrid[zz, yy, xx].mRot,
