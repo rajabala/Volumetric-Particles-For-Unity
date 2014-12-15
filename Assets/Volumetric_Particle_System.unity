@@ -491,7 +491,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1569223725}
   m_LocalRotation: {x: .162945583, y: 0, z: 0, w: .986635089}
-  m_LocalPosition: {x: -3.5317452, y: 6.40367079, z: 1.65509796}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1773395101}
@@ -673,7 +673,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1773395100}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -12.8599997}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1569223727}
@@ -690,15 +690,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mvScale: {x: 2, y: 2, z: 2}
-  numMetavoxelsX: 6
-  numMetavoxelsY: 6
-  numMetavoxelsZ: 6
+  numMetavoxelsX: 12
+  numMetavoxelsY: 12
+  numMetavoxelsZ: 12
   numVoxelsInMetavoxel: 32
   updateInterval: 1
   rayMarchSteps: 64
   numBorderVoxels: 1
   opacityFactor: 1
-  ambientColor: {x: .200000003, y: .200000003, z: .200000003}
+  ambientColor: {x: .5, y: .5, z: .5}
+  fadeOutParticles: 0
   matFillVolume: {fileID: 2100000, guid: 742e800cae20c4547bc14935a578e998, type: 2}
   matRayMarchOver: {fileID: 2100000, guid: 14e5eb7c9a4acf34688b8fbd737f2365, type: 2}
   matRayMarchUnder: {fileID: 2100000, guid: 98638f28235c80d4eb0bd30969960c4a, type: 2}
@@ -785,7 +786,7 @@ ParticleSystemRenderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 10302, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 10301, guid: 0000000000000000f000000000000000, type: 0}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -1049,7 +1050,7 @@ ParticleSystem:
       minMaxState: 0
     gravityModifier: 0
     inheritVelocity: 0
-    maxNumParticles: 25
+    maxNumParticles: 9
   ShapeModule:
     serializedVersion: 2
     enabled: 1

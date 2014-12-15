@@ -117,11 +117,11 @@
 				{					
 					if (_ShowPrettyColors == 1) // Color metavoxels that are covered by particles 
 					{
-						if (_ParticleCoverageRatio < 0.25)
+						if (_ParticleCoverageRatio < 0.15)
 							return green;
-						else if (_ParticleCoverageRatio < 0.5)
+						else if (_ParticleCoverageRatio < 0.35)
 							return yellow;
-						else if (_ParticleCoverageRatio < 0.75)
+						else if (_ParticleCoverageRatio < 0.55)
 							return orange;
 						else
 							return red;
@@ -177,9 +177,10 @@
 						}
 
 						float3 samplePos = (2 * mvRayPos + 1.0) / 2.0; //[-0.5, 0.5] -->[0, 1]
+						// the metavoxel texture's Z follows the light direction, while the actual orientation is towards the light
+						samplePos.z = 1 - samplePos.z; 
 						// adjust for the metavoxel border -- the border voxels are only for filtering
 						float borderVoxelOffset = _MetavoxelBorderSize / _NumVoxels; // [0, 1] ---> [offset, 1 - offset]
-
 						samplePos = clamp(samplePos, borderVoxelOffset, 1.0 - borderVoxelOffset);
 
 						float4 voxelColor = tex3D(_VolumeTexture, samplePos);
@@ -207,7 +208,6 @@
 					return red;*/
 
 					return float4(result.rgb, 1 - transmittance);
-					// return float4(result.rgb, transmittance);
 				
 				} // frag
 

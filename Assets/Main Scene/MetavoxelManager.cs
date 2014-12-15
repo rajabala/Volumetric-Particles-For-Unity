@@ -71,6 +71,7 @@ public class MetavoxelManager : MonoBehaviour {
     public int numBorderVoxels; // per end (i.e. a value of 1 means 2 voxels per dimension are border voxels)
     public float opacityFactor;
     public Vector3 ambientColor;
+    public bool fadeOutParticles;
 
     public Material matFillVolume;
     public Material matRayMarchOver;
@@ -124,6 +125,7 @@ public class MetavoxelManager : MonoBehaviour {
         CreateTempResources();
         showMetavoxelCoverage = false;
         displacementScale = 1.0f;
+        fadeOutParticles = true;
 
         lastLightRot = transform.rotation;
         dirLight = transform.parent.GetComponent<Light>();
@@ -502,6 +504,12 @@ public class MetavoxelManager : MonoBehaviour {
         matFillVolume.SetFloat("_OpacityFactor", opacityFactor);
         matFillVolume.SetFloat("_DisplacementScale", displacementScale);
         matFillVolume.SetVector("_AmbientColor", ambientColor);
+
+        int fadeParticles = 0;
+        if (fadeOutParticles)
+            fadeParticles = 1;
+
+        matFillVolume.SetInt("_FadeOutParticles", fadeParticles);
     }
 
     // Each metavoxel that has particles in it needs to be filled with volume info (opacity for now)

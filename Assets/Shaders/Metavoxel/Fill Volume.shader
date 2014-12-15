@@ -53,6 +53,7 @@
 		float3 _LightColor;
 		float3 _AmbientColor;
 		float _OpacityFactor;
+		int _FadeOutParticles;
 		float3 _MetavoxelGridDim;
 		float _DisplacementScale;
 
@@ -85,7 +86,11 @@
 
 			// how dense is this particle at the current voxel? (density falls quickly as we move to the outer surface of the particle)
 			float baseDensity = smoothstep(netDisplacement, 0.7 * netDisplacement, voxelParticleDistSq); 
-			float density = baseDensity * opacity * _OpacityFactor; // factor in the particle's lifetime opacity & opacity factor
+			float density = baseDensity *  _OpacityFactor; 
+			
+			// factor in the particle's lifetime opacity & opacity factor
+			if (_FadeOutParticles == 1)
+				density *= opacity;
 
 			v.density = density;
 			v.ao = netDisplacement;
@@ -155,7 +160,7 @@
 				float diffuseCoeff = 0.5;
 				float4 voxelColor;
 	
-				voxelColor = float4(lightIncidentOnVoxel * _LightColor * diffuseCoeff  +  voxelColumn[slice].ao * _AmbientColor, voxelColumn[slice].density);
+				voxelColor = float4(lightIncidentOnVoxel * _LightColor * diffuseCoeff + voxelColumn[slice].ao * _AmbientColor, voxelColumn[slice].density);
 				
 				volumeTex[int3(i.pos.xy, slice)]	=	voxelColor;
 
