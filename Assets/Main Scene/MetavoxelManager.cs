@@ -122,6 +122,7 @@ public class MetavoxelManager : MonoBehaviour {
 
         CreateTempResources();
         showPrettyColors = false;
+        displacementScale = 1.0f;
 
         lastLightRot = transform.rotation;
         dirLight = transform.parent.GetComponent<Light>();
