@@ -563,7 +563,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1703466573
 Transform:
   m_ObjectHideFlags: 0
@@ -697,12 +697,13 @@ MonoBehaviour:
   updateInterval: 1
   rayMarchSteps: 64
   numBorderVoxels: 1
+  opacityFactor: 1
+  ambientColor: {x: .200000003, y: .200000003, z: .200000003}
   matFillVolume: {fileID: 2100000, guid: 742e800cae20c4547bc14935a578e998, type: 2}
   matRayMarchOver: {fileID: 2100000, guid: 14e5eb7c9a4acf34688b8fbd737f2365, type: 2}
   matRayMarchUnder: {fileID: 2100000, guid: 98638f28235c80d4eb0bd30969960c4a, type: 2}
   theParticleSystem: {fileID: 1946669431}
   testLightPlane: {fileID: 1314314053}
-  testQuad: {fileID: 100000, guid: 9b3913a0e73d9d647a0b714eb80a70bd, type: 2}
   mvLineColor: {fileID: 2100000, guid: e091f90250c3ccc4eb5732506a7b76f6, type: 2}
   cubeVertices:
   - {x: -.5, y: -.5, z: .5}
@@ -821,7 +822,7 @@ ParticleSystem:
   InitialModule:
     enabled: 1
     startLifetime:
-      scalar: 3
+      scalar: 5
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -1858,7 +1859,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1946669431}
   m_LocalRotation: {x: .744205296, y: -6.0110608e-08, z: -6.34339443e-08, w: -.667950988}
-  m_LocalPosition: {x: -1.10000002, y: -4.1500001, z: .449999988}
+  m_LocalPosition: {x: -1.10000002, y: -6.30000019, z: .699999988}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -1948,8 +1949,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2017214303}
-  m_LocalRotation: {x: .0606056079, y: .0156781189, z: -.000952049682, w: .998038232}
-  m_LocalPosition: {x: -.449999988, y: 3.13000011, z: -22.1399994}
+  m_LocalRotation: {x: .114369467, y: -.0480955541, z: .00554358168, w: .992257893}
+  m_LocalPosition: {x: -1.07863641, y: 2.55900979, z: -12.4305391}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}

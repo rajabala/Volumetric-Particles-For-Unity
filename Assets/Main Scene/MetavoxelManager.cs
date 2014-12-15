@@ -69,6 +69,8 @@ public class MetavoxelManager : MonoBehaviour {
     public int updateInterval;
     public int rayMarchSteps;
     public int numBorderVoxels; // per end (i.e. a value of 1 means 2 voxels per dimension are border voxels)
+    public float opacityFactor;
+    public Vector3 ambientColor;
 
     public Material matFillVolume;
     public Material matRayMarchOver;
@@ -76,7 +78,6 @@ public class MetavoxelManager : MonoBehaviour {
 
     public GameObject theParticleSystem;
     public GameObject testLightPlane;
-    public GameObject testQuad;
 
     public Material mvLineColor;
     
@@ -98,7 +99,7 @@ public class MetavoxelManager : MonoBehaviour {
     private Light dirLight;
 
     // GUI controls
-    private bool showPrettyColors;
+    private bool showMetavoxelCoverage;
     private float displacementScale;
 
     // temp prototyping stuff
@@ -121,7 +122,7 @@ public class MetavoxelManager : MonoBehaviour {
         this.camera.cullingMask = 0;
 
         CreateTempResources();
-        showPrettyColors = false;
+        showMetavoxelCoverage = false;
         displacementScale = 1.0f;
 
         lastLightRot = transform.rotation;
@@ -159,7 +160,7 @@ public class MetavoxelManager : MonoBehaviour {
 
     void OnGUI()
     {
-        showPrettyColors = GUI.Toggle(new Rect(25, 50, 200, 30), showPrettyColors, "Show pretty colors");
+        showMetavoxelCoverage = GUI.Toggle(new Rect(25, 50, 200, 30), showMetavoxelCoverage, "Show metavoxel coverage");
         GUI.Label(new Rect(25, 100, 150, 50), "Displacement Scale [" + displacementScale + "]");
         displacementScale = GUI.HorizontalSlider(new Rect(175, 105, 100, 30), displacementScale, 0.0f, 1.0f);
     }
@@ -391,7 +392,7 @@ public class MetavoxelManager : MonoBehaviour {
     {
         lightPropogationUAV = new RenderTexture(numMetavoxelsX * numVoxelsInMetavoxel, numMetavoxelsY * numVoxelsInMetavoxel, 0 /* no need depth surface, just color*/, RenderTextureFormat.RFloat);
         lightPropogationUAV.generateMips = false;
-        lightPropogationUAV.enableRandomWrite = true;
+        lightPropogationUAV.enableRandomWrite = true; // use as UAV
         lightPropogationUAV.Create();
 
         Graphics.SetRenderTarget(lightPropogationUAV);
@@ -498,8 +499,9 @@ public class MetavoxelManager : MonoBehaviour {
         matFillVolume.SetFloat("_InitLightIntensity", 1.0f);
         matFillVolume.SetVector("_LightColor", dirLight.color);
         matFillVolume.SetVector("_MetavoxelGridDim", new Vector3(numMetavoxelsX, numMetavoxelsY, numMetavoxelsZ));
-        matFillVolume.SetFloat("_OpacityFactor", 200f);
+        matFillVolume.SetFloat("_OpacityFactor", opacityFactor);
         matFillVolume.SetFloat("_DisplacementScale", displacementScale);
+        matFillVolume.SetVector("_AmbientColor", ambientColor);
     }
 
     // Each metavoxel that has particles in it needs to be filled with volume info (opacity for now)
@@ -526,7 +528,6 @@ public class MetavoxelManager : MonoBehaviour {
 
         int index = 0;
 
-        //Debug.Log("Meta voxel " + xx + "," + yy + "," + zz + " convers " + mvGrid[zz, yy, xx].mParticlesCovered.Count);
         foreach (ParticleSystem.Particle p in mvGrid[zz, yy, xx].mParticlesCovered)
         {
             Vector3 wsPos = theParticleSystem.transform.localToWorldMatrix.MultiplyPoint3x4(p.position); 
@@ -534,11 +535,7 @@ public class MetavoxelManager : MonoBehaviour {
             dpArray[index].mWorldPos = wsPos;
             dpArray[index].mRadius = p.size / 2f;
             dpArray[index].mOpacity = p.lifetime / p.startLifetime; // [time-particle-will-remain-alive / particle-lifetime] use this to make particles less "dense" as they meet their end.
-
-            //Debug.Log("voxel in particle space is " + dpArray[index].mWorldToLocal.MultiplyPoint3x4(mvGrid[zz, yy, xx].mPos));
-
             index++;
-
         }
 
         ComputeBuffer dpBuffer = new ComputeBuffer(numParticles,
@@ -553,10 +550,9 @@ public class MetavoxelManager : MonoBehaviour {
         matFillVolume.SetVector("_MetavoxelIndex", new Vector3(xx, yy, zz));
         matFillVolume.SetInt("_NumParticles", numParticles);
         matFillVolume.SetBuffer("_Particles", dpBuffer);
-        // end test--
+
         Graphics.Blit(src, src, matFillVolume);
 
-        
         // cleanup
         dpBuffer.Release();
         Graphics.ClearRandomWriteTargets();
@@ -665,7 +661,7 @@ public class MetavoxelManager : MonoBehaviour {
 			m.SetVector("_AABBMax", pBounds.aabb.max);
 			
 			int showPrettyColors_i = 0;
-			if (showPrettyColors)
+			if (showMetavoxelCoverage)
 				showPrettyColors_i = 1;
 			
 			m.SetInt("_ShowPrettyColors", showPrettyColors_i);

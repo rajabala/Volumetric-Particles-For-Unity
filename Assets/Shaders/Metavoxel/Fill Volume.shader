@@ -22,7 +22,7 @@
 			float4x4 mWorldToLocal;
 			float3	mWorldPos;
 			float	mRadius;
-			float	mOpacity; // [0.0, 1.0]
+			float	mLifetimeOpacity; // [0.0, 1.0]
 		};
 
 		struct Voxel {
@@ -50,7 +50,8 @@
 		// Uniforms over entire fill pass
 		float _NumVoxels; // (nv) each metavoxel is made up of nv * nv * nv voxels
 		float _InitLightIntensity;
-		float _LightColor;
+		float3 _LightColor;
+		float3 _AmbientColor;
 		float _OpacityFactor;
 		float3 _MetavoxelGridDim;
 		float _DisplacementScale;
@@ -70,8 +71,8 @@
 
 
 		void 
-		compute_voxel_color(float3 psVoxelPos /*voxel position in particle space*/, 
-							float opacity, /*particle opacity -- particle fades away as it dies*/
+		compute_voxel_color(float3 psVoxelPos	/*voxel position in particle space*/, 
+							float opacity,		/*particle opacity -- particle fades away as it dies*/
 							out Voxel v)
 		{
 			// sample the displacement noise texture for the particle
@@ -81,15 +82,18 @@
 			float netDisplacement = _DisplacementScale * rawDisplacement + (1.0 - _DisplacementScale); // disp. from center in the range [0, 1]
 
 			float voxelParticleDistSq = dot(2 * psVoxelPos,  2 * psVoxelPos); // make it [0, 1]
-			float baseDensity = smoothstep(netDisplacement, 0.7 * netDisplacement, voxelParticleDistSq); // how dense is this particle at the current voxel? (density decreases as we move to the edge of the particle)
-			float density = baseDensity * opacity * _OpacityFactor;
+
+			// how dense is this particle at the current voxel? (density falls quickly as we move to the outer surface of the particle)
+			float baseDensity = smoothstep(netDisplacement, 0.7 * netDisplacement, voxelParticleDistSq); 
+			float density = baseDensity * opacity * _OpacityFactor; // factor in the particle's lifetime opacity & opacity factor
 
 			v.density = density;
 			v.ao = netDisplacement;
 		}
 
 		// Fragment shader fills a "voxel column" of the metavoxel's volume texture
-		// Iterate through all the particles covered by the MV and fill the voxel column by iterating through each voxel slice.
+		// For each voxel in the voxel column of our metavoxel, we iterate through all the displaced particles covered by the metavoxel and test for coverage. 
+		// If a displaced particle covers the voxel's center, we calculate its contribution to "density" and "ao". 
 		float4 
 		frag(v2f_img i) : COLOR
 		{
@@ -97,8 +101,6 @@
 			float lightIncidentOnVoxel, lightIncidentOnPreviousVoxel;
 
 			lightIncidentOnPreviousVoxel = lightIncidentOnVoxel = _InitLightIntensity * lightPropogationTex[int2(i.pos.xy + _MetavoxelIndex.xy * _NumVoxels)];
-
-			float3 ambientColor = float3(0.2, 0.2, 0.0);
 			
 			Voxel voxelColumn[NUM_VOXELS]; // temporary storage for the voxel column associated with the current fragment
 
@@ -116,7 +118,7 @@
 				
 				if (dist2 < 0.25) // 0.5 * 0.5 -- if the voxel center is within the particle it'd be less than 0.5 units away from the particle center in particle space
 				{
-					compute_voxel_color(psVoxelPos, p.mOpacity, voxelColumn[slice]);				
+					compute_voxel_color(psVoxelPos, p.mLifetimeOpacity, voxelColumn[slice]);				
 				}
 				else 
 				{
@@ -126,11 +128,9 @@
 				}				
 			}
 
-
-			// i.pos is SV_POSITION, that gives us the center of the pixel position being shaded
+			// Iterate through all the remaining particles for every voxel in the voxel column
 			for (slice = 0; slice < _NumVoxels; slice++)
 			{
-
 				float4 voxelWorldPos = get_voxel_world_pos(i.pos.xy, slice);
 				
 				for (pp = 1; pp < _NumParticles; pp++)
@@ -143,7 +143,7 @@
 
 					if (dist2 < 0.25) // 0.5 * 0.5 -- if the voxel center is within the particle it'd be less than 0.5 units away from the particle center in particle space
 					{
-						compute_voxel_color(psVoxelPos, p.mOpacity, v);
+						compute_voxel_color(psVoxelPos, p.mLifetimeOpacity, v);
 
 						voxelColumn[slice].density += v.density;
 						voxelColumn[slice].ao		= max(voxelColumn[slice].ao, v.ao);
@@ -155,7 +155,7 @@
 				float diffuseCoeff = 0.5;
 				float4 voxelColor;
 	
-				voxelColor = float4(lightIncidentOnVoxel * _LightColor * diffuseCoeff  +  voxelColumn[slice].ao * ambientColor, voxelColumn[slice].density);
+				voxelColor = float4(lightIncidentOnVoxel * _LightColor * diffuseCoeff  +  voxelColumn[slice].ao * _AmbientColor, voxelColumn[slice].density);
 				
 				volumeTex[int3(i.pos.xy, slice)]	=	voxelColor;
 
@@ -165,6 +165,7 @@
 
 			lightPropogationTex[int2(i.pos.xy + _MetavoxelIndex.xy * _NumVoxels)] = lightIncidentOnPreviousVoxel; // exclude the exit border voxel to prevent inconsistencies in next metavoxel
 		
+			/* this fragment shader does NOT return anything. it's merely used for filling a voxel column while propagating light through it*/
 			discard;
 			return float4(1.0f, 0.0f, 1.0f, 1.0f);
 			

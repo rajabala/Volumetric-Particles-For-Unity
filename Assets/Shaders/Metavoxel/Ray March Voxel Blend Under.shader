@@ -2,7 +2,6 @@
 	Properties{
 		_VolumeTexture("Metavoxel fill data", 3D) = "" {}
 		_LightPropogationTexture("Light Propogation", 2D) = "" {}
-		_NumSteps("Num steps in raymarch", Int) = 50
 	}
 	SubShader
 		{
@@ -68,8 +67,10 @@
 				v2f	
 				vert(appdata_base i) {
 					// every vertex submitted is in a unit-metavoxel space
-					// transform from model -> world -> eye -> proj space
+					// transform from model -> world -> eye -> proj -> clip space
 					v2f o;
+
+					// can't use the default UNITY_MATRIX_MVP since the draw is made using Graphics.DrawMeshNow
 					o.pos = mul(mul(UNITY_MATRIX_VP, _MetavoxelToWorld), i.vertex); // clip space
 					o.worldPos = mul(_MetavoxelToWorld, i.vertex); // world space
 					return o;
@@ -126,22 +127,25 @@
 							return red;
 					}
 
+					/* [todo] delete 
 					// Find ray direction from camera through this pixel
 					// -- Find half width and height of the near plane in world units
 					float screenHalfHeight = _Near * tan(radians(_Fov / 2));
 					float screenHalfWidth  = (_ScreenRes.x / _ScreenRes.y) * screenHalfHeight;
 
 					// -- Normalize the pixel position to a [-1, 1] range to help find its world space position
-//					float2 pixelNormPos = (2 * i.pos.xy - _ScreenRes) / _ScreenRes; // [0, wh] to [-1, 1]
-//					float3 pixelWorldPos = _CameraWorldPos + mul(_CameraToWorldMatrix, float3(pixelNormPos * float2(screenHalfWidth, screenHalfHeight), _Near)); // pixel lies on the near plane
+					float2 pixelNormPos = (2 * i.pos.xy - _ScreenRes) / _ScreenRes; // [0, wh] to [-1, 1]
+					float3 pixelWorldPos = _CameraWorldPos + mul(_CameraToWorldMatrix, float3(pixelNormPos * float2(screenHalfWidth, screenHalfHeight), _Near)); // pixel lies on the near plane
 
 					// Since we cull front-facing triangles, the geometry corresponding to this fragment is a back-facing one and thus
 					// represents the ray's world space exit position for this metavoxel
-					float3 rayDir = normalize(i.worldPos - _CameraWorldPos);
+					*/
+					// i.worldPos represents the world space exit position of the ray through the current metavoxel
+					float3 wsRayDir = normalize(i.worldPos - _CameraWorldPos);
 					
 					Ray csRay; // camera space
 					csRay.o = float3(0, 0, 0); // camera is at the origin in camera space.
-					csRay.d = normalize(mul(_WorldToCameraMatrix, float4(rayDir, 0)));			
+					csRay.d = normalize(mul(_WorldToCameraMatrix, float4(wsRayDir, 0)));
 
 					// Find the intersection of the ray with a camera-AABB of the ENTIRE volume
 					float tnear, tfar;
