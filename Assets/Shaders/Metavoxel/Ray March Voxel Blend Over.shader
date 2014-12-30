@@ -116,6 +116,8 @@
 				float4
 					frag(v2f i) : COLOR
 				{
+					return blue;
+
 					if (_ShowPrettyColors == 1) // Color metavoxels that are covered by particles 
 					{
 						if (_ParticleCoverageRatio < 0.15)
@@ -168,36 +170,36 @@
 					float4x4 CameraToMetavoxel = mul(_WorldToMetavoxel, _CameraToWorldMatrix);
 					float3 csRayPos = (tnear + stepSize*exitIndex) * csRay.d;
 
-					[unroll(64)]
-					for (step = exitIndex; step >= 0; step--) {
-						// convert from mv space to sampling space, i.e., [-mvSize/2, mvSize/2] -> [0,1]
-						float3 mvRayPos = mul(CameraToMetavoxel, float4(csRayPos, 1));
-						if (abs(mvRayPos.x) > 0.5 || abs(mvRayPos.y) > 0.5 || abs(mvRayPos.z) > 0.5)
-						{
-							break;  // point outside mv
-						}
+					//[unroll(64)]
+					//for (step = exitIndex; step >= 0; step--) {				
+					//	// convert from mv space to sampling space, i.e., [-mvSize/2, mvSize/2] -> [0,1]
+					//	float3 mvRayPos = mul(CameraToMetavoxel, float4(csRayPos, 1));
+					//	if (abs(mvRayPos.x) > 0.5 || abs(mvRayPos.y) > 0.5 || abs(mvRayPos.z) > 0.5)
+					//	{
+					//		break;  // point outside mv
+					//	}
 
-						float3 samplePos = (2 * mvRayPos + 1.0) / 2.0; //[-0.5, 0.5] -->[0, 1]
-						// the metavoxel texture's Z follows the light direction, while the actual orientation is towards the light
-						samplePos.z = 1 - samplePos.z;
-						// adjust for the metavoxel border -- the border voxels are only for filtering
-						float borderVoxelOffset = _MetavoxelBorderSize / _NumVoxels; // [0, 1] ---> [offset, 1 - offset]
-						samplePos = clamp(samplePos, borderVoxelOffset, 1.0 - borderVoxelOffset);
+					//	float3 samplePos = (2 * mvRayPos + 1.0) / 2.0; //[-0.5, 0.5] -->[0, 1]
+					//	// the metavoxel texture's Z follows the light direction, while the actual orientation is towards the light
+					//	samplePos.z = 1 - samplePos.z;
+					//	// adjust for the metavoxel border -- the border voxels are only for filtering
+					//	float borderVoxelOffset = _MetavoxelBorderSize / _NumVoxels; // [0, 1] ---> [offset, 1 - offset]
+					//	samplePos = clamp(samplePos, borderVoxelOffset, 1.0 - borderVoxelOffset);
 
-						float4 voxelColor = tex3D(_VolumeTexture, samplePos);
-						float3 color = voxelColor.rgb;
-						float  density = voxelColor.a;
+					//	float4 voxelColor = tex3D(_VolumeTexture, samplePos);
+					//	float3 color = voxelColor.rgb;
+					//	float  density = voxelColor.a;
 
-						float blendFactor = rcp(1.0 + density);
+					//	float blendFactor = rcp(1.0 + density);
 
-						result.rgb = lerp(color, result.rgb, blendFactor);
-						transmittance *= blendFactor;
-						// blending individual samples back-to-front, so use the `over` operator
-						//result.rgb = voxelColor.a * voxelColor.rgb + (1 - voxelColor.a) * result.rgb; // a1*C1 + (1 - a1)*C0  (C1,a1) over (C0,a0)
-						//transmittance *= (1 - voxelColor.a);
+					//	result.rgb = lerp(color, result.rgb, blendFactor);
+					//	transmittance *= blendFactor;
+					//	// blending individual samples back-to-front, so use the `over` operator
+					//	//result.rgb = voxelColor.a * voxelColor.rgb + (1 - voxelColor.a) * result.rgb; // a1*C1 + (1 - a1)*C0  (C1,a1) over (C0,a0)
+					//	//transmittance *= (1 - voxelColor.a);
 
-						csRayPos -= (stepSize * csRay.d);
-					}
+					//	csRayPos -= (stepSize * csRay.d);
+					//}
 
 					/*int stepsTaken = exitIndex - step;
 					if (stepsTaken < 2)

@@ -690,12 +690,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mvScale: {x: 3, y: 3, z: 3}
-  numMetavoxelsX: 10
-  numMetavoxelsY: 10
-  numMetavoxelsZ: 10
+  numMetavoxelsX: 6
+  numMetavoxelsY: 6
+  numMetavoxelsZ: 6
   numVoxelsInMetavoxel: 32
   updateInterval: 1
-  rayMarchSteps: 64
+  rayMarchSteps: 128
   numBorderVoxels: 1
   opacityFactor: .699999988
   ambientColor: {x: .5, y: .5, z: .5}

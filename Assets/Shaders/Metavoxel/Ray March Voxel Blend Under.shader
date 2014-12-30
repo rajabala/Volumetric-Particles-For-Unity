@@ -25,6 +25,7 @@
 #define yellow float4(0.5, 0.5, 0.0, 0.5)
 #define orange float4(0.5, 0.4, 0.0, 0.5)
 #define red float4(0.5, 0.0, 0.0, 0.5)
+#define seethrough float4(0.0, 0.0, 0.0, 0.0)
 
 
 				sampler3D _VolumeTexture;
@@ -127,35 +128,51 @@
 							return red;
 					}
 
-					/* [todo] delete 
+					 
 					// Find ray direction from camera through this pixel
 					// -- Find half width and height of the near plane in world units
 					float screenHalfHeight = _Near * tan(radians(_Fov / 2));
 					float screenHalfWidth  = (_ScreenRes.x / _ScreenRes.y) * screenHalfHeight;
 
 					// -- Normalize the pixel position to a [-1, 1] range to help find its world space position
-					float2 pixelNormPos = (2 * i.pos.xy - _ScreenRes) / _ScreenRes; // [0, wh] to [-1, 1]
+					float2 pixelNormPos = (2 * i.pos.xy / _ScreenRes) - 1.0; // [0, wh] to [-1, 1]
+
+					float3 csRayDir;
+					csRayDir.xy = pixelNormPos;
+					csRayDir.z = _Near;
+
 					float3 pixelWorldPos = _CameraWorldPos + mul(_CameraToWorldMatrix, float3(pixelNormPos * float2(screenHalfWidth, screenHalfHeight), _Near)); // pixel lies on the near plane
 
 					// Since we cull front-facing triangles, the geometry corresponding to this fragment is a back-facing one and thus
 					// represents the ray's world space exit position for this metavoxel
-					*/
-					// i.worldPos represents the world space exit position of the ray through the current metavoxel
-					float3 wsRayDir = normalize(i.worldPos - _CameraWorldPos);
 					
+					// i.worldPos represents the world space exit position of the ray through the current metavoxel
+					//float3 wsRayDir = normalize(i.worldPos - _CameraWorldPos);
+					float3 wsRayDir = normalize(pixelWorldPos - _CameraWorldPos);
+
 					Ray csRay; // camera space
 					csRay.o = float3(0, 0, 0); // camera is at the origin in camera space.
 					csRay.d = normalize(mul(_WorldToCameraMatrix, float4(wsRayDir, 0)));
 
+					if (csRay.d.x == 0 || csRay.d.y == 0)
+						return green;
 					// Find the intersection of the ray with a camera-AABB of the ENTIRE volume
 					float tnear, tfar;
+
 					bool rayVolumeIntersects = IntersectBox(csRay, _AABBMin, _AABBMax, tnear, tfar);
+
+					if (!rayVolumeIntersects) // entirely possible that pixels in a metavoxel fall outside of the camera-AABB for the volume
+						return seethrough;
+					else
+						return red;
 
 					// The pixel we're working on is an exit point for the ray (we're rendering only backfaces of the metavoxel cubes).
 					// Find its 't' w.r.t the ray from the camera
-					float3 tmvexit = mul(_WorldToCameraMatrix, float4(i.worldPos, 1)) / csRay.d;
+					float3 csMvExit = mul(_WorldToCameraMatrix, float4(i.worldPos, 1));
+					float tmvexit = sqrt(dot(csMvExit, csMvExit));
+					//float3 tmvexit = mul(_WorldToCameraMatrix, float4(i.worldPos, 1)) / csRay.d;
 					float stepSize = abs((tfar - tnear) / (float)(_NumSteps)); 
-					int exitIndex = floor((tmvexit.x - tnear) / stepSize);
+					int exitIndex = floor((tmvexit - tnear) / stepSize);
 
 					float3 result = float3(0, 0, 0);
 					float transmittance = 1.0f;
@@ -167,36 +184,36 @@
 					float4x4 CameraToMetavoxel = mul(_WorldToMetavoxel, _CameraToWorldMatrix);
 					float3 csRayPos = (tnear + stepSize*exitIndex) * csRay.d;
 				
-					[unroll(64)]
-					for (step = exitIndex; step >= 0; step--) {
-						// convert from mv space to sampling space, i.e., [-mvSize/2, mvSize/2] -> [0,1]
-						float3 mvRayPos = mul(CameraToMetavoxel, float4(csRayPos, 1));
-						if (abs(mvRayPos.x) > 0.5 || abs(mvRayPos.y) > 0.5 || abs(mvRayPos.z) > 0.5)
-						{
-							break;  // point outside mv
-						}
+					//[unroll(64)]
+					//for (step = exitIndex; step >= 0; step--) {
+					//	// convert from mv space to sampling space, i.e., [-mvSize/2, mvSize/2] -> [0,1]
+					//	float3 mvRayPos = mul(CameraToMetavoxel, float4(csRayPos, 1));
+					//	if (abs(mvRayPos.x) > 0.5 || abs(mvRayPos.y) > 0.5 || abs(mvRayPos.z) > 0.5)
+					//	{
+					//		break;  // point outside mv
+					//	}
 
-						float3 samplePos = (2 * mvRayPos + 1.0) / 2.0; //[-0.5, 0.5] -->[0, 1]
-						// the metavoxel texture's Z follows the light direction, while the actual orientation is towards the light
-						samplePos.z = 1 - samplePos.z; 
-						// adjust for the metavoxel border -- the border voxels are only for filtering
-						float borderVoxelOffset = _MetavoxelBorderSize / _NumVoxels; // [0, 1] ---> [offset, 1 - offset]
-						samplePos = clamp(samplePos, borderVoxelOffset, 1.0 - borderVoxelOffset);
+					//	float3 samplePos = (2 * mvRayPos + 1.0) / 2.0; //[-0.5, 0.5] -->[0, 1]
+					//	// the metavoxel texture's Z follows the light direction, while the actual orientation is towards the light
+					//	samplePos.z = 1 - samplePos.z; 
+					//	// adjust for the metavoxel border -- the border voxels are only for filtering
+					//	float borderVoxelOffset = _MetavoxelBorderSize / _NumVoxels; // [0, 1] ---> [offset, 1 - offset]
+					//	samplePos = clamp(samplePos, borderVoxelOffset, 1.0 - borderVoxelOffset);
 
-						float4 voxelColor = tex3D(_VolumeTexture, samplePos);
-						float3 color = voxelColor.rgb;
-						float  density = voxelColor.a;
+					//	float4 voxelColor = tex3D(_VolumeTexture, samplePos);
+					//	float3 color = voxelColor.rgb;
+					//	float  density = voxelColor.a;
 
-						float blendFactor = rcp(1.0 + density);
+					//	float blendFactor = rcp(1.0 + density);
 
-						result.rgb = lerp(color, result.rgb, blendFactor);
-						transmittance *= blendFactor;
-						// blending individual samples back-to-front, so use the `over` operator
-						//result.rgb = voxelColor.a * voxelColor.rgb + (1 - voxelColor.a) * result.rgb; // a1*C1 + (1 - a1)*C0  (C1,a1) over (C0,a0)
-						//transmittance *= (1 - voxelColor.a);
+					//	result.rgb = lerp(color, result.rgb, blendFactor);
+					//	transmittance *= blendFactor;
+					//	// blending individual samples back-to-front, so use the `over` operator
+					//	//result.rgb = voxelColor.a * voxelColor.rgb + (1 - voxelColor.a) * result.rgb; // a1*C1 + (1 - a1)*C0  (C1,a1) over (C0,a0)
+					//	//transmittance *= (1 - voxelColor.a);
 
-						csRayPos -= (stepSize * csRay.d);
-					}
+					//	csRayPos -= (stepSize * csRay.d);
+					//}
 
 					/*int stepsTaken = exitIndex - step;
 					if (stepsTaken < 2)
