@@ -116,7 +116,7 @@
 				float4
 					frag(v2f i) : COLOR
 				{
-					return blue;
+					return orange;
 
 					if (_ShowPrettyColors == 1) // Color metavoxels that are covered by particles 
 					{

@@ -690,12 +690,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mvScale: {x: 3, y: 3, z: 3}
-  numMetavoxelsX: 6
-  numMetavoxelsY: 6
-  numMetavoxelsZ: 6
+  numMetavoxelsX: 5
+  numMetavoxelsY: 5
+  numMetavoxelsZ: 5
   numVoxelsInMetavoxel: 32
   updateInterval: 1
-  rayMarchSteps: 128
+  rayMarchSteps: 64
   numBorderVoxels: 1
   opacityFactor: .699999988
   ambientColor: {x: .5, y: .5, z: .5}
@@ -1051,7 +1051,7 @@ ParticleSystem:
       minMaxState: 0
     gravityModifier: 0
     inheritVelocity: 0
-    maxNumParticles: 15
+    maxNumParticles: 10
   ShapeModule:
     serializedVersion: 2
     enabled: 1

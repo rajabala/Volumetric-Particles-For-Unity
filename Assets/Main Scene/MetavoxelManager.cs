@@ -659,7 +659,7 @@ public class MetavoxelManager : MonoBehaviour {
 			// that's attached to the directional light. We're interested in the main camera's matrices, not the pseudo-mv cam!
 			m.SetMatrix("_CameraToWorldMatrix", Camera.main.cameraToWorldMatrix);
 			m.SetMatrix("_WorldToCameraMatrix", Camera.main.worldToCameraMatrix);
-			m.SetFloat("_Fov", Camera.main.fieldOfView);
+			m.SetFloat("_Fov", Mathf.Deg2Rad * Camera.main.fieldOfView);
 			m.SetFloat("_Near", Camera.main.nearClipPlane);
 			m.SetFloat("_Far", Camera.main.farClipPlane);
 			m.SetVector("_ScreenRes", new Vector2(Screen.width, Screen.height));
