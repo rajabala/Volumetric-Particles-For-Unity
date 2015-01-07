@@ -126,7 +126,7 @@ public class MetavoxelManager : MonoBehaviour {
         CreateTempResources();
         showMetavoxelCoverage = false;
         displacementScale = 1.0f;
-        fadeOutParticles = true;
+        fadeOutParticles = false;
 
         lastLightRot = transform.rotation;
         dirLight = transform.parent.GetComponent<Light>();

@@ -10,7 +10,7 @@
 			{
 				Cull Front ZWrite Off ZTest Less
 				// Syntax: Blend SrcFactor DstFactor, SrcFactorA DstFactorA
-				Blend OneMinusDstAlpha One, One One // Front to Back blending (blend under)-- this is b/w metavoxels.
+				Blend OneMinusDstAlpha DstAlpha, One One // Front to Back blending (blend under)-- this is b/w metavoxels.
 				BlendOp Add
 
 				CGPROGRAM
@@ -160,14 +160,23 @@
 					float3 mvAABBEnd	= mul(CameraToMetavoxel, float4(csAABBEnd, 1));
 
 					float3 mvRay = mvAABBEnd - mvAABBStart;
+					float mvRayLength = sqrt(dot(mvRay, mvRay));
 					float3 mvRayStep = mvRay / float (_NumSteps);
 					float3 mvRayDir = normalize(mvRay);
 					float3 mvMin = float3(-0.5, -0.5, -0.5), mvMax = -1.0 * mvMin;
 					
-					float mvMinOnRay = dot(mvRayDir, mvMin - mvAABBStart), mvMaxOnRay = dot(mvRayDir, mvMax - mvAABBStart); 
-					float mvRayStepSize = sqrt(dot(mvRay, mvRay)) / (float)  _NumSteps;					
-					float mvStartIndex = ceil(min(mvMinOnRay, mvMaxOnRay) / mvRayStepSize), 
-						  mvStopIndex  = floor(max(mvMinOnRay, mvMaxOnRay) / mvRayStepSize);
+					/*float t1, t2;
+					Ray mvRay1;
+					mvRay1.o = mvAABBStart;
+					mvRay1.d = mvRayDir;
+					IntersectBox(mvRay1, mvMin, mvMax, t1, t2);
+
+					float tmin = min(t1, t2), tmax = max(t1, t2);
+					float mvStartIndex = tmin / mvRayLength,
+						  mvStopIndex = tmax / mvRayLength;
+
+					if (mvStopIndex - mvStartIndex < 1.0)
+						return orange;*/
 		
 					float3 result = float3(0, 0, 0);
 					float transmittance = 1.0f;
@@ -178,6 +187,7 @@
 					// and moving towards the camera while stopping once we're no longer within the current metavoxel.
 					// Blend the samples back-to-front in the process
 					
+					int samples = 0;
 					[unroll(64)]
 					//for (step = mvStopIndex; step >= mvStartIndex; step--) {
 					for (step = _NumSteps; step >= 0; step--) {
@@ -187,6 +197,7 @@
 							continue;  // point outside mv
 						}
 
+						samples++;
 						// convert from mv space to sampling space, i.e., [-mvSize/2, mvSize/2] -> [0,1]
 						float3 samplePos = (2 * mvRayPos + 1.0) / 2.0; //[-0.5, 0.5] -->[0, 1]
 						// the metavoxel texture's Z follows the light direction, while the actual orientation is towards the light
@@ -209,15 +220,17 @@
 						mvRayPos -= mvRayStep;
 					}
 
-					/*int stepstaken = _NumSteps - step;
+					if (samples == 0)
+						return red;
+					/*int stepstaken = samples;
 					if (stepstaken < 2)
 						return green;
 					if (stepstaken < 5)
 						return yellow;
 					if (stepstaken < 15)
 						return orange;
-					return red;
-*/
+					return red;*/
+
 					return float4(result.rgb, 1 - transmittance);
 				
 				} // frag
