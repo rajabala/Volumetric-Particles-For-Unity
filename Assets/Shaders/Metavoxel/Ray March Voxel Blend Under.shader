@@ -10,7 +10,7 @@
 			{
 				Cull Front ZWrite Off ZTest Less
 				// Syntax: Blend SrcFactor DstFactor, SrcFactorA DstFactorA
-				Blend OneMinusDstAlpha DstAlpha, One One // Front to Back blending (blend under)-- this is b/w metavoxels.
+				Blend OneMinusDstAlpha One, OneMinusDstAlpha One // Front to Back blending (blend under)-- this is b/w metavoxels.
 				BlendOp Add
 
 				CGPROGRAM
@@ -163,24 +163,24 @@
 					float mvRayLength = sqrt(dot(mvRay, mvRay));
 					float3 mvRayStep = mvRay / float (_NumSteps);
 					float3 mvRayDir = normalize(mvRay);
-					float3 mvMin = float3(-0.5, -0.5, -0.5), mvMax = -1.0 * mvMin;
+					//float3 mvMin = float3(-0.5, -0.5, -0.5), mvMax = -1.0 * mvMin;
 					
-					/*float t1, t2;
-					Ray mvRay1;
-					mvRay1.o = mvAABBStart;
-					mvRay1.d = mvRayDir;
-					IntersectBox(mvRay1, mvMin, mvMax, t1, t2);
+					//float t1, t2;
+					//Ray mvRay1;
+					//mvRay1.o = mvAABBStart;
+					//mvRay1.d = mvRayDir;
+					//IntersectBox(mvRay1, mvMin, mvMax, t1, t2);
 
-					float tmin = min(t1, t2), tmax = max(t1, t2);
-					float mvStartIndex = tmin / mvRayLength,
-						  mvStopIndex = tmax / mvRayLength;
+					//float tmin = min(t1, t2), tmax = max(t1, t2);
+					//float mvStartIndex = tmin / mvRayLength,
+					//	  mvStopIndex = tmax / mvRayLength;
 
-					if (mvStopIndex - mvStartIndex < 1.0)
-						return orange;*/
+					//if (mvStopIndex - mvStartIndex < 1.0)
+					//	return orange;
 		
 					float3 result = float3(0, 0, 0);
 					float transmittance = 1.0f;
-					float borderVoxelOffset = _MetavoxelBorderSize / _NumVoxels; // [0, 1] ---> [offset, 1 - offset]
+					float borderVoxelOffset = _MetavoxelBorderSize / _NumVoxels;
 					float3 mvRayPos = mvAABBEnd; // mvAABBStart + mvStopIndex * mvRayStep;
 					int step;
 					// Sample uniformly along the ray starting from the current metavoxel's exit index (along the ray), 
@@ -198,12 +198,14 @@
 						}
 
 						samples++;
-						// convert from mv space to sampling space, i.e., [-mvSize/2, mvSize/2] -> [0,1]
-						float3 samplePos = (2 * mvRayPos + 1.0) / 2.0; //[-0.5, 0.5] -->[0, 1]
-						// the metavoxel texture's Z follows the light direction, while the actual orientation is towards the light
+
+						float3 samplePos = mvRayPos + 0.5; //[-0.5, 0.5] -->[0, 1]
+						// the metavoxel texture's Z follows the light direction, while the actual metavoxel orientation is towards the light
+						// see get_voxel_world_pos(..) in Fill Volume.shader ; we're mapping slice [0, n-1] to [+0.5, -0.5] in mv space
 						samplePos.z = 1.0 - samplePos.z; 
+
 						// adjust for the metavoxel border -- the border voxels are only for filtering
-						samplePos = samplePos * (1.0 - 2.0 * borderVoxelOffset) + borderVoxelOffset;
+						samplePos = samplePos * (1.0 - 2.0 * borderVoxelOffset) + borderVoxelOffset;  // [0, 1] ---> [offset, 1 - offset]
 
 						float4 voxelColor = tex3D(_VolumeTexture, samplePos);
 						float3 color = voxelColor.rgb;
@@ -220,8 +222,8 @@
 						mvRayPos -= mvRayStep;
 					}
 
-					if (samples == 0)
-						return red;
+					//if (samples == 0)
+					//	return red;
 					/*int stepstaken = samples;
 					if (stepstaken < 2)
 						return green;
@@ -230,6 +232,9 @@
 					if (stepstaken < 15)
 						return orange;
 					return red;*/
+
+					if (transmittance < 1.0)
+						return yellow;
 
 					return float4(result.rgb, 1 - transmittance);
 				
