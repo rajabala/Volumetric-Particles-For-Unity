@@ -490,7 +490,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1569223725}
-  m_LocalRotation: {x: .162945583, y: 0, z: 0, w: .986635089}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -673,7 +673,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1773395100}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -17.0200005}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1569223727}
@@ -691,7 +691,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mvScale: {x: 3, y: 3, z: 3}
   numMetavoxelsX: 2
-  numMetavoxelsY: 1
+  numMetavoxelsY: 2
   numMetavoxelsZ: 1
   numVoxelsInMetavoxel: 32
   updateInterval: 1
@@ -813,7 +813,7 @@ ParticleSystem:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1946669431}
-  lengthInSec: 5
+  lengthInSec: 25
   startDelay: 0
   speed: 1
   randomSeed: 0
@@ -824,7 +824,7 @@ ParticleSystem:
   InitialModule:
     enabled: 1
     startLifetime:
-      scalar: 5
+      scalar: 25
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -1051,7 +1051,7 @@ ParticleSystem:
       minMaxState: 0
     gravityModifier: 0
     inheritVelocity: 0
-    maxNumParticles: 3
+    maxNumParticles: 1
   ShapeModule:
     serializedVersion: 2
     enabled: 1
@@ -1860,8 +1860,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1946669431}
-  m_LocalRotation: {x: .744205296, y: -6.0110608e-08, z: -6.34339443e-08, w: -.667950988}
-  m_LocalPosition: {x: -1.10000002, y: -3.91000009, z: .699999988}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -1951,8 +1951,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2017214303}
-  m_LocalRotation: {x: .114369467, y: -.0480955541, z: .00554358168, w: .992257893}
-  m_LocalPosition: {x: -.589999974, y: 3.75, z: -17.4899998}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1, z: -10.8800001}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}

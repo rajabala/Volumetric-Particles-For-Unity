@@ -10,7 +10,7 @@
 			{
 				Cull Front ZWrite Off ZTest Less
 				// Syntax: Blend SrcFactor DstFactor, SrcFactorA DstFactorA
-				Blend OneMinusDstAlpha DstAlpha, One One // Front to Back blending (blend under)-- this is b/w metavoxels.
+				Blend OneMinusDstAlpha DstAlpha, OneMinusDstAlpha One // Front to Back blending (blend under)-- this is b/w metavoxels.
 				BlendOp Add
 
 				CGPROGRAM
@@ -213,15 +213,12 @@
 
 						result.rgb = lerp(color, result.rgb, blendFactor);
 						transmittance *= blendFactor;
-						// blending individual samples back-to-front, so use the `over` operator
-						//result.rgb = voxelColor.a * voxelColor.rgb + (1 - voxelColor.a) * result.rgb; // a1*C1 + (1 - a1)*C0  (C1,a1) over (C0,a0)
-						//transmittance *= (1 - voxelColor.a);
-
+						
 						mvRayPos -= mvRayStep;
 					}
 
-					if (samples == 0)
-						return red;
+					/*if (samples == 0)
+						return red;*/
 					/*int stepstaken = samples;
 					if (stepstaken < 2)
 						return green;
@@ -230,8 +227,11 @@
 					if (stepstaken < 15)
 						return orange;
 					return red;*/
-
-					return float4(result.rgb, 1 - transmittance);
+					if (transmittance < 1)
+						return float4(result.rgb, 1);
+						/*return float4(result.rgb, 1 - transmittance);*/
+					else
+						return float4(result.rgb, 1 - transmittance);
 				
 				} // frag
 
