@@ -182,7 +182,7 @@
 					float transmittance = 1.0f;
 					float borderVoxelOffset = rcp(_NumVoxels) * _MetavoxelBorderSize;
 					float3 mvRayPos = mvAABBEnd;
-				
+
 					int step;
 					// Sample uniformly along the ray starting from the current metavoxel's exit index (along the ray), 
 					// and moving towards the camera while stopping once we're no longer within the current metavoxel.
@@ -204,12 +204,13 @@
 						if (samples > 13)
 							break;
 						*/
-						// convert from mv space to sampling space, i.e., [-mvSize/2, mvSize/2] -> [0,1]
-						float3 samplePos = (2 * mvRayPos + 1.0) / 2.0; //[-0.5, 0.5] -->[0, 1]
-						// the metavoxel texture's Z follows the light direction, while the actual orientation is towards the light
+						float3 samplePos = mvRayPos + 0.5; //[-0.5, 0.5] -->[0, 1]
+						// the metavoxel texture's Z follows the light direction, while the actual metavoxel orientation is towards the light
+						// see get_voxel_world_pos(..) in Fill Volume.shader ; we're mapping slice [0, n-1] to [+0.5, -0.5] in mv space
 						samplePos.z = 1.0 - samplePos.z; 
+
 						// adjust for the metavoxel border -- the border voxels are only for filtering
-						samplePos = samplePos * (1.0 - 2.0 * borderVoxelOffset) + borderVoxelOffset;
+						samplePos = samplePos * (1.0 - 2.0 * borderVoxelOffset) + borderVoxelOffset;  // [0, 1] ---> [offset, 1 - offset]
 
 						float4 voxelColor = tex3D(_VolumeTexture, samplePos);
 						float3 color = voxelColor.rgb;
@@ -233,6 +234,9 @@
 							return orange;
 						return red;
 					}
+
+					if (transmittance < 1.0)
+						return yellow;
 
 					return float4(result.rgb, 1 - transmittance);
 				
