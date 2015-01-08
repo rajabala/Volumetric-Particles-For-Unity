@@ -689,10 +689,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8baae8a2fe103a640bbd718cd9d3a590, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mvScale: {x: 4, y: 4, z: 4}
-  numMetavoxelsX: 1
-  numMetavoxelsY: 1
-  numMetavoxelsZ: 1
+  mvScale: {x: 2, y: 2, z: 2}
+  numMetavoxelsX: 4
+  numMetavoxelsY: 4
+  numMetavoxelsZ: 4
   numVoxelsInMetavoxel: 32
   updateInterval: 1
   rayMarchSteps: 64
@@ -813,7 +813,7 @@ ParticleSystem:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1946669431}
-  lengthInSec: 25
+  lengthInSec: 5
   startDelay: 0
   speed: 1
   randomSeed: 0
@@ -824,7 +824,7 @@ ParticleSystem:
   InitialModule:
     enabled: 1
     startLifetime:
-      scalar: 25
+      scalar: 5
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -857,7 +857,7 @@ ParticleSystem:
         m_PostInfinity: 2
       minMaxState: 0
     startSpeed:
-      scalar: 0
+      scalar: 1
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -1051,7 +1051,7 @@ ParticleSystem:
       minMaxState: 0
     gravityModifier: 0
     inheritVelocity: 0
-    maxNumParticles: 1
+    maxNumParticles: 4
   ShapeModule:
     serializedVersion: 2
     enabled: 1

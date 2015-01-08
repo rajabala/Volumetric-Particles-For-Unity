@@ -653,7 +653,8 @@ public class MetavoxelManager : MonoBehaviour {
 			
 			// Metavoxel grid uniforms
 			m.SetFloat("_NumVoxels", numVoxelsInMetavoxel);
-			//m.SetVector("_MetavoxelSize", mvScale);
+			m.SetVector("_MetavoxelSize", mvScale);
+            m.SetVector("_MetavoxelGridDim", new Vector3(numMetavoxelsX, numMetavoxelsY, numMetavoxelsZ));
             m.SetInt("_MetavoxelBorderSize", numBorderVoxels);
 			
 			// Camera uniforms
@@ -696,7 +697,7 @@ public class MetavoxelManager : MonoBehaviour {
         }
 
         //Debug.Log("rendering mv " + xx + "," + yy +"," + zz);
-        mvFillTextures[zz, yy, xx].filterMode = FilterMode.Point;//FilterMode.Bilinear;
+        mvFillTextures[zz, yy, xx].filterMode = FilterMode.Bilinear;
         mvFillTextures[zz, yy, xx].wrapMode = TextureWrapMode.Clamp;
         mvFillTextures[zz, yy, xx].anisoLevel = volumeTextureAnisoLevel;
 

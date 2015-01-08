@@ -40,7 +40,8 @@
 				float4x4 _MetavoxelToWorld;
 				float4x4 _WorldToMetavoxel;
 				float4 _MetavoxelIndex;
-				//float3 _MetavoxelGridDim;
+				float3 _MetavoxelGridDim;
+				float3 _MetavoxelSize;
 				float _ParticleCoverageRatio; 
 
 				// Camera uniforms
@@ -151,9 +152,20 @@
 					float3 csRayDir2 = normalize(mul(_WorldToCameraMatrix, float4(i.worldPos - _CameraWorldPos, 0)));
 					//return float4(csRayDir2 - csRayDir, 0.5);
 					csRayDir = csRayDir2;
+
+					float3 csVolOrigin = mul(_WorldToCameraMatrix, float4(0, 0, 0, 1));
+					
+					float2 n = max(_MetavoxelGridDim.xx, _MetavoxelGridDim.yz);
+					float csVolHalfZ = sqrt(3) * 0.5 * max(n.x, n.y) * _MetavoxelSize.x;
+					float csZVolMin = csVolOrigin.z + csVolHalfZ,
+						  csZVolMax = csVolOrigin.z - csVolHalfZ;
 					// Find camera space intersections of the ray with the camera-AABB of the volume
-					float3 csAABBStart	= csRayDir * (_AABBMin.z / csRayDir.z);
-					float3 csAABBEnd	= csRayDir * (_AABBMax.z / csRayDir.z);
+					//float3 csAABBStart	= csRayDir * (_AABBMin.z / csRayDir.z);
+					//float3 csAABBEnd	= csRayDir * (_AABBMax.z / csRayDir.z);
+					float3 csAABBStart	= csRayDir * (csZVolMin / csRayDir.z);
+					float3 csAABBEnd	= csRayDir * (csZVolMax / csRayDir.z);
+
+
 
 					// return float4(normalize(csAABBEnd - csAABBStart), 0.5);
 					// Xform to the current metavoxel's space
@@ -176,18 +188,24 @@
 					bool intersects = IntersectBox(mvRay1, mvMin, mvMax, t1, t2);
 					if (!intersects)					
 						return red;
+					
+					if (t2 < 0 || t2 < 0)
+						return green;
+					// if the volume AABB's near plane is within the metavoxel, t1 will be negative. clamp to 0
+					//t1 = max(0, t1);
 
 					int tstart = ceil(t1 / stepSize), tend = floor(t2 / stepSize);
 					float3 result = float3(0, 0, 0);
 					float transmittance = 1.0f;
 					float borderVoxelOffset = rcp(_NumVoxels) * _MetavoxelBorderSize;
-					float3 mvRayPos = mvAABBEnd;
+					float3 mvRayPos = mvAABBStart + tend * mvRayStep;
 
 					int step;
 					// Sample uniformly along the ray starting from the current metavoxel's exit index (along the ray), 
 					// and moving towards the camera while stopping once we're no longer within the current metavoxel.
 					// Blend the samples back-to-front in the process
 					
+					//return float4(0, (tend - tstart)/float(_NumSteps), 0, 0.5);
 					int samples = 0;
 					[unroll(32)]
 					for (step = tend; step >= tstart; step--) {
@@ -199,15 +217,19 @@
 							continue;  // point outside mv
 						}
 
-						samples++;
+						
 
 						if (samples > 13)
 							break;
 						*/
+
+						samples++;
+							
 						float3 samplePos = mvRayPos + 0.5; //[-0.5, 0.5] -->[0, 1]
 						// the metavoxel texture's Z follows the light direction, while the actual metavoxel orientation is towards the light
 						// see get_voxel_world_pos(..) in Fill Volume.shader ; we're mapping slice [0, n-1] to [+0.5, -0.5] in mv space
 						samplePos.z = 1.0 - samplePos.z; 
+
 
 						// adjust for the metavoxel border -- the border voxels are only for filtering
 						samplePos = samplePos * (1.0 - 2.0 * borderVoxelOffset) + borderVoxelOffset;  // [0, 1] ---> [offset, 1 - offset]
@@ -224,19 +246,19 @@
 						mvRayPos -= mvRayStep;
 					}
 
-					if (_ShowNumSamples == 1) {
-						int stepstaken = samples;
-						if (stepstaken < 2)
-							return green;
-						if (stepstaken < 5)
-							return yellow;
-						if (stepstaken < 15)
-							return orange;
-						return red;
-					}
+					//if (_ShowNumSamples == 1) {
+					//	int stepstaken = samples;
+					//	if (stepstaken < 2)
+					//		return green;
+					//	if (stepstaken < 5)
+					//		return yellow;
+					//	if (stepstaken < 15)
+					//		return orange;
+					//	return red;
+					//}
 
-					if (transmittance < 1.0)
-						return yellow;
+					//if (transmittance < 1.0)
+					//	return yellow;
 
 					return float4(result.rgb, 1 - transmittance);
 				
