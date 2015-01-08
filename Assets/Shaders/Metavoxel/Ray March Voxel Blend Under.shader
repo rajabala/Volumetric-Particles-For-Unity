@@ -123,6 +123,8 @@
 				// [todo] this can be parallelized.
 				float4
 				frag(v2f i) : COLOR
+
+
 				{			
 					//return green;
 					if (_ShowPrettyColors == 1) // Color metavoxels that are covered by particles 
@@ -205,14 +207,21 @@
 					
 					//return float4(0, (tend - tstart)/float(_NumSteps), 0, 0.5);
 					int samples = 0;
-					[unroll(64)]
+					[unroll(32)]
 					for (step = tend; step >= tstart; step--) {
 					//for (step = _NumSteps; step > 0; step--) {
 						float limit = 0.5;
-						if (abs(mvRayPos.x) >= limit || abs(mvRayPos.y) >= limit || abs(mvRayPos.z) >= limit)
+						/*if (abs(mvRayPos.x) >= limit || abs(mvRayPos.y) >= limit || abs(mvRayPos.z) >= limit)
 						{												
-							return red;
+							mvRayPos -= mvRayStep;
+							continue;  // point outside mv
 						}
+
+						
+
+						if (samples > 13)
+							break;
+						*/
 
 						samples++;
 							
@@ -237,16 +246,19 @@
 						mvRayPos -= mvRayStep;
 					}
 
-					if (_ShowNumSamples == 1) {
-						int stepstaken = samples;
-						if (stepstaken < 2)
-							return green;
-						if (stepstaken < 5)
-							return yellow;
-						if (stepstaken < 15)
-							return orange;
-						return red;
-					}
+					//if (_ShowNumSamples == 1) {
+					//	int stepstaken = samples;
+					//	if (stepstaken < 2)
+					//		return green;
+					//	if (stepstaken < 5)
+					//		return yellow;
+					//	if (stepstaken < 15)
+					//		return orange;
+					//	return red;
+					//}
+
+					//if (transmittance < 1.0)
+					//	return yellow;
 
 					return float4(result.rgb, 1 - transmittance);
 				
@@ -256,3 +268,4 @@
 			} // Pass
 		}FallBack Off
 }
+ 

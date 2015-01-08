@@ -702,7 +702,7 @@ public class MetavoxelManager : MonoBehaviour {
         mvFillTextures[zz, yy, xx].anisoLevel = volumeTextureAnisoLevel;
 
         m.SetTexture("_VolumeTexture", mvFillTextures[zz, yy, xx]);
-        Matrix4x4 mvToWorld = Matrix4x4.TRS(mvGrid[zz, yy, xx].mPos * 2,
+        Matrix4x4 mvToWorld = Matrix4x4.TRS(mvGrid[zz, yy, xx].mPos,
                                             mvGrid[zz, yy, xx].mRot,
                                             mvScale); // border should NOT be included here. we want to rasterize only the pixels covered by the metavoxel
         m.SetMatrix("_MetavoxelToWorld", mvToWorld);
