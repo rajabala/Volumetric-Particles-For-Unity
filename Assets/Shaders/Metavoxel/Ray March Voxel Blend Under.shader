@@ -10,7 +10,7 @@
 			{
 				Cull Front ZWrite Off ZTest Less
 				// Syntax: Blend SrcFactor DstFactor, SrcFactorA DstFactorA
-				Blend OneMinusDstAlpha DstAlpha, OneMinusDstAlpha One // Front to Back blending (blend under)-- this is b/w metavoxels.
+				Blend OneMinusDstAlpha One, One One // Front to Back blending (blend under)-- this is b/w metavoxels.
 				BlendOp Add
 
 				CGPROGRAM
@@ -59,6 +59,7 @@
 
 				// tmp
 				int _ShowPrettyColors;
+				int _ShowNumSamples;
 
 				struct v2f {
 					float4 pos : SV_POSITION;
@@ -146,9 +147,10 @@
 					csRayDir.z = -rcp(tan(_Fov / 2.0)); // tan(fov_y / 2) = 1 / (norm_z)
 					csRayDir = normalize(csRayDir);
 							
-					
+					//return float4((csRayDir + 1.0) / 2.0, 0.5);
 					float3 csRayDir2 = normalize(mul(_WorldToCameraMatrix, float4(i.worldPos - _CameraWorldPos, 0)));
 					//return float4(csRayDir2 - csRayDir, 0.5);
+					csRayDir = csRayDir2;
 					// Find camera space intersections of the ray with the camera-AABB of the volume
 					float3 csAABBStart	= csRayDir * (_AABBMin.z / csRayDir.z);
 					float3 csAABBEnd	= csRayDir * (_AABBMax.z / csRayDir.z);
@@ -160,44 +162,48 @@
 					float3 mvAABBEnd	= mul(CameraToMetavoxel, float4(csAABBEnd, 1));
 
 					float3 mvRay = mvAABBEnd - mvAABBStart;
-					float mvRayLength = sqrt(dot(mvRay, mvRay));
+					float stepSize = sqrt(dot(mvRay, mvRay)) / float(_NumSteps);
 					float3 mvRayStep = mvRay / float (_NumSteps);
 					float3 mvRayDir = normalize(mvRay);
+
+					//return float4((mvRayDir + 1.0) / 2.0, 0.6);
 					float3 mvMin = float3(-0.5, -0.5, -0.5), mvMax = -1.0 * mvMin;
 					
-					/*float t1, t2;
+					float t1, t2;
 					Ray mvRay1;
 					mvRay1.o = mvAABBStart;
 					mvRay1.d = mvRayDir;
-					IntersectBox(mvRay1, mvMin, mvMax, t1, t2);
+					bool intersects = IntersectBox(mvRay1, mvMin, mvMax, t1, t2);
+					if (!intersects)					
+						return red;
 
-					float tmin = min(t1, t2), tmax = max(t1, t2);
-					float mvStartIndex = tmin / mvRayLength,
-						  mvStopIndex = tmax / mvRayLength;
-
-					if (mvStopIndex - mvStartIndex < 1.0)
-						return orange;*/
-		
+					int tstart = ceil(t1 / stepSize), tend = floor(t2 / stepSize);
 					float3 result = float3(0, 0, 0);
 					float transmittance = 1.0f;
-					float borderVoxelOffset = _MetavoxelBorderSize / _NumVoxels; // [0, 1] ---> [offset, 1 - offset]
-					float3 mvRayPos = mvAABBEnd; // mvAABBStart + mvStopIndex * mvRayStep;
+					float borderVoxelOffset = rcp(_NumVoxels) * _MetavoxelBorderSize;
+					float3 mvRayPos = mvAABBEnd;
+				
 					int step;
 					// Sample uniformly along the ray starting from the current metavoxel's exit index (along the ray), 
 					// and moving towards the camera while stopping once we're no longer within the current metavoxel.
 					// Blend the samples back-to-front in the process
 					
 					int samples = 0;
-					[unroll(64)]
-					//for (step = mvStopIndex; step >= mvStartIndex; step--) {
-					for (step = _NumSteps; step >= 0; step--) {
-						if (abs(mvRayPos.x) > 0.5 || abs(mvRayPos.y) > 0.5 || abs(mvRayPos.z) > 0.5)
+					[unroll(32)]
+					for (step = tend; step >= tstart; step--) {
+					//for (step = _NumSteps; step > 0; step--) {
+						float limit = 0.5;
+						/*if (abs(mvRayPos.x) >= limit || abs(mvRayPos.y) >= limit || abs(mvRayPos.z) >= limit)
 						{												
 							mvRayPos -= mvRayStep;
 							continue;  // point outside mv
 						}
 
 						samples++;
+
+						if (samples > 13)
+							break;
+						*/
 						// convert from mv space to sampling space, i.e., [-mvSize/2, mvSize/2] -> [0,1]
 						float3 samplePos = (2 * mvRayPos + 1.0) / 2.0; //[-0.5, 0.5] -->[0, 1]
 						// the metavoxel texture's Z follows the light direction, while the actual orientation is towards the light
@@ -217,21 +223,18 @@
 						mvRayPos -= mvRayStep;
 					}
 
-					/*if (samples == 0)
-						return red;*/
-					/*int stepstaken = samples;
-					if (stepstaken < 2)
-						return green;
-					if (stepstaken < 5)
-						return yellow;
-					if (stepstaken < 15)
-						return orange;
-					return red;*/
-					if (transmittance < 1)
-						return float4(result.rgb, 1);
-						/*return float4(result.rgb, 1 - transmittance);*/
-					else
-						return float4(result.rgb, 1 - transmittance);
+					if (_ShowNumSamples == 1) {
+						int stepstaken = samples;
+						if (stepstaken < 2)
+							return green;
+						if (stepstaken < 5)
+							return yellow;
+						if (stepstaken < 15)
+							return orange;
+						return red;
+					}
+
+					return float4(result.rgb, 1 - transmittance);
 				
 				} // frag
 

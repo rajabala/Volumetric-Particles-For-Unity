@@ -121,7 +121,7 @@
 				float3 psVoxelPos = mul(p.mWorldToLocal, voxelWorldPos); // voxel position in particle space
 				float dist2 = dot(psVoxelPos, psVoxelPos);
 				
-				if (dist2 < 0.25) // 0.5 * 0.5 -- if the voxel center is within the particle it'd be less than 0.5 units away from the particle center in particle space
+				if (dist2 <= 0.25) // 0.5 * 0.5 -- if the voxel center is within the particle it'd be less than 0.5 units away from the particle center in particle space
 				{
 					compute_voxel_color(psVoxelPos, p.mLifetimeOpacity, voxelColumn[slice]);				
 				}
@@ -146,7 +146,7 @@
 					float dist2 = dot(psVoxelPos, psVoxelPos);
 					Voxel v;
 
-					if (dist2 < 0.25) // 0.5 * 0.5 -- if the voxel center is within the particle it'd be less than 0.5 units away from the particle center in particle space
+					if (dist2 <= 0.25) // 0.5 * 0.5 -- if the voxel center is within the particle it'd be less than 0.5 units away from the particle center in particle space
 					{
 						compute_voxel_color(psVoxelPos, p.mLifetimeOpacity, v);
 

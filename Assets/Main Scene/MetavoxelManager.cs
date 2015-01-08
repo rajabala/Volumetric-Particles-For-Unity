@@ -102,6 +102,7 @@ public class MetavoxelManager : MonoBehaviour {
 
     // GUI controls
     private bool showMetavoxelCoverage;
+    private bool showNumSamples;
     private float displacementScale;
 
     // temp prototyping stuff
@@ -125,7 +126,8 @@ public class MetavoxelManager : MonoBehaviour {
 
         CreateTempResources();
         showMetavoxelCoverage = false;
-        displacementScale = 1.0f;
+        showNumSamples = false;
+        displacementScale = 0.0f;
         fadeOutParticles = false;
 
         lastLightRot = transform.rotation;
@@ -166,6 +168,7 @@ public class MetavoxelManager : MonoBehaviour {
         showMetavoxelCoverage = GUI.Toggle(new Rect(25, 50, 200, 30), showMetavoxelCoverage, "Show metavoxel coverage");
         GUI.Label(new Rect(25, 100, 150, 50), "Displacement Scale [" + displacementScale + "]");
         displacementScale = GUI.HorizontalSlider(new Rect(175, 105, 100, 30), displacementScale, 0.0f, 1.0f);
+        showNumSamples = GUI.Toggle(new Rect(25, 150, 200, 30), showNumSamples, "Show steps marched");
     }
 
 
@@ -674,6 +677,13 @@ public class MetavoxelManager : MonoBehaviour {
 				showPrettyColors_i = 1;
 			
 			m.SetInt("_ShowPrettyColors", showPrettyColors_i);
+
+            int showNumSamples_i = 0;
+            if (showNumSamples)
+                showNumSamples_i = 1;
+
+            m.SetInt("_ShowNumSamples", showNumSamples_i);
+
 		}
 	}
 
@@ -686,12 +696,12 @@ public class MetavoxelManager : MonoBehaviour {
         }
 
         //Debug.Log("rendering mv " + xx + "," + yy +"," + zz);
-        mvFillTextures[zz, yy, xx].filterMode = FilterMode.Bilinear;
+        mvFillTextures[zz, yy, xx].filterMode = FilterMode.Point;//FilterMode.Bilinear;
         mvFillTextures[zz, yy, xx].wrapMode = TextureWrapMode.Clamp;
         mvFillTextures[zz, yy, xx].anisoLevel = volumeTextureAnisoLevel;
 
         m.SetTexture("_VolumeTexture", mvFillTextures[zz, yy, xx]);
-        Matrix4x4 mvToWorld = Matrix4x4.TRS(mvGrid[zz, yy, xx].mPos * 2,
+        Matrix4x4 mvToWorld = Matrix4x4.TRS(mvGrid[zz, yy, xx].mPos,
                                             mvGrid[zz, yy, xx].mRot,
                                             mvScale); // border should NOT be included here. we want to rasterize only the pixels covered by the metavoxel
         m.SetMatrix("_MetavoxelToWorld", mvToWorld);
