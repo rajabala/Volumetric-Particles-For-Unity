@@ -690,9 +690,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mvScale: {x: 2, y: 2, z: 2}
-  numMetavoxelsX: 2
-  numMetavoxelsY: 2
-  numMetavoxelsZ: 1
+  numMetavoxelsX: 10
+  numMetavoxelsY: 10
+  numMetavoxelsZ: 10
   numVoxelsInMetavoxel: 32
   updateInterval: 1
   rayMarchSteps: 64
@@ -985,7 +985,7 @@ ParticleSystem:
         rgba: 4294967295
       minMaxState: 0
     startSize:
-      scalar: 5
+      scalar: 2
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -1052,7 +1052,7 @@ ParticleSystem:
       minMaxState: 0
     gravityModifier: 0
     inheritVelocity: 0
-    maxNumParticles: 15
+    maxNumParticles: 20
   ShapeModule:
     serializedVersion: 2
     enabled: 1
@@ -1953,7 +1953,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2017214303}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -24.9123058}
+  m_LocalPosition: {x: -1.38429642, y: -.674671173, z: -10.3034935}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}

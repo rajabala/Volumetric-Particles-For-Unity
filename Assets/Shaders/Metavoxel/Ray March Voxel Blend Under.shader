@@ -123,8 +123,6 @@
 				// [todo] this can be parallelized.
 				float4
 				frag(v2f i) : COLOR
-
-
 				{			
 					//return green;
 					if (_ShowPrettyColors == 1) // Color metavoxels that are covered by particles 
@@ -172,8 +170,11 @@
 					float3 mvAABBEnd	= mul(CameraToMetavoxel, float4(csAABBEnd, 1));
 
 					float3 mvRay = mvAABBEnd - mvAABBStart;
-					float stepSize = sqrt(dot(mvRay, mvRay)) / float(_NumSteps);
-					float3 mvRayStep = mvRay / float (_NumSteps);
+					float totalRayMarchSteps = n * float(_NumSteps);
+					float oneOverTotalRayMarchSteps = rcp(totalRayMarchSteps);
+
+					float stepSize = sqrt(dot(mvRay, mvRay)) * oneOverTotalRayMarchSteps;
+					float3 mvRayStep = mvRay * oneOverTotalRayMarchSteps;
 					float3 mvRayDir = normalize(mvRay);
 
 					float3 mvMin = float3(-0.5, -0.5, -0.5), mvMax = -1.0 * mvMin;				
@@ -187,24 +188,18 @@
 					
 					// if the volume AABB's near plane is within the metavoxel, t1 will be negative. clamp to 0				
 					int tstart = ceil(t1 / stepSize), tend = floor(t2 / stepSize);
-					//tstart = max(0, tstart);
-					//tend   = min(_NumSteps - 1, tend);
+					tstart = max(0, tstart);
+					tend   = min(totalRayMarchSteps - 1, tend);
 
 					float3 result = float3(0, 0, 0);
 					float transmittance = 1.0f;
 					float borderVoxelOffset = rcp(_NumVoxels) * _MetavoxelBorderSize;
 					float3 mvRayPos = mvAABBStart + tend * mvRayStep;
-
+					int samples = 0;
 					int step;
 					// Sample uniformly along the ray starting from the current metavoxel's exit index (along the ray), 
 					// and moving towards the camera while stopping once we're no longer within the current metavoxel.
-					// Blend the samples back-to-front in the process
-					
-					//return float4(0, (tend - tstart)/float(_NumSteps), 0, 0.5);
-					int samples = 0;
-					bool gg = false;
-
-					[unroll(64)]
+					// Blend the samples back-to-front in the process										
 					for (step = tend; step >= tstart; step--) {			
 						float3 samplePos = mvRayPos + 0.5; //[-0.5, 0.5] -->[0, 1]
 						// the metavoxel texture's Z follows the light direction, while the actual metavoxel orientation is towards the light
@@ -212,13 +207,14 @@
 						samplePos.z = 1.0 - samplePos.z; 
 
 
-						// adjust for the metavoxel border -- the border voxels are only for filtering
+						//// adjust for the metavoxel border -- the border voxels are only for filtering
 						samplePos = samplePos * (1.0 - 2.0 * borderVoxelOffset) + borderVoxelOffset;  // [0, 1] ---> [offset, 1 - offset]
 
-						float4 voxelColor = tex3D(_VolumeTexture, samplePos);
+						// supply 0 derivatives when sampling -- this ensures that the loop doesn't have to unrolled
+						// due to a gradient instruction (such as tex3D)
+						float4 voxelColor = tex3D(_VolumeTexture, samplePos, float3(0,0,0), float3(0,0,0));
 						float3 color = voxelColor.rgb;
 						float  density = voxelColor.a;
-
 						float blendFactor = rcp(1.0 + density);
 
 						result.rgb = lerp(color, result.rgb, blendFactor);
@@ -242,7 +238,7 @@
 					return float4(result.rgb, 1 - transmittance);			
 				} // frag
 
-					ENDCG
+				ENDCG
 			} // Pass
 		}FallBack Off
 }

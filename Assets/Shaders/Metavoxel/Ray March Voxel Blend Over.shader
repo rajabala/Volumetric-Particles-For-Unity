@@ -121,12 +121,10 @@ SubShader
 				// For each fragment, we have to iterate through all the particles covered
 				// by the MV and fill the voxel column by iterating through each voxel slice.
 				// [todo] this can be parallelized.
-				float4
+								float4
 				frag(v2f i) : COLOR
-
-
 				{			
-					return green;
+					//return green;
 					if (_ShowPrettyColors == 1) // Color metavoxels that are covered by particles 
 					{
 						if (_ParticleCoverageRatio < 0.15)
@@ -148,35 +146,38 @@ SubShader
 					csRayDir.x *= (_ScreenRes.x / _ScreenRes.y); // account for aspect ratio
 					csRayDir.z = -rcp(tan(_Fov / 2.0)); // tan(fov_y / 2) = 1 / (norm_z)
 					csRayDir = normalize(csRayDir);
-					
+							
+					// Holy fucking balls, it took forever to find that aspect ratio bug.			
+					//float3 csRayDir2 = normalize(mul(_WorldToCameraMatrix, float4(i.worldPos - _CameraWorldPos, 0)));
+					//return float4(csRayDir2 - csRayDir, 1.0);
+
+					// Find camera space intersections of the ray with the camera-AABB of the volume
+					//float3 csAABBStart	= csRayDir * (_AABBMin.z / csRayDir.z);
+					//float3 csAABBEnd	= csRayDir * (_AABBMax.z / csRayDir.z);
+			
 					float3 csVolOrigin = mul(_WorldToCameraMatrix, float4(0, 0, 0, 1));
 					
 					float2 n = max(_MetavoxelGridDim.xx, _MetavoxelGridDim.yz);
 					float csVolHalfZ = sqrt(3) * 0.5 * max(n.x, n.y) * _MetavoxelSize.x;
 					float csZVolMin = csVolOrigin.z + csVolHalfZ,
 						  csZVolMax = csVolOrigin.z - csVolHalfZ;
-					// Find camera space intersections of the ray with the camera-AABB of the volume
-					//float3 csAABBStart	= csRayDir * (_AABBMin.z / csRayDir.z);
-					//float3 csAABBEnd	= csRayDir * (_AABBMax.z / csRayDir.z);
 					float3 csAABBStart	= csRayDir * (csZVolMin / csRayDir.z);
 					float3 csAABBEnd	= csRayDir * (csZVolMax / csRayDir.z);
-
-
-
-					// return float4(normalize(csAABBEnd - csAABBStart), 0.5);
+				
 					// Xform to the current metavoxel's space
 					float4x4 CameraToMetavoxel = mul(_WorldToMetavoxel, _CameraToWorldMatrix);
 					float3 mvAABBStart	= mul(CameraToMetavoxel, float4(csAABBStart, 1));
 					float3 mvAABBEnd	= mul(CameraToMetavoxel, float4(csAABBEnd, 1));
 
 					float3 mvRay = mvAABBEnd - mvAABBStart;
-					float stepSize = sqrt(dot(mvRay, mvRay)) / float(_NumSteps);
-					float3 mvRayStep = mvRay / float (_NumSteps);
+					float totalRayMarchSteps = n * float(_NumSteps);
+					float oneOverTotalRayMarchSteps = rcp(totalRayMarchSteps);
+
+					float stepSize = sqrt(dot(mvRay, mvRay)) * oneOverTotalRayMarchSteps;
+					float3 mvRayStep = mvRay * oneOverTotalRayMarchSteps;
 					float3 mvRayDir = normalize(mvRay);
 
-					//return float4((mvRayDir + 1.0) / 2.0, 0.6);
-					float3 mvMin = float3(-0.5, -0.5, -0.5), mvMax = -1.0 * mvMin;
-					
+					float3 mvMin = float3(-0.5, -0.5, -0.5), mvMax = -1.0 * mvMin;				
 					float t1, t2;
 					Ray mvRay1;
 					mvRay1.o = mvAABBStart;
@@ -185,82 +186,59 @@ SubShader
 					if (!intersects)					
 						return red;
 					
-					if (t2 < 0 || t2 < 0)
-						return green;
-					// if the volume AABB's near plane is within the metavoxel, t1 will be negative. clamp to 0
-					//t1 = max(0, t1);
-
+					// if the volume AABB's near plane is within the metavoxel, t1 will be negative. clamp to 0				
 					int tstart = ceil(t1 / stepSize), tend = floor(t2 / stepSize);
+					tstart = max(0, tstart);
+					tend   = min(totalRayMarchSteps - 1, tend);
+
 					float3 result = float3(0, 0, 0);
 					float transmittance = 1.0f;
 					float borderVoxelOffset = rcp(_NumVoxels) * _MetavoxelBorderSize;
 					float3 mvRayPos = mvAABBStart + tend * mvRayStep;
-
+					int samples = 0;
 					int step;
 					// Sample uniformly along the ray starting from the current metavoxel's exit index (along the ray), 
 					// and moving towards the camera while stopping once we're no longer within the current metavoxel.
-					// Blend the samples back-to-front in the process
-					
-					//return float4(0, (tend - tstart)/float(_NumSteps), 0, 0.5);
-					int samples = 0;
-					[unroll(64)]
-					for (step = tend; step >= tstart; step--) {
-					//for (step = _NumSteps; step > 0; step--) {
-						float limit = 0.5;
-						/*if (abs(mvRayPos.x) >= limit || abs(mvRayPos.y) >= limit || abs(mvRayPos.z) >= limit)
-						{												
-							mvRayPos -= mvRayStep;
-							continue;  // point outside mv
-						}
-
-						
-
-						if (samples > 13)
-							break;
-						*/
-
-						samples++;
-							
+					// Blend the samples back-to-front in the process										
+					for (step = tend; step >= tstart; step--) {			
 						float3 samplePos = mvRayPos + 0.5; //[-0.5, 0.5] -->[0, 1]
 						// the metavoxel texture's Z follows the light direction, while the actual metavoxel orientation is towards the light
 						// see get_voxel_world_pos(..) in Fill Volume.shader ; we're mapping slice [0, n-1] to [+0.5, -0.5] in mv space
 						samplePos.z = 1.0 - samplePos.z; 
 
 
-						// adjust for the metavoxel border -- the border voxels are only for filtering
+						//// adjust for the metavoxel border -- the border voxels are only for filtering
 						samplePos = samplePos * (1.0 - 2.0 * borderVoxelOffset) + borderVoxelOffset;  // [0, 1] ---> [offset, 1 - offset]
 
-						float4 voxelColor = tex3D(_VolumeTexture, samplePos);
+						// supply 0 derivatives when sampling -- this ensures that the loop doesn't have to unrolled
+						// due to a gradient instruction (such as tex3D)
+						float4 voxelColor = tex3D(_VolumeTexture, samplePos, float3(0,0,0), float3(0,0,0));
 						float3 color = voxelColor.rgb;
 						float  density = voxelColor.a;
-
 						float blendFactor = rcp(1.0 + density);
 
 						result.rgb = lerp(color, result.rgb, blendFactor);
 						transmittance *= blendFactor;
 						
 						mvRayPos -= mvRayStep;
+						samples++;
 					}
 
 					if (_ShowNumSamples == 1) {
 						int stepstaken = samples;
 						if (stepstaken < 2)
 							return green;
-						if (stepstaken < 5)
+						if (stepstaken < 10)
 							return yellow;
-						if (stepstaken < 15)
+						if (stepstaken < 25)
 							return orange;
 						return red;
 					}
 
-					//if (transmittance < 1.0)
-					//	return yellow;
-
-					return float4(result.rgb, 1 - transmittance);
-				
+					return float4(result.rgb, 1 - transmittance);			
 				} // frag
 
-					ENDCG
+				ENDCG
 			} // Pass
 		}FallBack Off
 }
