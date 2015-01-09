@@ -3,7 +3,7 @@
 		_VolumeTexture("Metavoxel fill data", 3D) = "" {}
 		_LightPropogationTexture("Light Propogation", 2D) = "" {}
 	}
-	SubShader
+SubShader
 		{
 			Tags {"Queue" = "Transparent"}
 			Pass
@@ -20,12 +20,12 @@
 #pragma vertex vert
 #pragma fragment frag
 
-
 #include "UnityCG.cginc"
 #define green float4(0.0, 0.5, 0.0, 0.5)
 #define yellow float4(0.5, 0.5, 0.0, 0.5)
 #define orange float4(0.5, 0.4, 0.0, 0.5)
 #define red float4(0.5, 0.0, 0.0, 0.5)
+#define seethrough float4(0.0, 0.0, 0.0, 0.0)
 
 
 				sampler3D _VolumeTexture;
@@ -39,26 +39,28 @@
 				// Metavoxel uniforms
 				float4x4 _MetavoxelToWorld;
 				float4x4 _WorldToMetavoxel;
-				//float3 _MetavoxelIndex;
-				//float3 _MetavoxelGridDim;
-				float _ParticleCoverageRatio;
+				float4 _MetavoxelIndex;
+				float3 _MetavoxelGridDim;
+				float3 _MetavoxelSize;
+				float _ParticleCoverageRatio; 
 
 				// Camera uniforms
 				float4x4 _CameraToWorldMatrix; // need to explicitly define this to get the main camera's matrices
 				float4x4 _WorldToCameraMatrix;
-				float3 _CameraWorldPos;
+				float4 _CameraWorldPos;
 				float _Fov;
 				float _Near;
 				float _Far;
-				float2 _ScreenRes;
+				float4 _ScreenRes;
 
 				// Ray march constants
 				int _NumSteps;
-				float3 _AABBMin;
-				float3 _AABBMax;
+				float4 _AABBMin;
+				float4 _AABBMax;
 
 				// tmp
 				int _ShowPrettyColors;
+				int _ShowNumSamples;
 
 				struct v2f {
 					float4 pos : SV_POSITION;
@@ -81,11 +83,11 @@
 					float3 o; // origin
 					float3 d; // direction (normalized)
 				};
-
-
+				
+				
 				bool
-					IntersectBox(Ray r, float3 boxmin, float3 boxmax,
-					out float tnear, out float tfar)
+				IntersectBox(Ray r, float3 boxmin, float3 boxmax, 
+							 out float tnear, out float tfar)
 				{
 					// compute intersection of ray with all six bbox planes
 					float3 invR = 1.0 / r.d;
@@ -108,16 +110,23 @@
 					return hit;
 				}
 
+				// [-1, 1] to [0, 1]
+				float 
+				normToUV(float x)
+				{
+					return (x + 1.0) / 2.0;
+				}
 
 				// Fragment shader
 				// For each fragment, we have to iterate through all the particles covered
 				// by the MV and fill the voxel column by iterating through each voxel slice.
 				// [todo] this can be parallelized.
 				float4
-					frag(v2f i) : COLOR
-				{
-					return orange;
+				frag(v2f i) : COLOR
 
+
+				{			
+					return green;
 					if (_ShowPrettyColors == 1) // Color metavoxels that are covered by particles 
 					{
 						if (_ParticleCoverageRatio < 0.15)
@@ -130,91 +139,128 @@
 							return red;
 					}
 
-					/* [todo] delete
+					 
 					// Find ray direction from camera through this pixel
-					// -- Find half width and height of the near plane in world units
-					float screenHalfHeight = _Near * tan(radians(_Fov / 2));
-					float screenHalfWidth  = (_ScreenRes.x / _ScreenRes.y) * screenHalfHeight;
-
 					// -- Normalize the pixel position to a [-1, 1] range to help find its world space position
-					float2 pixelNormPos = (2 * i.pos.xy - _ScreenRes) / _ScreenRes; // [0, wh] to [-1, 1]
-					float3 pixelWorldPos = _CameraWorldPos + mul(_CameraToWorldMatrix, float3(pixelNormPos * float2(screenHalfWidth, screenHalfHeight), _Near)); // pixel lies on the near plane
+					// Note that view space uses a RHS system (looks down -Z) while Unity's editor uses a LHS system
+					float3 csRayDir;
+					csRayDir.xy = (2.0 * i.pos.xy / _ScreenRes) - 1.0; // [0, wh] to [-1, 1];
+					csRayDir.x *= (_ScreenRes.x / _ScreenRes.y); // account for aspect ratio
+					csRayDir.z = -rcp(tan(_Fov / 2.0)); // tan(fov_y / 2) = 1 / (norm_z)
+					csRayDir = normalize(csRayDir);
+					
+					float3 csVolOrigin = mul(_WorldToCameraMatrix, float4(0, 0, 0, 1));
+					
+					float2 n = max(_MetavoxelGridDim.xx, _MetavoxelGridDim.yz);
+					float csVolHalfZ = sqrt(3) * 0.5 * max(n.x, n.y) * _MetavoxelSize.x;
+					float csZVolMin = csVolOrigin.z + csVolHalfZ,
+						  csZVolMax = csVolOrigin.z - csVolHalfZ;
+					// Find camera space intersections of the ray with the camera-AABB of the volume
+					//float3 csAABBStart	= csRayDir * (_AABBMin.z / csRayDir.z);
+					//float3 csAABBEnd	= csRayDir * (_AABBMax.z / csRayDir.z);
+					float3 csAABBStart	= csRayDir * (csZVolMin / csRayDir.z);
+					float3 csAABBEnd	= csRayDir * (csZVolMax / csRayDir.z);
 
-					// Since we cull front-facing triangles, the geometry corresponding to this fragment is a back-facing one and thus
-					// represents the ray's world space exit position for this metavoxel
-					*/
-					// i.worldPos represents the world space exit position of the ray through the current metavoxel
-					float3 wsRayDir = normalize(i.worldPos - _CameraWorldPos);
 
-					Ray csRay; // camera space
-					csRay.o = float3(0, 0, 0); // camera is at the origin in camera space.
-					csRay.d = normalize(mul(_WorldToCameraMatrix, float4(wsRayDir, 0)));
 
-					// Find the intersection of the ray with a camera-AABB of the ENTIRE volume
-					float tnear, tfar;
-					bool rayVolumeIntersects = IntersectBox(csRay, _AABBMin, _AABBMax, tnear, tfar);
+					// return float4(normalize(csAABBEnd - csAABBStart), 0.5);
+					// Xform to the current metavoxel's space
+					float4x4 CameraToMetavoxel = mul(_WorldToMetavoxel, _CameraToWorldMatrix);
+					float3 mvAABBStart	= mul(CameraToMetavoxel, float4(csAABBStart, 1));
+					float3 mvAABBEnd	= mul(CameraToMetavoxel, float4(csAABBEnd, 1));
 
-					// The pixel we're working on is an exit point for the ray (we're rendering only backfaces of the metavoxel cubes).
-					// Find its 't' w.r.t the ray from the camera
-					float3 tmvexit = mul(_WorldToCameraMatrix, float4(i.worldPos, 1)) / csRay.d;
-					float stepSize = abs((tfar - tnear) / (float)(_NumSteps));
-					int exitIndex = floor((tmvexit.x - tnear) / stepSize);
+					float3 mvRay = mvAABBEnd - mvAABBStart;
+					float stepSize = sqrt(dot(mvRay, mvRay)) / float(_NumSteps);
+					float3 mvRayStep = mvRay / float (_NumSteps);
+					float3 mvRayDir = normalize(mvRay);
 
+					//return float4((mvRayDir + 1.0) / 2.0, 0.6);
+					float3 mvMin = float3(-0.5, -0.5, -0.5), mvMax = -1.0 * mvMin;
+					
+					float t1, t2;
+					Ray mvRay1;
+					mvRay1.o = mvAABBStart;
+					mvRay1.d = mvRayDir;
+					bool intersects = IntersectBox(mvRay1, mvMin, mvMax, t1, t2);
+					if (!intersects)					
+						return red;
+					
+					if (t2 < 0 || t2 < 0)
+						return green;
+					// if the volume AABB's near plane is within the metavoxel, t1 will be negative. clamp to 0
+					//t1 = max(0, t1);
+
+					int tstart = ceil(t1 / stepSize), tend = floor(t2 / stepSize);
 					float3 result = float3(0, 0, 0);
 					float transmittance = 1.0f;
-					int step;
+					float borderVoxelOffset = rcp(_NumVoxels) * _MetavoxelBorderSize;
+					float3 mvRayPos = mvAABBStart + tend * mvRayStep;
 
+					int step;
 					// Sample uniformly along the ray starting from the current metavoxel's exit index (along the ray), 
 					// and moving towards the camera while stopping once we're no longer within the current metavoxel.
 					// Blend the samples back-to-front in the process
-					float4x4 CameraToMetavoxel = mul(_WorldToMetavoxel, _CameraToWorldMatrix);
-					float3 csRayPos = (tnear + stepSize*exitIndex) * csRay.d;
+					
+					//return float4(0, (tend - tstart)/float(_NumSteps), 0, 0.5);
+					int samples = 0;
+					[unroll(64)]
+					for (step = tend; step >= tstart; step--) {
+					//for (step = _NumSteps; step > 0; step--) {
+						float limit = 0.5;
+						/*if (abs(mvRayPos.x) >= limit || abs(mvRayPos.y) >= limit || abs(mvRayPos.z) >= limit)
+						{												
+							mvRayPos -= mvRayStep;
+							continue;  // point outside mv
+						}
 
-					//[unroll(64)]
-					//for (step = exitIndex; step >= 0; step--) {				
-					//	// convert from mv space to sampling space, i.e., [-mvSize/2, mvSize/2] -> [0,1]
-					//	float3 mvRayPos = mul(CameraToMetavoxel, float4(csRayPos, 1));
-					//	if (abs(mvRayPos.x) > 0.5 || abs(mvRayPos.y) > 0.5 || abs(mvRayPos.z) > 0.5)
-					//	{
-					//		break;  // point outside mv
-					//	}
+						
 
-					//	float3 samplePos = (2 * mvRayPos + 1.0) / 2.0; //[-0.5, 0.5] -->[0, 1]
-					//	// the metavoxel texture's Z follows the light direction, while the actual orientation is towards the light
-					//	samplePos.z = 1 - samplePos.z;
-					//	// adjust for the metavoxel border -- the border voxels are only for filtering
-					//	float borderVoxelOffset = _MetavoxelBorderSize / _NumVoxels; // [0, 1] ---> [offset, 1 - offset]
-					//	samplePos = clamp(samplePos, borderVoxelOffset, 1.0 - borderVoxelOffset);
+						if (samples > 13)
+							break;
+						*/
 
-					//	float4 voxelColor = tex3D(_VolumeTexture, samplePos);
-					//	float3 color = voxelColor.rgb;
-					//	float  density = voxelColor.a;
+						samples++;
+							
+						float3 samplePos = mvRayPos + 0.5; //[-0.5, 0.5] -->[0, 1]
+						// the metavoxel texture's Z follows the light direction, while the actual metavoxel orientation is towards the light
+						// see get_voxel_world_pos(..) in Fill Volume.shader ; we're mapping slice [0, n-1] to [+0.5, -0.5] in mv space
+						samplePos.z = 1.0 - samplePos.z; 
 
-					//	float blendFactor = rcp(1.0 + density);
 
-					//	result.rgb = lerp(color, result.rgb, blendFactor);
-					//	transmittance *= blendFactor;
-					//	// blending individual samples back-to-front, so use the `over` operator
-					//	//result.rgb = voxelColor.a * voxelColor.rgb + (1 - voxelColor.a) * result.rgb; // a1*C1 + (1 - a1)*C0  (C1,a1) over (C0,a0)
-					//	//transmittance *= (1 - voxelColor.a);
+						// adjust for the metavoxel border -- the border voxels are only for filtering
+						samplePos = samplePos * (1.0 - 2.0 * borderVoxelOffset) + borderVoxelOffset;  // [0, 1] ---> [offset, 1 - offset]
 
-					//	csRayPos -= (stepSize * csRay.d);
-					//}
+						float4 voxelColor = tex3D(_VolumeTexture, samplePos);
+						float3 color = voxelColor.rgb;
+						float  density = voxelColor.a;
 
-					/*int stepsTaken = exitIndex - step;
-					if (stepsTaken < 2)
-					return green;
-					if (stepsTaken < 5)
-					return yellow;
-					if (stepsTaken < 15)
-					return orange;
-					return red;*/
+						float blendFactor = rcp(1.0 + density);
+
+						result.rgb = lerp(color, result.rgb, blendFactor);
+						transmittance *= blendFactor;
+						
+						mvRayPos -= mvRayStep;
+					}
+
+					if (_ShowNumSamples == 1) {
+						int stepstaken = samples;
+						if (stepstaken < 2)
+							return green;
+						if (stepstaken < 5)
+							return yellow;
+						if (stepstaken < 15)
+							return orange;
+						return red;
+					}
+
+					//if (transmittance < 1.0)
+					//	return yellow;
 
 					return float4(result.rgb, 1 - transmittance);
-
+				
 				} // frag
 
 					ENDCG
 			} // Pass
-	}FallBack Off
+		}FallBack Off
 }

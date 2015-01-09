@@ -110,6 +110,7 @@ public class MetavoxelManager : MonoBehaviour {
     private Mesh mesh;
     public Vector3[] cubeVertices;
     public Vector2[] cubeUVs;
+    public float debugTwo;
 
 	
 	void Start () {
@@ -698,11 +699,11 @@ public class MetavoxelManager : MonoBehaviour {
 
         //Debug.Log("rendering mv " + xx + "," + yy +"," + zz);
         mvFillTextures[zz, yy, xx].filterMode = FilterMode.Bilinear;
-        mvFillTextures[zz, yy, xx].wrapMode = TextureWrapMode.Clamp;
+        mvFillTextures[zz, yy, xx].wrapMode = TextureWrapMode.Repeat;
         mvFillTextures[zz, yy, xx].anisoLevel = volumeTextureAnisoLevel;
 
         m.SetTexture("_VolumeTexture", mvFillTextures[zz, yy, xx]);
-        Matrix4x4 mvToWorld = Matrix4x4.TRS(mvGrid[zz, yy, xx].mPos,
+        Matrix4x4 mvToWorld = Matrix4x4.TRS(mvGrid[zz, yy, xx].mPos * debugTwo,
                                             mvGrid[zz, yy, xx].mRot,
                                             mvScale); // border should NOT be included here. we want to rasterize only the pixels covered by the metavoxel
         m.SetMatrix("_MetavoxelToWorld", mvToWorld);

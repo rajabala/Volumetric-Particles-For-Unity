@@ -38,7 +38,7 @@ Material:
       data:
         first:
           name: _NumSteps
-        second: 64
+        second: 128
     m_Colors:
       data:
         first:

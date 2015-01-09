@@ -145,6 +145,17 @@ public class CameraScript : MonoBehaviour {
 
             transform.position += transform.forward * Input.GetAxis("Vertical") * moveSpeed;
             transform.position += transform.right * Input.GetAxis("Horizontal") * moveSpeed;
+
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                if (Input.GetKey(KeyCode.LeftShift))
+                {
+                    // move in -X in local camera space
+                    transform.position -= moveSpeed * transform.up;
+                }
+                else
+                    transform.position += moveSpeed * transform.up;
+            }
         }
         else if (moveLight)
         {

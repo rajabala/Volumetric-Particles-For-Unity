@@ -10,7 +10,7 @@
 			{
 				Cull Front ZWrite Off ZTest Less
 				// Syntax: Blend SrcFactor DstFactor, SrcFactorA DstFactorA
-				Blend OneMinusDstAlpha One, One One // Front to Back blending (blend under)-- this is b/w metavoxels.
+				Blend OneMinusDstAlpha One, OneMinusDstAlpha One // Front to Back blending (blend under)-- this is b/w metavoxels.
 				BlendOp Add
 
 				CGPROGRAM
@@ -23,7 +23,7 @@
 #include "UnityCG.cginc"
 #define green float4(0.0, 0.5, 0.0, 0.5)
 #define yellow float4(0.5, 0.5, 0.0, 0.5)
-#define orange float4(0.5, 0.4, 0.0, 0.5)
+#define orange float4(0.6, 0.4, 0.0, 0.5)
 #define red float4(0.5, 0.0, 0.0, 0.5)
 #define seethrough float4(0.0, 0.0, 0.0, 0.0)
 
@@ -149,29 +149,23 @@
 					csRayDir.z = -rcp(tan(_Fov / 2.0)); // tan(fov_y / 2) = 1 / (norm_z)
 					csRayDir = normalize(csRayDir);
 							
-					// Holy fucking balls, it took forever to find that aspect ratio bug.
-					////return float4((csRayDir + 1.0) / 2.0, 0.5);
+					// Holy fucking balls, it took forever to find that aspect ratio bug.			
 					//float3 csRayDir2 = normalize(mul(_WorldToCameraMatrix, float4(i.worldPos - _CameraWorldPos, 0)));
-
-					////return float4((csRayDir2 + 1.0) / 2.0, 0.5);
 					//return float4(csRayDir2 - csRayDir, 1.0);
-					//csRayDir = csRayDir2;
 
+					// Find camera space intersections of the ray with the camera-AABB of the volume
+					//float3 csAABBStart	= csRayDir * (_AABBMin.z / csRayDir.z);
+					//float3 csAABBEnd	= csRayDir * (_AABBMax.z / csRayDir.z);
+			
 					float3 csVolOrigin = mul(_WorldToCameraMatrix, float4(0, 0, 0, 1));
 					
 					float2 n = max(_MetavoxelGridDim.xx, _MetavoxelGridDim.yz);
 					float csVolHalfZ = sqrt(3) * 0.5 * max(n.x, n.y) * _MetavoxelSize.x;
 					float csZVolMin = csVolOrigin.z + csVolHalfZ,
 						  csZVolMax = csVolOrigin.z - csVolHalfZ;
-					// Find camera space intersections of the ray with the camera-AABB of the volume
-					//float3 csAABBStart	= csRayDir * (_AABBMin.z / csRayDir.z);
-					//float3 csAABBEnd	= csRayDir * (_AABBMax.z / csRayDir.z);
 					float3 csAABBStart	= csRayDir * (csZVolMin / csRayDir.z);
 					float3 csAABBEnd	= csRayDir * (csZVolMax / csRayDir.z);
-
-
-
-					// return float4(normalize(csAABBEnd - csAABBStart), 0.5);
+				
 					// Xform to the current metavoxel's space
 					float4x4 CameraToMetavoxel = mul(_WorldToMetavoxel, _CameraToWorldMatrix);
 					float3 mvAABBStart	= mul(CameraToMetavoxel, float4(csAABBStart, 1));
@@ -182,9 +176,7 @@
 					float3 mvRayStep = mvRay / float (_NumSteps);
 					float3 mvRayDir = normalize(mvRay);
 
-					//return float4((mvRayDir + 1.0) / 2.0, 0.6);
-					float3 mvMin = float3(-0.5, -0.5, -0.5), mvMax = -1.0 * mvMin;
-					
+					float3 mvMin = float3(-0.5, -0.5, -0.5), mvMax = -1.0 * mvMin;				
 					float t1, t2;
 					Ray mvRay1;
 					mvRay1.o = mvAABBStart;
@@ -193,12 +185,11 @@
 					if (!intersects)					
 						return red;
 					
-					if (t2 < 0 || t2 < 0)
-						return green;
-					// if the volume AABB's near plane is within the metavoxel, t1 will be negative. clamp to 0
-					//t1 = max(0, t1);
-
+					// if the volume AABB's near plane is within the metavoxel, t1 will be negative. clamp to 0				
 					int tstart = ceil(t1 / stepSize), tend = floor(t2 / stepSize);
+					//tstart = max(0, tstart);
+					//tend   = min(_NumSteps - 1, tend);
+
 					float3 result = float3(0, 0, 0);
 					float transmittance = 1.0f;
 					float borderVoxelOffset = rcp(_NumVoxels) * _MetavoxelBorderSize;
@@ -211,24 +202,10 @@
 					
 					//return float4(0, (tend - tstart)/float(_NumSteps), 0, 0.5);
 					int samples = 0;
+					bool gg = false;
+
 					[unroll(64)]
-					for (step = tend; step >= tstart; step--) {
-					//for (step = _NumSteps; step > 0; step--) {
-						float limit = 0.5;
-						/*if (abs(mvRayPos.x) >= limit || abs(mvRayPos.y) >= limit || abs(mvRayPos.z) >= limit)
-						{												
-							mvRayPos -= mvRayStep;
-							continue;  // point outside mv
-						}
-
-						
-
-						if (samples > 13)
-							break;
-						*/
-
-						samples++;
-							
+					for (step = tend; step >= tstart; step--) {			
 						float3 samplePos = mvRayPos + 0.5; //[-0.5, 0.5] -->[0, 1]
 						// the metavoxel texture's Z follows the light direction, while the actual metavoxel orientation is towards the light
 						// see get_voxel_world_pos(..) in Fill Volume.shader ; we're mapping slice [0, n-1] to [+0.5, -0.5] in mv space
@@ -248,24 +225,21 @@
 						transmittance *= blendFactor;
 						
 						mvRayPos -= mvRayStep;
+						samples++;
 					}
 
 					if (_ShowNumSamples == 1) {
 						int stepstaken = samples;
 						if (stepstaken < 2)
 							return green;
-						if (stepstaken < 5)
+						if (stepstaken < 10)
 							return yellow;
-						if (stepstaken < 15)
+						if (stepstaken < 25)
 							return orange;
 						return red;
 					}
 
-					//if (transmittance < 1.0)
-					//	return yellow;
-
-					return float4(result.rgb, 1 - transmittance);
-				
+					return float4(result.rgb, 1 - transmittance);			
 				} // frag
 
 					ENDCG
