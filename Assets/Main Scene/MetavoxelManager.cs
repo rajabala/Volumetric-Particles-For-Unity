@@ -667,7 +667,7 @@ public class MetavoxelManager : MonoBehaviour {
 			m.SetFloat("_Near", Camera.main.nearClipPlane);
 			m.SetFloat("_Far", Camera.main.farClipPlane);
 			m.SetVector("_ScreenRes", new Vector2(Screen.width, Screen.height));
-			
+
 			// Ray march uniforms
 			m.SetInt("_NumSteps", rayMarchSteps);
 			m.SetVector("_AABBMin", pBounds.aabb.min);

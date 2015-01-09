@@ -145,13 +145,17 @@
 					// Note that view space uses a RHS system (looks down -Z) while Unity's editor uses a LHS system
 					float3 csRayDir;
 					csRayDir.xy = (2.0 * i.pos.xy / _ScreenRes) - 1.0; // [0, wh] to [-1, 1];
+					csRayDir.x *= (_ScreenRes.x / _ScreenRes.y); // account for aspect ratio
 					csRayDir.z = -rcp(tan(_Fov / 2.0)); // tan(fov_y / 2) = 1 / (norm_z)
 					csRayDir = normalize(csRayDir);
 							
-					//return float4((csRayDir + 1.0) / 2.0, 0.5);
-					float3 csRayDir2 = normalize(mul(_WorldToCameraMatrix, float4(i.worldPos - _CameraWorldPos, 0)));
-					//return float4(csRayDir2 - csRayDir, 0.5);
-					csRayDir = csRayDir2;
+					// Holy fucking balls, it took forever to find that aspect ratio bug.
+					////return float4((csRayDir + 1.0) / 2.0, 0.5);
+					//float3 csRayDir2 = normalize(mul(_WorldToCameraMatrix, float4(i.worldPos - _CameraWorldPos, 0)));
+
+					////return float4((csRayDir2 + 1.0) / 2.0, 0.5);
+					//return float4(csRayDir2 - csRayDir, 1.0);
+					//csRayDir = csRayDir2;
 
 					float3 csVolOrigin = mul(_WorldToCameraMatrix, float4(0, 0, 0, 1));
 					
@@ -207,7 +211,7 @@
 					
 					//return float4(0, (tend - tstart)/float(_NumSteps), 0, 0.5);
 					int samples = 0;
-					[unroll(32)]
+					[unroll(64)]
 					for (step = tend; step >= tstart; step--) {
 					//for (step = _NumSteps; step > 0; step--) {
 						float limit = 0.5;
@@ -246,16 +250,16 @@
 						mvRayPos -= mvRayStep;
 					}
 
-					//if (_ShowNumSamples == 1) {
-					//	int stepstaken = samples;
-					//	if (stepstaken < 2)
-					//		return green;
-					//	if (stepstaken < 5)
-					//		return yellow;
-					//	if (stepstaken < 15)
-					//		return orange;
-					//	return red;
-					//}
+					if (_ShowNumSamples == 1) {
+						int stepstaken = samples;
+						if (stepstaken < 2)
+							return green;
+						if (stepstaken < 5)
+							return yellow;
+						if (stepstaken < 15)
+							return orange;
+						return red;
+					}
 
 					//if (transmittance < 1.0)
 					//	return yellow;
