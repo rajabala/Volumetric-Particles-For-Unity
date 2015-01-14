@@ -14,7 +14,6 @@ public class CameraScript : MonoBehaviour {
     // Scene controls (GUI elements + toggle controls)
     private bool moveCamera, moveLight;
     private bool drawMetavoxelGrid;
-    private bool rayMarchVoxels;
     private MetavoxelManager[] mvMgrs;
 
     private float camRotationX, camRotationY, lightRotationX, lightRotationY;
@@ -28,7 +27,6 @@ public class CameraScript : MonoBehaviour {
         moveCamera = moveLight = false;
 
         drawMetavoxelGrid = false;
-        rayMarchVoxels = true;
 
         mvMgrs = new MetavoxelManager[mLights.Length];
         int ii = 0;
@@ -78,12 +76,9 @@ public class CameraScript : MonoBehaviour {
         // with the main scene in OnRenderImage(..)
         Graphics.SetRenderTarget(particlesRT.colorBuffer, mainSceneRT.depthBuffer);
 
-        if (rayMarchVoxels)
-        {
-            // fill particlesRT with the ray marched volume (the loop is per directional light source)
-            foreach (MetavoxelManager mgr in mvMgrs)
-                mgr.RenderMetavoxels();
-        }
+        // fill particlesRT with the ray marched volume (the loop is per directional light source)
+        foreach (MetavoxelManager mgr in mvMgrs)
+            mgr.RenderMetavoxels();
 
         // blend the particles onto the main (opaque) scene. [todo] what happens to billboarded particles on the main scene? when're they rendered?
         Graphics.Blit(particlesRT, mainSceneRT, matBlendParticles);
@@ -101,8 +96,7 @@ public class CameraScript : MonoBehaviour {
 
     void OnGUI()
     {
-        drawMetavoxelGrid   = GUI.Toggle(new Rect(25, 25, 100, 30), drawMetavoxelGrid, "Show mv grid");
-        rayMarchVoxels      = GUI.Toggle(new Rect(25, 75, 150, 30), rayMarchVoxels, "Ray march voxels");
+        drawMetavoxelGrid   = GUI.Toggle(new Rect(25, 25, 100, 30), drawMetavoxelGrid, "Show mv grid");        
     }
 
     // ---- private methods ----------------

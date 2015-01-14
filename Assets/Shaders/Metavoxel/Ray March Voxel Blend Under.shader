@@ -5,13 +5,14 @@
 	}
 	SubShader
 		{
-			Tags {"Queue" = "Transparent"}
+			//Tags { "Queue" = "Geometry+1" }
 			Pass
 			{
 				Cull Front ZWrite Off ZTest Less
 				// Syntax: Blend SrcFactor DstFactor, SrcFactorA DstFactorA
-				Blend OneMinusDstAlpha One, OneMinusDstAlpha One // Front to Back blending (blend under)-- this is b/w metavoxels.
-				BlendOp Add
+				// Cr = Cs * (1 - Ad) + Cd  &  Ar = As * (1 - Ad) + Ad
+				//Blend OneMinusDstAlpha One, OneMinusDstAlpha One // Front to Back blending (blend under)-- this is b/w metavoxels.
+				//BlendOp Add
 
 				CGPROGRAM
 #pragma target 5.0
@@ -25,6 +26,9 @@
 #define yellow float4(0.5, 0.5, 0.0, 0.5)
 #define orange float4(0.6, 0.4, 0.0, 0.5)
 #define red float4(0.5, 0.0, 0.0, 0.5)
+#define redb float4(0.5, 0.0, 0.0, 1.0)
+#define blueb float4(0.0, 0.0, 0.5, 1.0)
+#define greenb float4(0.0, 0.5, 0.0, 1.0)
 #define seethrough float4(0.0, 0.0, 0.0, 0.0)
 
 
@@ -61,6 +65,8 @@
 				// tmp
 				int _ShowPrettyColors;
 				int _ShowNumSamples;
+				int _ShowMetavoxelDrawOrder;
+				int _OrderIndex;
 
 				struct v2f {
 					float4 pos : SV_POSITION;
@@ -135,6 +141,21 @@
 							return orange;
 						else
 							return red;
+					}
+
+					if (_ShowMetavoxelDrawOrder == 1) 
+					{
+						if (_OrderIndex == 0)
+							return redb;
+						if (_OrderIndex == 1)
+							return greenb;
+						if (_OrderIndex == 2)
+							return blueb;
+						return orange;
+						
+
+						//int totalMetavoxels = _MetavoxelGridDim.x * _MetavoxelGridDim.y * _MetavoxelGridDim.z;
+						//return float4(0, 1 - (_OrderIndex / float(totalMetavoxels)), 0, 0.5);						
 					}
 
 					 
@@ -225,12 +246,12 @@
 					}
 
 					if (_ShowNumSamples == 1) {
-						int stepstaken = samples;
-						if (stepstaken < 2)
+						// Ray march steps per metavoxel caps the # of samples we'll make (64 for a 32-voxel-wide metavoxel => 2 samples per voxel)
+						if (samples < 5)
 							return green;
-						if (stepstaken < 10)
+						if (samples < 10)
 							return yellow;
-						if (stepstaken < 25)
+						if (samples < 20)
 							return orange;
 						return red;
 					}

@@ -46,6 +46,7 @@
 		float4x4 _WorldToLight; // [unused]
 		float3 _MetavoxelIndex;
 		int _NumParticles;
+		int _MetavoxelBorderSize;
 
 		// Uniforms over entire fill pass
 		float _NumVoxels; // (nv) each metavoxel is made up of nv * nv * nv voxels
@@ -63,10 +64,11 @@
 		{
 			// svPos goes from [0, numVoxels]. transform to a [-0.5, 0.5] range w.r.t metavoxel centered at origin
 			// since we xform from mv to world space, we need to ensure zSlice = 0 is the closest to the light (+Z in metavoxel space)
-			// with all dimensions in normalizaed unit cube (metavoxel) space, transform to world space
+			// i.e. zSlice 0 corresponds to +0.5 in the metavoxel's local space
 			float3 voxelPos = float3(svPos, zSlice);
 			float4 normPos = float4((svPos - _NumVoxels/2) / _NumVoxels, (_NumVoxels/2 - zSlice) / _NumVoxels, 1.0);
 
+			// with all dimensions in normalizaed unit cube (metavoxel) space, transform to world space
 			return mul(_MetavoxelToWorld, normPos);
 		}
 
@@ -85,7 +87,9 @@
 			float voxelParticleDistSq = dot(2 * psVoxelPos,  2 * psVoxelPos); // make it [0, 1]
 
 			// how dense is this particle at the current voxel? (density falls quickly as we move to the outer surface of the particle)
-			float baseDensity = smoothstep(netDisplacement, 0.7 * netDisplacement, voxelParticleDistSq); 
+			// voxelParticleDistSq < 0.7 * netDisplacement ==> baseDensity = 1, voxelParticleDistSq > netDisplacement ==> baseDensity = 0
+			// 0.7 * netDisplacement < voxelParticleDistSq < netDisplacement ==> baseDensity ==> linear drop
+			float baseDensity = smoothstep(netDisplacement, 0.7 * netDisplacement, voxelParticleDistSq); // [0.0, 1.0]
 			float density = baseDensity *  _OpacityFactor; 
 			
 			// factor in the particle's lifetime opacity & opacity factor
@@ -156,16 +160,19 @@
 				} // per particle
 
 				// use density and ao info to light the voxel and propagate light to the next one
-				float3 rampColor = tex2D(_RampTexture, float2(voxelColumn[slice].ao, 1.0));
+				//float3 rampColor = float3(0.0, 0.4, 0.0); //tex2D(_RampTexture, float2(voxelColumn[slice].ao, 1.0));
 				float diffuseCoeff = 0.5;
 				float4 voxelColor;
 	
-				voxelColor = float4(lightIncidentOnVoxel * _LightColor * diffuseCoeff + voxelColumn[slice].ao * _AmbientColor, voxelColumn[slice].density);
+				if (voxelColumn[slice].density == 0)
+					voxelColor = float4(0,0,0,0);
+				else
+					voxelColor = float4(lightIncidentOnVoxel * _LightColor   /** diffuseCoeff+ voxelColumn[slice].ao * _AmbientColor*/, voxelColumn[slice].density);
 				
 				volumeTex[int3(i.pos.xy, slice)]	=	voxelColor;
 
 				lightIncidentOnPreviousVoxel = lightIncidentOnVoxel;
-				lightIncidentOnVoxel *= rcp(1 + voxelColumn[slice].density);
+				lightIncidentOnVoxel *= rcp(1.0 + voxelColumn[slice].density);
 			} // per slice
 
 			lightPropogationTex[int2(i.pos.xy + _MetavoxelIndex.xy * _NumVoxels)] = lightIncidentOnPreviousVoxel; // exclude the exit border voxel to prevent inconsistencies in next metavoxel

@@ -2,6 +2,7 @@
 #if UNITY_EDITOR 
 using UnityEditor;
 #endif
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
@@ -45,15 +46,23 @@ public struct DisplacedParticle
 }
 
 
-// Compare used for sorting metavoxels of a z-slice (w.r.t the light) from farthest-to-nearest from the camera
-public class MvDistComparer : IComparer<Vector3>
+public struct MetavoxelSortData : IComparable<MetavoxelSortData>
 {
-    public int Compare(Vector3 x, Vector3 y)
+    public int x, y;
+    public float distance;
+
+    public MetavoxelSortData(int xx, int yy, float dd)
     {
-        if (x.z > y.z)
-            return 1;
-       
-        return -1;
+        x = xx; y = yy; distance = dd;
+    }
+
+    public void Print(int index) {
+        Debug.Log("At index " + index + "(" + x + "," + y + ") at disance " + distance);
+    }
+
+    public int CompareTo(MetavoxelSortData other)
+    {
+        return this.distance.CompareTo(other.distance);
     }
 }
 
@@ -101,8 +110,7 @@ public class MetavoxelManager : MonoBehaviour {
     private Light dirLight;
 
     // GUI controls
-    private bool showMetavoxelCoverage;
-    private bool showNumSamples;
+    private bool showMetavoxelCoverage, showNumSamples, showMetavoxelDrawOrder;
     private float displacementScale;
 
     // temp prototyping stuff
@@ -128,6 +136,7 @@ public class MetavoxelManager : MonoBehaviour {
         CreateTempResources();
         showMetavoxelCoverage = false;
         showNumSamples = false;
+        showMetavoxelDrawOrder = false;
         displacementScale = 0.0f;
         fadeOutParticles = false;
 
@@ -167,9 +176,14 @@ public class MetavoxelManager : MonoBehaviour {
     void OnGUI()
     {
         showMetavoxelCoverage = GUI.Toggle(new Rect(25, 50, 200, 30), showMetavoxelCoverage, "Show metavoxel coverage");
+        
         GUI.Label(new Rect(25, 100, 150, 50), "Displacement Scale [" + displacementScale + "]");
         displacementScale = GUI.HorizontalSlider(new Rect(175, 105, 100, 30), displacementScale, 0.0f, 1.0f);
+        
         showNumSamples = GUI.Toggle(new Rect(25, 150, 200, 30), showNumSamples, "Show steps marched");
+
+        showMetavoxelDrawOrder = GUI.Toggle(new Rect(25, 200, 200, 30), showMetavoxelDrawOrder, "Show mv draw order");
+        
     }
 
 
@@ -402,9 +416,6 @@ public class MetavoxelManager : MonoBehaviour {
         lightPropogationUAV.enableRandomWrite = true; // use as UAV
         lightPropogationUAV.Create();
 
-        Graphics.SetRenderTarget(lightPropogationUAV);
-        GL.Clear(false, true, Color.red);
-
         testLightPlane.renderer.material.SetTexture("_Plane", lightPropogationUAV);
     }
 
@@ -427,7 +438,7 @@ public class MetavoxelManager : MonoBehaviour {
                 for (int xx = 0; xx < numMetavoxelsX; xx++)
                 {
                     Vector3 lsOffset = Vector3.Scale(new Vector3(numMetavoxelsX / 2 - xx, numMetavoxelsY / 2 - yy, numMetavoxelsZ / 2 - zz), mvScale);
-                    Vector3 wsMetavoxelPos = transform.localToWorldMatrix.MultiplyPoint3x4(lsWorldOrigin - lsOffset);
+                    Vector3 wsMetavoxelPos = transform.localToWorldMatrix.MultiplyPoint3x4(lsWorldOrigin - lsOffset); // using - lsOffset means that zz = 0 is closer to the light
                     mvGrid[zz, yy, xx].mPos = wsMetavoxelPos;
 
                     Quaternion q = new Quaternion();
@@ -509,6 +520,7 @@ public class MetavoxelManager : MonoBehaviour {
         matFillVolume.SetFloat("_OpacityFactor", opacityFactor);
         matFillVolume.SetFloat("_DisplacementScale", displacementScale);
         matFillVolume.SetVector("_AmbientColor", ambientColor);
+        matFillVolume.SetInt("_MetavoxelBorderSize", numBorderVoxels);
 
         int fadeParticles = 0;
         if (fadeOutParticles)
@@ -522,7 +534,7 @@ public class MetavoxelManager : MonoBehaviour {
 
     void FillMetavoxel(int xx, int yy, int zz, RenderTexture src, RenderTexture dst)
     {
-        Graphics.ClearRandomWriteTargets();
+        //Graphics.ClearRandomWriteTargets();
 
         // Note: Calling Create lets you create it up front. Create does nothing if the texture is already created.
         // file:///C:/Program%20Files%20(x86)/Unity/Editor/Data/Documentation/html/en/ScriptReference/RenderTexture.Create.html
@@ -572,9 +584,9 @@ public class MetavoxelManager : MonoBehaviour {
     }
 
     // The ray march step uses alpha blending and imposes order requirements 
-    List<Vector3> SortMetavoxelSlicesFarToNearFromEye()
+    List<MetavoxelSortData> SortMetavoxelSlicesFarToNearFromEye()
     {
-        List<Vector3> mvPerSliceFarToNear = new List<Vector3>() ;
+        List<MetavoxelSortData> mvPerSliceFarToNear = new List<MetavoxelSortData>();
         Vector3 cameraPos = Camera.main.transform.position;
 
         for (int yy = 0; yy < numMetavoxelsY; yy++)
@@ -582,12 +594,13 @@ public class MetavoxelManager : MonoBehaviour {
             for (int xx = 0; xx < numMetavoxelsX; xx++)
             {
                 Vector3 distFromEye = mvGrid[0, yy, xx].mPos - cameraPos;
-                mvPerSliceFarToNear.Add(new Vector3(xx, yy, Vector3.Dot(distFromEye, distFromEye)));
+                //Debug.Log("Distance from mv " + xx + ", " + yy + "to camera is " + Vector3.Dot(distFromEye, distFromEye));
+                mvPerSliceFarToNear.Add(new MetavoxelSortData(xx, yy, Vector3.Dot(distFromEye, distFromEye)));
             }
         }
 
-        MvDistComparer mvdc = new MvDistComparer();
-        mvPerSliceFarToNear.Sort(mvdc);
+        mvPerSliceFarToNear.Sort();
+        mvPerSliceFarToNear.Reverse();
 
         return mvPerSliceFarToNear;
     }
@@ -596,7 +609,7 @@ public class MetavoxelManager : MonoBehaviour {
     // This function is called from CameraScript.cs
     public void RenderMetavoxels()
     {
-        List<Vector3> mvPerSliceFarToNear = SortMetavoxelSlicesFarToNearFromEye();
+        List<MetavoxelSortData> mvPerSliceFarToNear = SortMetavoxelSlicesFarToNearFromEye();
 		SetRaymarchPassConstants();
 
 		Vector3 lsCameraPos = transform.worldToLocalMatrix.MultiplyPoint3x4 (Camera.main.transform.position);
@@ -604,23 +617,26 @@ public class MetavoxelManager : MonoBehaviour {
         int zBoundary = Mathf.Clamp( (int)(lsCameraPos.z - lsFirstZSlice), 0, numMetavoxelsZ - 1);
 
         matRayMarchOver.EnableKeyword("BLEND_UNDER");
+        int mvCount = 0;
         // Render metavoxel slices to the "left" of the camera in
         // (a) increasing order along the direction of the light
         // (b) farthest-to-nearest from the camera per slice
         for (int zz = 0; zz < zBoundary; zz++)
         {
-            foreach (Vector3 vv in mvPerSliceFarToNear)
+            foreach (MetavoxelSortData vv in mvPerSliceFarToNear)
             {
+                Debug.Log("F2N " + mvCount + "(" + vv.x + "," + vv.y + ")");
                 int xx = (int)vv.x, yy = (int)vv.y;
 
                 if (mvGrid[zz, yy, xx].mParticlesCovered.Count != 0)
                 {
-                    RenderMetavoxel(xx, yy, zz, matRayMarchOver);
+                    RenderMetavoxel(xx, yy, zz, matRayMarchOver, mvCount++);
                 }
 
             }
         }
 
+        mvCount = 0;
         // Render metavoxel slices to the "right" of the camera in
         // (a) increasing order along the direction of the light
         // (b) nearest-to-farthest from the camera per slice
@@ -629,13 +645,16 @@ public class MetavoxelManager : MonoBehaviour {
 
         for (int zz = zBoundary; zz < numMetavoxelsZ; zz++)
         {
-            foreach (Vector3 vv in mvPerSliceFarToNear)
+            foreach (MetavoxelSortData vv in mvPerSliceFarToNear)
             {
+                Vector3 cam2mv = Camera.main.transform.position - mvGrid[zz, vv.y, vv.x].mPos;
+
                 int xx = (int)vv.x, yy = (int)vv.y;
 
                 if (mvGrid[zz, yy, xx].mParticlesCovered.Count != 0)
                 {
-                    RenderMetavoxel(xx, yy, zz, matRayMarchUnder);
+                    Debug.Log("N2F" + mvCount + "(" + vv.x + "," + vv.y + "," + zz + ") at dist " + cam2mv.sqrMagnitude);
+                    RenderMetavoxel(xx, yy, zz, matRayMarchUnder, mvCount++);
                 }
 
             }
@@ -686,10 +705,16 @@ public class MetavoxelManager : MonoBehaviour {
 
             m.SetInt("_ShowNumSamples", showNumSamples_i);
 
+            int showMetavoxelDrawOrder_i = 0;
+            if (showMetavoxelDrawOrder)
+                showMetavoxelDrawOrder_i = 1;
+
+            m.SetInt("_ShowMetavoxelDrawOrder", showMetavoxelDrawOrder_i);
+
 		}
 	}
 
-    void RenderMetavoxel(int xx, int yy, int zz, Material m)
+    void RenderMetavoxel(int xx, int yy, int zz, Material m, int orderIndex)
     {
         bool setPass = m.SetPass(0); // [eureka] should be done for every drawmeshnow call apparently..!
         if (!setPass)
@@ -710,7 +735,7 @@ public class MetavoxelManager : MonoBehaviour {
         m.SetMatrix("_WorldToMetavoxel", mvToWorld.inverse);
         m.SetVector("_MetavoxelIndex", new Vector3(xx, yy, zz));
         m.SetFloat("_ParticleCoverageRatio", mvGrid[zz, yy, xx].mParticlesCovered.Count / (float)numParticlesEmitted);
-
+        m.SetInt("_OrderIndex", orderIndex);
         Graphics.DrawMeshNow(mesh, Vector3.zero, Quaternion.identity);
     }
 

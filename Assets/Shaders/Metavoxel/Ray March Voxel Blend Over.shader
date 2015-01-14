@@ -5,12 +5,13 @@
 	}
 SubShader
 		{
-			Tags {"Queue" = "Transparent"}
+			//Tags { "Queue" = "Geometry+1" }
 			Pass
 			{
 				Cull Front ZWrite Off ZTest Less
 				// Syntax: Blend SrcFactor DstFactor, SrcFactorA DstFactorA
-				Blend SrcAlpha OneMinusSrcAlpha, One One // Back to Front blending (blend over)
+				// Cr = Cs + Cd * (1 - As)  &  Ar = As + Ad * (1 - As)
+				Blend One OneMinusSrcAlpha, One OneMinusSrcAlpha // Back to Front blending (blend over)
 				BlendOp Add
 
 				CGPROGRAM
@@ -117,11 +118,11 @@ SubShader
 					return (x + 1.0) / 2.0;
 				}
 
-				// Fragment shader
+		// Fragment shader
 				// For each fragment, we have to iterate through all the particles covered
 				// by the MV and fill the voxel column by iterating through each voxel slice.
 				// [todo] this can be parallelized.
-								float4
+				float4
 				frag(v2f i) : COLOR
 				{			
 					//return green;
@@ -225,12 +226,12 @@ SubShader
 					}
 
 					if (_ShowNumSamples == 1) {
-						int stepstaken = samples;
-						if (stepstaken < 2)
+						// Ray march steps per metavoxel caps the # of samples we'll make (64 for a 32-voxel-wide metavoxel => 2 samples per voxel)
+						if (samples < 5)
 							return green;
-						if (stepstaken < 10)
+						if (samples < 10)
 							return yellow;
-						if (stepstaken < 25)
+						if (samples < 20)
 							return orange;
 						return red;
 					}
@@ -238,7 +239,7 @@ SubShader
 					return float4(result.rgb, 1 - transmittance);			
 				} // frag
 
-				ENDCG
-			} // Pass
-		}FallBack Off
+		ENDCG
+		}
+	}FallBack Off
 }
