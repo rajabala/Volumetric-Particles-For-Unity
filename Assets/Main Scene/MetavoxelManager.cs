@@ -137,8 +137,9 @@ public class MetavoxelManager : MonoBehaviour {
         showMetavoxelCoverage = false;
         showNumSamples = false;
         showMetavoxelDrawOrder = false;
-        displacementScale = 0.0f;
+        displacementScale = 0.5f;
         fadeOutParticles = false;
+        volumeTextureAnisoLevel = 1; // The value range of this variable goes from 1 to 9, where 1 equals no filtering applied and 9 equals full filtering applied
 
         lastLightRot = transform.rotation;
         dirLight = transform.parent.GetComponent<Light>();
@@ -177,12 +178,12 @@ public class MetavoxelManager : MonoBehaviour {
     {
         showMetavoxelCoverage = GUI.Toggle(new Rect(25, 50, 200, 30), showMetavoxelCoverage, "Show metavoxel coverage");
         
-        GUI.Label(new Rect(25, 100, 150, 50), "Displacement Scale [" + displacementScale + "]");
-        displacementScale = GUI.HorizontalSlider(new Rect(175, 105, 100, 30), displacementScale, 0.0f, 1.0f);
+        GUI.Label(new Rect(25, 75, 150, 50), "Displacement Scale [" + displacementScale + "]");
+        displacementScale = GUI.HorizontalSlider(new Rect(175, 80, 100, 30), displacementScale, 0.0f, 1.0f);
         
-        showNumSamples = GUI.Toggle(new Rect(25, 150, 200, 30), showNumSamples, "Show steps marched");
+        showNumSamples = GUI.Toggle(new Rect(25, 100, 200, 30), showNumSamples, "Show steps marched");
 
-        showMetavoxelDrawOrder = GUI.Toggle(new Rect(25, 200, 200, 30), showMetavoxelDrawOrder, "Show mv draw order");
+        //showMetavoxelDrawOrder = GUI.Toggle(new Rect(25, 200, 200, 30), showMetavoxelDrawOrder, "Show mv draw order");
         
     }
 
@@ -568,14 +569,14 @@ public class MetavoxelManager : MonoBehaviour {
         dpBuffer.SetData(dpArray);
 
         // Set material state
-        matFillVolume.SetPass(0);
+        
         matFillVolume.SetMatrix("_MetavoxelToWorld", Matrix4x4.TRS( mvGrid[zz, yy, xx].mPos,
                                                                     mvGrid[zz, yy, xx].mRot,
                                                                     mvScaleWithBorder)); // need to fill the border voxels of this metavoxel too (so we need to make it "seem" bigger
         matFillVolume.SetVector("_MetavoxelIndex", new Vector3(xx, yy, zz));
         matFillVolume.SetInt("_NumParticles", numParticles);
         matFillVolume.SetBuffer("_Particles", dpBuffer);
-
+        matFillVolume.SetPass(0);
         Graphics.Blit(src, src, matFillVolume);
 
         // cleanup
@@ -616,7 +617,8 @@ public class MetavoxelManager : MonoBehaviour {
         float lsFirstZSlice = transform.worldToLocalMatrix.MultiplyPoint3x4(mvGrid[0, 0, 0].mPos).z;
         int zBoundary = Mathf.Clamp( (int)(lsCameraPos.z - lsFirstZSlice), 0, numMetavoxelsZ - 1);
 
-        matRayMarchOver.EnableKeyword("BLEND_UNDER");
+        // todo: find a way to merge the two shaders since the only difference is the blend state
+        //matRayMarchOver.EnableKeyword("BLEND_UNDER"); 
         int mvCount = 0;
         // Render metavoxel slices to the "left" of the camera in
         // (a) increasing order along the direction of the light
@@ -625,7 +627,7 @@ public class MetavoxelManager : MonoBehaviour {
         {
             foreach (MetavoxelSortData vv in mvPerSliceFarToNear)
             {
-                Debug.Log("F2N " + mvCount + "(" + vv.x + "," + vv.y + ")");
+                //Debug.Log("F2N " + mvCount + "(" + vv.x + "," + vv.y + ")");
                 int xx = (int)vv.x, yy = (int)vv.y;
 
                 if (mvGrid[zz, yy, xx].mParticlesCovered.Count != 0)
@@ -647,8 +649,7 @@ public class MetavoxelManager : MonoBehaviour {
         {
             foreach (MetavoxelSortData vv in mvPerSliceFarToNear)
             {
-                Vector3 cam2mv = Camera.main.transform.position - mvGrid[zz, vv.y, vv.x].mPos;
-
+                //Vector3 cam2mv = Camera.main.transform.position - mvGrid[zz, vv.y, vv.x].mPos;
                 int xx = (int)vv.x, yy = (int)vv.y;
 
                 if (mvGrid[zz, yy, xx].mParticlesCovered.Count != 0)
@@ -668,7 +669,7 @@ public class MetavoxelManager : MonoBehaviour {
 	{
 		Material[] over_under = {matRayMarchOver, matRayMarchUnder};
 
-		foreach (Material m in over_under) {            
+		foreach (Material m in over_under) {  
 			// Resources
 			m.SetTexture("_LightPropogationTexture", lightPropogationUAV);
 			
@@ -691,14 +692,14 @@ public class MetavoxelManager : MonoBehaviour {
 
 			// Ray march uniforms
 			m.SetInt("_NumSteps", rayMarchSteps);
-			m.SetVector("_AABBMin", pBounds.aabb.min);
-			m.SetVector("_AABBMax", pBounds.aabb.max);
-			
-			int showPrettyColors_i = 0;
+            //m.SetVector("_AABBMin", pBounds.aabb.min);
+            //m.SetVector("_AABBMax", pBounds.aabb.max);
+
+            int showMetavoxelCoverage_i = 0;
 			if (showMetavoxelCoverage)
-				showPrettyColors_i = 1;
-			
-			m.SetInt("_ShowPrettyColors", showPrettyColors_i);
+                showMetavoxelCoverage_i = 1;
+
+            m.SetInt("_ShowMvCoverage", showMetavoxelCoverage_i);
 
             int showNumSamples_i = 0;
             if (showNumSamples)
@@ -706,23 +707,18 @@ public class MetavoxelManager : MonoBehaviour {
 
             m.SetInt("_ShowNumSamples", showNumSamples_i);
 
-            int showMetavoxelDrawOrder_i = 0;
-            if (showMetavoxelDrawOrder)
-                showMetavoxelDrawOrder_i = 1;
+            //int showMetavoxelDrawOrder_i = 0;
+            //if (showMetavoxelDrawOrder)
+            //    showMetavoxelDrawOrder_i = 1;
 
-            m.SetInt("_ShowMetavoxelDrawOrder", showMetavoxelDrawOrder_i);
+            //m.SetInt("_ShowMetavoxelDrawOrder", showMetavoxelDrawOrder_i);
 
 		}
 	}
 
     void RenderMetavoxel(int xx, int yy, int zz, Material m, int orderIndex)
     {
-        bool setPass = m.SetPass(0); // [eureka] should be done for every drawmeshnow call apparently..!
-        Debug.Log(m.renderQueue);
-        if (!setPass)
-        {
-            Debug.LogError("material set pass returned false;..");
-        }
+        
 
         //Debug.Log("rendering mv " + xx + "," + yy +"," + zz);
         mvFillTextures[zz, yy, xx].filterMode = FilterMode.Bilinear;
@@ -737,7 +733,16 @@ public class MetavoxelManager : MonoBehaviour {
         m.SetMatrix("_WorldToMetavoxel", mvToWorld.inverse);
         m.SetVector("_MetavoxelIndex", new Vector3(xx, yy, zz));
         m.SetFloat("_ParticleCoverageRatio", mvGrid[zz, yy, xx].mParticlesCovered.Count / (float)numParticlesEmitted);
-        m.SetInt("_OrderIndex", orderIndex);
+        //m.SetInt("_OrderIndex", orderIndex);
+
+        // Absence of the line below caused several hours of debugging madness.
+        // SetPass needs to be called AFTER all material properties are set prior to every DrawMeshNow call.
+        bool setPass = m.SetPass(0); 
+        if (!setPass)
+        {
+            Debug.LogError("material set pass returned false;..");
+        }
+
         Graphics.DrawMeshNow(mesh, Vector3.zero, Quaternion.identity);
     }
 

@@ -5,7 +5,6 @@
 	}
 	SubShader
 		{
-			Tags { "Queue" = "Overlay" }
 			Pass
 			{
 				Cull Front ZWrite Off ZTest Less
@@ -22,10 +21,14 @@
 #pragma fragment frag
 
 #include "UnityCG.cginc"
-#define green float4(0.0, 0.5, 0.0, 0.5)
+#define green1 float4(0.0, 0.2, 0.0, 0.5)
+#define green2 float4(0.0, 0.5, 0.0, 0.5)
 #define yellow float4(0.5, 0.5, 0.0, 0.5)
 #define orange float4(0.6, 0.4, 0.0, 0.5)
-#define red float4(0.5, 0.0, 0.0, 0.5)
+#define red float4(0.6, 0.0, 0.0, 0.5)
+#define red2 float4(0.8, 0.0, 0.0, 0.5)
+#define red3 float4(1.0, 0.0, 0.0, 0.5)
+
 #define redb float4(0.5, 0.0, 0.0, 1.0)
 #define blueb float4(0.0, 0.0, 0.5, 1.0)
 #define greenb float4(0.0, 0.5, 0.0, 1.0)
@@ -35,55 +38,37 @@
 				sampler3D _VolumeTexture;
 				sampler2D _LightPropogationTexture;
 
-				// Raymarch pass constants
+				// Metavoxel uniforms
+				float4x4 _MetavoxelToWorld;
+				float4x4 _WorldToMetavoxel;
+				float3 _MetavoxelIndex;
+				float3 _MetavoxelGridDim;
+				float3 _MetavoxelSize;
+				float _ParticleCoverageRatio; 
 				float _NumVoxels; // metavoxel's voxel dimensions
 				int _MetavoxelBorderSize;
 				//float3 _MetavoxelScale;
 
-				// Metavoxel uniforms
-				float4x4 _MetavoxelToWorld;
-				float4x4 _WorldToMetavoxel;
-				float4 _MetavoxelIndex;
-				float3 _MetavoxelGridDim;
-				float3 _MetavoxelSize;
-				float _ParticleCoverageRatio; 
 
 				// Camera uniforms
 				float4x4 _CameraToWorldMatrix; // need to explicitly define this to get the main camera's matrices
 				float4x4 _WorldToCameraMatrix;
-				float4 _CameraWorldPos;
+				float3 _CameraWorldPos;
 				float _Fov;
-				float _Near;
-				float _Far;
+				//float _Near;
+				//float _Far;
 				float4 _ScreenRes;
 
 				// Ray march constants
 				int _NumSteps;
-				float4 _AABBMin;
-				float4 _AABBMax;
+				//float4 _AABBMin;
+				//float4 _AABBMax;
 
 				// tmp
-				int _ShowPrettyColors;
+				int _ShowMvCoverage;
 				int _ShowNumSamples;
-				int _ShowMetavoxelDrawOrder;
-				int _OrderIndex;
-
-				struct v2f {
-					float4 pos : SV_POSITION;
-					float3 worldPos : TEXCOORD;
-				};
-
-				v2f
-					vert(appdata_base i) {
-					// every vertex submitted is in a unit-metavoxel space
-					// transform from model -> world -> eye -> proj -> clip space
-					v2f o;
-
-					// can't use the default UNITY_MATRIX_MVP since the draw is made using Graphics.DrawMeshNow
-					o.pos = mul(mul(UNITY_MATRIX_VP, _MetavoxelToWorld), i.vertex); // clip space
-					o.worldPos = mul(_MetavoxelToWorld, i.vertex); // world space
-					return o;
-				}
+				//int _ShowMetavoxelDrawOrder;
+				//int _OrderIndex;
 
 				struct Ray {
 					float3 o; // origin
@@ -116,13 +101,26 @@
 					return hit;
 				}
 
-				// [-1, 1] to [0, 1]
-				float 
-				normToUV(float x)
-				{
-					return (x + 1.0) / 2.0;
-				}
 
+				struct v2f {
+					float4 pos : SV_POSITION;
+					//float3 worldPos : TEXCOORD;
+				};
+
+
+				// Vertex shader
+				v2f
+				vert(appdata_base i) {
+					// every vertex submitted is in a unit-metavoxel space
+					// transform from model -> world -> eye -> proj -> clip space
+					v2f o;
+
+					// can't use the default UNITY_MATRIX_MVP since the draw is made using Graphics.DrawMeshNow
+					o.pos = mul(mul(UNITY_MATRIX_VP, _MetavoxelToWorld), i.vertex); // clip space
+					//o.worldPos = mul(_MetavoxelToWorld, i.vertex); // world space
+					return o;
+				}
+	
 				// Fragment shader
 				// For each fragment, we have to iterate through all the particles covered
 				// by the MV and fill the voxel column by iterating through each voxel slice.
@@ -130,11 +128,10 @@
 				float4
 				frag(v2f i) : COLOR
 				{			
-					//return green;
-					if (_ShowPrettyColors == 1) // Color metavoxels that are covered by particles 
+					if (_ShowMvCoverage == 1) // Color metavoxels that are covered by particles 
 					{
 						if (_ParticleCoverageRatio < 0.15)
-							return green;
+							return green1;
 						else if (_ParticleCoverageRatio < 0.35)
 							return yellow;
 						else if (_ParticleCoverageRatio < 0.55)
@@ -143,20 +140,11 @@
 							return red;
 					}
 
-					if (_ShowMetavoxelDrawOrder == 1) 
-					{
-						if (_OrderIndex == 0)
-							return redb;
-						if (_OrderIndex == 1)
-							return greenb;
-						if (_OrderIndex == 2)
-							return blueb;
-						return orange;
-						
-
-						//int totalMetavoxels = _MetavoxelGridDim.x * _MetavoxelGridDim.y * _MetavoxelGridDim.z;
-						//return float4(0, 1 - (_OrderIndex / float(totalMetavoxels)), 0, 0.5);						
-					}
+					//if (_ShowMetavoxelDrawOrder == 1) 
+					//{
+					//	int totalMetavoxels = _MetavoxelGridDim.x * _MetavoxelGridDim.y * _MetavoxelGridDim.z;
+					//	return float4(0, 1 - (_OrderIndex / float(totalMetavoxels)), 0, 0.5);						
+					//}
 
 					 
 					// Find ray direction from camera through this pixel
@@ -172,7 +160,8 @@
 					//float3 csRayDir2 = normalize(mul(_WorldToCameraMatrix, float4(i.worldPos - _CameraWorldPos, 0)));
 					//return float4(csRayDir2 - csRayDir, 1.0);
 
-					// Find camera space intersections of the ray with the camera-AABB of the volume
+					// Using a camere-AABB for the volume shows a snapping artifact as the camera moves
+					// Unsure if this is a lag problem or sth else.
 					//float3 csAABBStart	= csRayDir * (_AABBMin.z / csRayDir.z);
 					//float3 csAABBEnd	= csRayDir * (_AABBMax.z / csRayDir.z);
 			
@@ -204,9 +193,7 @@
 					mvRay1.o = mvAABBStart;
 					mvRay1.d = mvRayDir;
 					bool intersects = IntersectBox(mvRay1, mvMin, mvMax, t1, t2);
-					if (!intersects)					
-						return red;
-					
+						
 					// if the volume AABB's near plane is within the metavoxel, t1 will be negative. clamp to 0				
 					int tstart = ceil(t1 / stepSize), tend = floor(t2 / stepSize);
 					tstart = max(0, tstart);
@@ -248,12 +235,19 @@
 					if (_ShowNumSamples == 1) {
 						// Ray march steps per metavoxel caps the # of samples we'll make (64 for a 32-voxel-wide metavoxel => 2 samples per voxel)
 						if (samples < 5)
-							return green;
+							return green1;
 						if (samples < 10)
-							return yellow;
+							return green2;
 						if (samples < 20)
+							return yellow;
+						if (samples < 30)
 							return orange;
-						return red;
+						if (samples < 40)
+							return red;
+						if (samples < 50)
+							return red2;
+							
+						return red3;
 					}
 
 					return float4(result.rgb, 1 - transmittance);			
@@ -263,4 +257,3 @@
 			} // Pass
 		}FallBack Off
 }
- 

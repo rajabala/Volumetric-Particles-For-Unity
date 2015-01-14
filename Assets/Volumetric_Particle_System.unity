@@ -132,20 +132,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mvScale: {x: 2, y: 2, z: 2}
-  numMetavoxelsX: 10
-  numMetavoxelsY: 10
-  numMetavoxelsZ: 10
+  numMetavoxelsX: 16
+  numMetavoxelsY: 16
+  numMetavoxelsZ: 16
   numVoxelsInMetavoxel: 32
-  updateInterval: 1
+  updateInterval: 2
   rayMarchSteps: 64
   numBorderVoxels: 1
-  opacityFactor: 1
-  ambientColor: {x: .5, y: .5, z: .5}
+  opacityFactor: 2
+  ambientColor: {x: .300000012, y: .300000012, z: .300000012}
   fadeOutParticles: 0
-  volumeTextureAnisoLevel: 0
+  volumeTextureAnisoLevel: 9
   matFillVolume: {fileID: 2100000, guid: 742e800cae20c4547bc14935a578e998, type: 2}
-  matRayMarchOver: {fileID: 2100000, guid: 14e5eb7c9a4acf34688b8fbd737f2365, type: 2}
-  matRayMarchUnder: {fileID: 2100000, guid: 98638f28235c80d4eb0bd30969960c4a, type: 2}
+  matRayMarchOver: {fileID: 2100000, guid: 865bff02ba66c2b4490cdab2d995b16f, type: 2}
+  matRayMarchUnder: {fileID: 2100000, guid: 8461ba2f797724140b96267093939244, type: 2}
   theParticleSystem: {fileID: 1946669431}
   testLightPlane: {fileID: 1314314053}
   mvLineColor: {fileID: 2100000, guid: e091f90250c3ccc4eb5732506a7b76f6, type: 2}
@@ -229,7 +229,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &650980973
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -282,7 +282,7 @@ ParticleSystem:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 650980972}
-  lengthInSec: 30
+  lengthInSec: 6
   startDelay: 0
   speed: 1
   randomSeed: 0
@@ -293,7 +293,7 @@ ParticleSystem:
   InitialModule:
     enabled: 1
     startLifetime:
-      scalar: 30
+      scalar: 6
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -326,7 +326,7 @@ ParticleSystem:
         m_PostInfinity: 2
       minMaxState: 0
     startSpeed:
-      scalar: 0
+      scalar: 2
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -453,7 +453,7 @@ ParticleSystem:
         rgba: 4294967295
       minMaxState: 0
     startSize:
-      scalar: 6
+      scalar: 3
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -1540,7 +1540,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1195387752
 Transform:
   m_ObjectHideFlags: 0
@@ -1744,7 +1744,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!108 &1569223726
 Light:
   m_ObjectHideFlags: 0
@@ -1987,8 +1987,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mvScale: {x: 2, y: 2, z: 2}
   numMetavoxelsX: 4
-  numMetavoxelsY: 1
-  numMetavoxelsZ: 1
+  numMetavoxelsY: 4
+  numMetavoxelsZ: 4
   numVoxelsInMetavoxel: 32
   updateInterval: 1
   rayMarchSteps: 64
@@ -1998,7 +1998,7 @@ MonoBehaviour:
   fadeOutParticles: 0
   volumeTextureAnisoLevel: 0
   matFillVolume: {fileID: 2100000, guid: 742e800cae20c4547bc14935a578e998, type: 2}
-  matRayMarchOver: {fileID: 2100000, guid: 8461ba2f797724140b96267093939244, type: 2}
+  matRayMarchOver: {fileID: 2100000, guid: 865bff02ba66c2b4490cdab2d995b16f, type: 2}
   matRayMarchUnder: {fileID: 2100000, guid: 8461ba2f797724140b96267093939244, type: 2}
   theParticleSystem: {fileID: 650980972}
   testLightPlane: {fileID: 1314314053}
@@ -2071,7 +2071,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!199 &1946669432
 ParticleSystemRenderer:
   m_ObjectHideFlags: 0
@@ -3266,7 +3266,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mLights:
-  - {fileID: 1569223726}
+  - {fileID: 1195387753}
   lookSpeed: 1
   moveSpeed: 2
   controlsText: {fileID: 1581667316}

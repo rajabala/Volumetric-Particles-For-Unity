@@ -167,7 +167,7 @@
 				if (voxelColumn[slice].density == 0)
 					voxelColor = float4(0,0,0,0);
 				else
-					voxelColor = float4(lightIncidentOnVoxel * _LightColor   /** diffuseCoeff+ voxelColumn[slice].ao * _AmbientColor*/, voxelColumn[slice].density);
+					voxelColor = float4(lightIncidentOnVoxel * _LightColor * diffuseCoeff   + voxelColumn[slice].ao * _AmbientColor, voxelColumn[slice].density);
 				
 				volumeTex[int3(i.pos.xy, slice)]	=	voxelColor;
 
