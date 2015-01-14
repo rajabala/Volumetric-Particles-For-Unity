@@ -453,7 +453,7 @@ ParticleSystem:
         rgba: 4294967295
       minMaxState: 0
     startSize:
-      scalar: 3
+      scalar: 6
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -1330,7 +1330,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 650980972}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: -4.37113883e-08}
-  m_LocalPosition: {x: .292623043, y: .293430328, z: 0}
+  m_LocalPosition: {x: -1.53372502, y: .293430328, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -1998,8 +1998,8 @@ MonoBehaviour:
   fadeOutParticles: 0
   volumeTextureAnisoLevel: 0
   matFillVolume: {fileID: 2100000, guid: 742e800cae20c4547bc14935a578e998, type: 2}
-  matRayMarchOver: {fileID: 2100000, guid: 14e5eb7c9a4acf34688b8fbd737f2365, type: 2}
-  matRayMarchUnder: {fileID: 2100000, guid: 98638f28235c80d4eb0bd30969960c4a, type: 2}
+  matRayMarchOver: {fileID: 2100000, guid: 8461ba2f797724140b96267093939244, type: 2}
+  matRayMarchUnder: {fileID: 2100000, guid: 8461ba2f797724140b96267093939244, type: 2}
   theParticleSystem: {fileID: 650980972}
   testLightPlane: {fileID: 1314314053}
   mvLineColor: {fileID: 2100000, guid: e091f90250c3ccc4eb5732506a7b76f6, type: 2}

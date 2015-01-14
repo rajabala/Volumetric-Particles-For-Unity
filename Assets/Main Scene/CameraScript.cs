@@ -109,12 +109,12 @@ public class CameraScript : MonoBehaviour {
             particlesRT.isVolume = false;
             particlesRT.enableRandomWrite = false;
             particlesRT.Create();
-        }
+            }
 
-        if (!mainSceneRT)
-        {
-            mainSceneRT = new RenderTexture(Screen.width, Screen.height, 24, RenderTextureFormat.ARGB32);
-            mainSceneRT.useMipMap = false;
+            if (!mainSceneRT)
+            {
+                mainSceneRT = new RenderTexture(Screen.width, Screen.height, 24, RenderTextureFormat.ARGB32);
+                mainSceneRT.useMipMap = false;
             mainSceneRT.isVolume = false;
             mainSceneRT.enableRandomWrite = false;
             mainSceneRT.Create();

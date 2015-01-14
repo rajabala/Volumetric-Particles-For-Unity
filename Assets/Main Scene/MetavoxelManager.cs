@@ -653,7 +653,8 @@ public class MetavoxelManager : MonoBehaviour {
 
                 if (mvGrid[zz, yy, xx].mParticlesCovered.Count != 0)
                 {
-                    Debug.Log("N2F" + mvCount + "(" + vv.x + "," + vv.y + "," + zz + ") at dist " + cam2mv.sqrMagnitude);
+                    //matRayMarchUnder.renderQueue = 5000 + mvCount;
+                    //Debug.Log("N2F" + mvCount + "(" + vv.x + "," + vv.y + "," + zz + ") at dist " + cam2mv.sqrMagnitude);
                     RenderMetavoxel(xx, yy, zz, matRayMarchUnder, mvCount++);
                 }
 
@@ -667,7 +668,7 @@ public class MetavoxelManager : MonoBehaviour {
 	{
 		Material[] over_under = {matRayMarchOver, matRayMarchUnder};
 
-		foreach (Material m in over_under) {
+		foreach (Material m in over_under) {            
 			// Resources
 			m.SetTexture("_LightPropogationTexture", lightPropogationUAV);
 			
@@ -717,6 +718,7 @@ public class MetavoxelManager : MonoBehaviour {
     void RenderMetavoxel(int xx, int yy, int zz, Material m, int orderIndex)
     {
         bool setPass = m.SetPass(0); // [eureka] should be done for every drawmeshnow call apparently..!
+        Debug.Log(m.renderQueue);
         if (!setPass)
         {
             Debug.LogError("material set pass returned false;..");

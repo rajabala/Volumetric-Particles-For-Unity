@@ -5,14 +5,14 @@
 	}
 	SubShader
 		{
-			//Tags { "Queue" = "Geometry+1" }
+			Tags { "Queue" = "Overlay" }
 			Pass
 			{
 				Cull Front ZWrite Off ZTest Less
 				// Syntax: Blend SrcFactor DstFactor, SrcFactorA DstFactorA
 				// Cr = Cs * (1 - Ad) + Cd  &  Ar = As * (1 - Ad) + Ad
-				//Blend OneMinusDstAlpha One, OneMinusDstAlpha One // Front to Back blending (blend under)-- this is b/w metavoxels.
-				//BlendOp Add
+				Blend OneMinusDstAlpha One, OneMinusDstAlpha One // Front to Back blending (blend under)-- this is b/w metavoxels.
+				BlendOp Add
 
 				CGPROGRAM
 #pragma target 5.0
