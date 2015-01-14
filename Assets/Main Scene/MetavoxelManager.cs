@@ -743,7 +743,7 @@ public class MetavoxelManager : MonoBehaviour {
             Debug.LogError("material set pass returned false;..");
         }
 
-        Graphics.DrawMeshNow(mesh, Vector3.zero, Quaternion.identity);
+        Graphics.DrawMeshNow(cubeMesh, Vector3.zero, Quaternion.identity);
     }
 
 
