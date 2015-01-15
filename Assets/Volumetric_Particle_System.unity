@@ -2348,7 +2348,7 @@ ParticleSystem:
       minMaxState: 0
     gravityModifier: 0
     inheritVelocity: 0
-    maxNumParticles: 30
+    maxNumParticles: 20
   ShapeModule:
     serializedVersion: 2
     enabled: 1
