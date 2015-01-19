@@ -1,21 +1,39 @@
 ﻿using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
-public class CameraScript : MonoBehaviour {
+using MetavoxelEngine;
+
+/*
+ * Attach this script to the main camera of your scene
+ * 
+ */
+
+public class CameraScript : MonoBehaviour {       
+    /*
+     *  public variables to be edited in the inspector window
+     */
+    public MetavoxelManager mvMgr;
     public Light[] mLights;
     public float lookSpeed, moveSpeed;
     public GUIText controlsText, beingMovedText;
+    public Material matBlendParticles; // material to blend the raymarched volume with the camera's RT
 
-    // Render targets & material to blend them
-    public Material matBlendParticles;
-    private RenderTexture mainSceneRT;
-    private RenderTexture particlesRT;
+    /*
+     * private data 
+     */
+    // Render targets
+    private RenderTexture mainSceneRT; // camera draws the scene but for the particles into this
+    private RenderTexture particlesRT; // result of raymarching the metavoxels is stored in this
 
-    // Scene controls (GUI elements + toggle controls)
+    // Scene controls (GUI elements, toggle controls, movement)
     private bool moveCamera, moveLight;
-    private bool drawMetavoxelGrid;
-    private MetavoxelManager[] mvMgrs;
-
+    private bool drawMetavoxelGrid;    
     private float camRotationX, camRotationY, lightRotationX, lightRotationY;
     private Vector3 startPos; private Quaternion startRot;
 
@@ -27,12 +45,6 @@ public class CameraScript : MonoBehaviour {
         moveCamera = moveLight = false;
 
         drawMetavoxelGrid = false;
-
-        mvMgrs = new MetavoxelManager[mLights.Length];
-        int ii = 0;
-        foreach (Light l in mLights) {
-            mvMgrs[ii++] = l.GetComponentInChildren<MetavoxelManager>();
-        }
 
         CreateResources();
         controlsText.pixelOffset = new Vector2(Screen.width / 3, 0);
@@ -71,22 +83,24 @@ public class CameraScript : MonoBehaviour {
     //// OnPostRender is called after a camera has finished rendering the scene.
     void OnPostRender()
     {
+        // Fill the metavoxels
+
+
+
         // Use the camera's existing depth buffer to depth-test the particles, while
         // writing the ray marched volume into a separate color buffer that's blended
         // with the main scene in OnRenderImage(..)
         Graphics.SetRenderTarget(particlesRT.colorBuffer, mainSceneRT.depthBuffer);
 
         // fill particlesRT with the ray marched volume (the loop is per directional light source)
-        foreach (MetavoxelManager mgr in mvMgrs)
-            mgr.RenderMetavoxels();
+        mvMgr.RenderMetavoxels();
 
         // blend the particles onto the main (opaque) scene. [todo] what happens to billboarded particles on the main scene? when're they rendered?
         Graphics.Blit(particlesRT, mainSceneRT, matBlendParticles);
 
         if (drawMetavoxelGrid)
         {
-            foreach (MetavoxelManager mgr in mvMgrs)
-                mgr.DrawMetavoxelGrid();
+            mvMgr.DrawMetavoxelGrid();
         }
 
         // need to set the targetTexture to null, else the Blit doesn't work

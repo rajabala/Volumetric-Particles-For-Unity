@@ -149,6 +149,20 @@ MonoBehaviour:
   theParticleSystem: {fileID: 1946669431}
   testLightPlane: {fileID: 1314314053}
   mvLineColor: {fileID: 2100000, guid: e091f90250c3ccc4eb5732506a7b76f6, type: 2}
+  mvScaleWithBorder: {x: 0, y: 0, z: 0}
+  rtCam: {fileID: 0}
+  lightPropogationUAV: {fileID: 0}
+  pBounds: {fileID: 0}
+  ps: {fileID: 0}
+  numParticlesEmitted: 0
+  lastLightRot: {x: 0, y: 0, z: 0, w: 0}
+  dirLight: {fileID: 0}
+  showMetavoxelCoverage: 0
+  showNumSamples: 0
+  showMetavoxelDrawOrder: 0
+  displacementScale: 0
+  cubeMesh: {fileID: 0}
+  mesh: {fileID: 0}
   cubeVertices:
   - {x: -.5, y: -.5, z: .5}
   - {x: -.5, y: .5, z: .5}
@@ -2003,6 +2017,20 @@ MonoBehaviour:
   theParticleSystem: {fileID: 650980972}
   testLightPlane: {fileID: 1314314053}
   mvLineColor: {fileID: 2100000, guid: e091f90250c3ccc4eb5732506a7b76f6, type: 2}
+  mvScaleWithBorder: {x: 0, y: 0, z: 0}
+  rtCam: {fileID: 0}
+  lightPropogationUAV: {fileID: 0}
+  pBounds: {fileID: 0}
+  ps: {fileID: 0}
+  numParticlesEmitted: 0
+  lastLightRot: {x: 0, y: 0, z: 0, w: 0}
+  dirLight: {fileID: 0}
+  showMetavoxelCoverage: 0
+  showNumSamples: 0
+  showMetavoxelDrawOrder: 0
+  displacementScale: 0
+  cubeMesh: {fileID: 0}
+  mesh: {fileID: 0}
   cubeVertices:
   - {x: -.5, y: -.5, z: .5}
   - {x: -.5, y: .5, z: .5}
@@ -3265,6 +3293,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43ce582a35930e042899371fcfbb1102, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mvMgr:
+    mvScale: {x: 0, y: 0, z: 0}
+    numMetavoxelsX: 0
+    numMetavoxelsY: 0
+    numMetavoxelsZ: 0
+    numVoxelsInMetavoxel: 0
+    numBorderVoxels: 0
+    updateInterval: 0
+    rayMarchSteps: 0
+    opacityFactor: 0
+    ambientColor: {x: 0, y: 0, z: 0}
+    fadeOutParticles: 0
+    volumeTextureAnisoLevel: 0
+    matFillVolume: {fileID: 0}
+    matRayMarchOver: {fileID: 0}
+    matRayMarchUnder: {fileID: 0}
+    theParticleSystem: {fileID: 0}
+    testLightPlane: {fileID: 0}
+    mvLineColor: {fileID: 0}
+    cubeVertices: []
+    cubeUVs: []
   mLights:
   - {fileID: 1195387753}
   lookSpeed: 1
