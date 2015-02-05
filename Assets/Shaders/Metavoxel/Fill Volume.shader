@@ -10,12 +10,20 @@
 		#pragma target 5.0
 		#pragma exclude_renderers flash gles opengl
 		#pragma enable_d3d11_debug_symbols
-		#pragma vertex vert_img
+		//#pragma vertex vert_img
+		#pragma vertex vert
 		#pragma fragment frag
 		#define NUM_VOXELS 32
 
 		#include "UnityCG.cginc"
 
+		struct vs_input {
+			float4 vertex : POSITION;
+		};
+
+		struct v2f {
+			float4 pos : SV_POSITION;
+		};
 
 		// particle
 		struct Particle {
@@ -100,11 +108,20 @@
 			v.ao = netDisplacement;
 		}
 
+		// Mesh is already in clip space. Just pipe it down.
+		v2f vert(vs_input i) {
+			v2f o;
+			o.pos = i.vertex;
+			return o;
+		}
+
+
 		// Fragment shader fills a "voxel column" of the metavoxel's volume texture
 		// For each voxel in the voxel column of our metavoxel, we iterate through all the displaced particles covered by the metavoxel and test for coverage. 
 		// If a displaced particle covers the voxel's center, we calculate its contribution to "density" and "ao". 
 		float4 
-		frag(v2f_img i) : COLOR
+		//frag(v2f_img i) : COLOR
+		frag(v2f i) : COLOR
 		{
 			int slice, pp;
 			float lightIncidentOnVoxel, lightIncidentOnPreviousVoxel;

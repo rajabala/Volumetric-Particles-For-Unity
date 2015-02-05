@@ -119,69 +119,18 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &246521388
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 246521387}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8baae8a2fe103a640bbd718cd9d3a590, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mvScale: {x: 2, y: 2, z: 2}
-  numMetavoxelsX: 8
-  numMetavoxelsY: 8
-  numMetavoxelsZ: 8
-  numVoxelsInMetavoxel: 32
-  updateInterval: 2
-  rayMarchSteps: 64
-  numBorderVoxels: 1
-  opacityFactor: 2
-  ambientColor: {x: .300000012, y: .300000012, z: .300000012}
-  fadeOutParticles: 0
-  volumeTextureAnisoLevel: 9
-  matFillVolume: {fileID: 2100000, guid: 742e800cae20c4547bc14935a578e998, type: 2}
-  matRayMarchOver: {fileID: 2100000, guid: 865bff02ba66c2b4490cdab2d995b16f, type: 2}
-  matRayMarchUnder: {fileID: 2100000, guid: 8461ba2f797724140b96267093939244, type: 2}
-  theParticleSystem: {fileID: 1946669431}
-  testLightPlane: {fileID: 1314314053}
-  mvLineColor: {fileID: 2100000, guid: e091f90250c3ccc4eb5732506a7b76f6, type: 2}
-  mvScaleWithBorder: {x: 0, y: 0, z: 0}
-  rtCam: {fileID: 0}
-  lightPropogationUAV: {fileID: 0}
-  pBounds: {fileID: 0}
-  ps: {fileID: 0}
-  numParticlesEmitted: 0
-  lastLightRot: {x: 0, y: 0, z: 0, w: 0}
-  dirLight: {fileID: 0}
-  showMetavoxelCoverage: 0
-  showNumSamples: 0
-  showMetavoxelDrawOrder: 0
-  displacementScale: 0
-  cubeMesh: {fileID: 0}
-  mesh: {fileID: 0}
-  cubeVertices:
-  - {x: -.5, y: -.5, z: .5}
-  - {x: -.5, y: .5, z: .5}
-  - {x: .5, y: .5, z: .5}
-  - {x: .5, y: -.5, z: .5}
-  - {x: -.5, y: -.5, z: -.5}
-  - {x: -.5, y: .5, z: -.5}
-  - {x: .5, y: .5, z: -.5}
-  - {x: .5, y: -.5, z: -.5}
-  cubeUVs:
-  - {x: 0, y: 0}
-  - {x: 0, y: 0}
-  - {x: 0, y: 0}
-  - {x: 0, y: 0}
-  - {x: 0, y: 0}
-  - {x: 0, y: 0}
-  - {x: 0, y: 0}
-  - {x: 0, y: 0}
-  debugTwo: 1
 --- !u!20 &246521389
 Camera:
   m_ObjectHideFlags: 0
@@ -1994,62 +1943,11 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1773395100}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8baae8a2fe103a640bbd718cd9d3a590, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mvScale: {x: 2, y: 2, z: 2}
-  numMetavoxelsX: 4
-  numMetavoxelsY: 4
-  numMetavoxelsZ: 4
-  numVoxelsInMetavoxel: 32
-  updateInterval: 1
-  rayMarchSteps: 64
-  numBorderVoxels: 1
-  opacityFactor: .5
-  ambientColor: {x: .5, y: .5, z: .5}
-  fadeOutParticles: 0
-  volumeTextureAnisoLevel: 0
-  matFillVolume: {fileID: 2100000, guid: 742e800cae20c4547bc14935a578e998, type: 2}
-  matRayMarchOver: {fileID: 2100000, guid: 865bff02ba66c2b4490cdab2d995b16f, type: 2}
-  matRayMarchUnder: {fileID: 2100000, guid: 8461ba2f797724140b96267093939244, type: 2}
-  theParticleSystem: {fileID: 650980972}
-  testLightPlane: {fileID: 1314314053}
-  mvLineColor: {fileID: 2100000, guid: e091f90250c3ccc4eb5732506a7b76f6, type: 2}
-  mvScaleWithBorder: {x: 0, y: 0, z: 0}
-  rtCam: {fileID: 0}
-  lightPropogationUAV: {fileID: 0}
-  pBounds: {fileID: 0}
-  ps: {fileID: 0}
-  numParticlesEmitted: 0
-  lastLightRot: {x: 0, y: 0, z: 0, w: 0}
-  dirLight: {fileID: 0}
-  showMetavoxelCoverage: 0
-  showNumSamples: 0
-  showMetavoxelDrawOrder: 0
-  displacementScale: 0
-  cubeMesh: {fileID: 0}
-  mesh: {fileID: 0}
-  cubeVertices:
-  - {x: -.5, y: -.5, z: .5}
-  - {x: -.5, y: .5, z: .5}
-  - {x: .5, y: .5, z: .5}
-  - {x: .5, y: -.5, z: .5}
-  - {x: -.5, y: -.5, z: -.5}
-  - {x: -.5, y: .5, z: -.5}
-  - {x: .5, y: .5, z: -.5}
-  - {x: .5, y: -.5, z: -.5}
-  cubeUVs:
-  - {x: 0, y: 0}
-  - {x: 0, y: 0}
-  - {x: 0, y: 0}
-  - {x: 0, y: 0}
-  - {x: 0, y: 0}
-  - {x: 0, y: 0}
-  - {x: 0, y: 0}
-  - {x: 0, y: 0}
-  debugTwo: 1
 --- !u!20 &1773395106
 Camera:
   m_ObjectHideFlags: 0
@@ -3293,31 +3191,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43ce582a35930e042899371fcfbb1102, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mvMgr:
-    mvScale: {x: 0, y: 0, z: 0}
-    numMetavoxelsX: 0
-    numMetavoxelsY: 0
-    numMetavoxelsZ: 0
-    numVoxelsInMetavoxel: 0
-    numBorderVoxels: 0
-    updateInterval: 0
-    rayMarchSteps: 0
-    opacityFactor: 0
-    ambientColor: {x: 0, y: 0, z: 0}
-    fadeOutParticles: 0
-    volumeTextureAnisoLevel: 0
-    matFillVolume: {fileID: 0}
-    matRayMarchOver: {fileID: 0}
-    matRayMarchUnder: {fileID: 0}
-    theParticleSystem: {fileID: 0}
-    testLightPlane: {fileID: 0}
-    mvLineColor: {fileID: 0}
-    cubeVertices: []
-    cubeUVs: []
-  mLights:
-  - {fileID: 1195387753}
+  dirLight: {fileID: 1195387753}
   lookSpeed: 1
   moveSpeed: 2
   controlsText: {fileID: 1581667316}
   beingMovedText: {fileID: 957975254}
+  theParticleSystem: {fileID: 1946669431}
+  numMetavoxelsX: 7
+  numMetavoxelsY: 7
+  numMetavoxelsZ: 7
+  mvScale: {x: 2, y: 2, z: 2}
+  numVoxelsInMetavoxel: 32
+  numBorderVoxels: 1
+  updateInterval: 1
+  rayMarchSteps: 64
+  opacityFactor: 1
+  ambientColor: {x: .200000003, y: .200000003, z: .200000003}
+  fadeOutParticles: 0
+  volumeTextureAnisoLevel: 0
+  matFillVolume: {fileID: 2100000, guid: 742e800cae20c4547bc14935a578e998, type: 2}
+  matRayMarchOver: {fileID: 2100000, guid: 865bff02ba66c2b4490cdab2d995b16f, type: 2}
+  matRayMarchUnder: {fileID: 2100000, guid: 8461ba2f797724140b96267093939244, type: 2}
   matBlendParticles: {fileID: 2100000, guid: 81bb6726bf20108478e2d39eedcfffce, type: 2}
+  mvLineColor: {fileID: 2100000, guid: e091f90250c3ccc4eb5732506a7b76f6, type: 2}
+  mainSceneRT: {fileID: 0}
+  particlesRT: {fileID: 0}
+  fillMetavoxelRT: {fileID: 0}
