@@ -1,28 +1,34 @@
 The death of billboarded particles in photorealistic games is imminent.
 Most games provide the illusion of 3D particle systems via textured quads that face the 
-camera plane (or) the camera view direction. You move, and these quads move as well.
+camera plane (or) the camera view direction, traditionally called billboards. You move, and these quads move as well.
 
-This makes volumetric lighting and self-shadowing hard, and the illusion breaks down in
-virtual reality.
+This makes volumetric lighting and self-shadowing hard, and the illusion breaks when you walk through the particle system (say, smoke)
+wherein the clipping of billboards is visible (and ugly). 
 
-This repo houses a work-in-progress Unity implementation of Doug Mcnabb's "Sparse 
-Volumetric Particle system". The gist of the idea is:
-(a) The world is a grid of metavoxels (a 3D cube of voxels) that face the light. Each
-	voxel of a metavoxel holds opacity/color information.
-(b) Particles are represented as displaced spheres, and each metavoxel holds information
-	on the particles it covers.
-(c) Metavoxels are "filled" in nearest to farthest order from the light, using a 3D
-	texture to hold voxel data, via a pixel (or) compute shader.
-(d) Metavoxels are rendered as cubes, and raymarched from the eye, with over (and)
-	under alpha-blending based on where the metavoxel is wrt the eye and the light.
-(e) The result of (d) is blended with the main scene, and voila, we have true-3D 
-	particles.
-	
-	
+Treating volumetric particle effects such as smoke, dust & fire in a true 3D sense can yield effects closer to CGI, though making them
+run in real-time requires some hackery and cutting corners.
+
+This repo houses a work-in-progress Unity implementation of Doug Mcnabb's "Sparse Volumetric Particle system". 
+Please check https://software.intel.com/en-us/articles/sparse-procedural-volumetric-rendering for a great overview of the technique and sample code.
+
+The gist of the idea is:
+The world is a grid of metavoxels that face the light. Each metavoxel is a 3D cube of voxels (volumetric pixels) and each voxel holds density and color information.
+
+Particles are represented as radially displaced spheres and use Unity's builtin particle simulation framework. However, they are not rendered by the camera (by tagging them on a separate layer).
+Since we want a realistic effect, we need to account for the light interaction with the particle system.
+
+We do this by filling a 3D texture per metavoxel to represent the volume information of the particles it covers. The metavoxels are filled nearest-to-farthest wrt the light, which lets us propagate light through the grid.
+The above filled metavoxels are raymarched from the eye by rendering each metavoxel as a cube and sampling from the 3D texture (that holds the voxel data).
+This is blended with the scene to give us a realistic volumetric effect.
+
+Assumptions:
+1. The grid in (a) is centered at the origin. Needs to use view/light frustum to make a tight fit grid for a scene.
+2. Only directional lights affect (or light) the volume.
+
 TODO:
-(d) and (e)
-
-BUGS:
-1. The grid in (a) is centered at the origin. Needs to use view/light frustum to create it.
-
+1. The light propagation doesn't account for objects that occlude the volume from the light (i.e., the volume isn't shadowed by the scene)
+	This needs to be fixed in the "fill volume" stage, since the light propagation happens there.
+2. The volume doesn't cast shadows on the scene.
+	This needs to be done in the "ray march" stage.
+3. Add a box primitive
  
