@@ -1,7 +1,11 @@
 ﻿Shader "Custom/RayMarchMetavoxelBlendOver" {
 	Properties{
 		_VolumeTexture("Metavoxel fill data", 3D) = "" {}
-		_LightPropogationTexture("Light Propogation", 2D) = "" {}
+		_LightPropogationTexture("Light Propogation", 2D) = "" {}		
+		SrcFactor ("SrcFactor", Float) = 0
+		DstFactor ("DstFactor", Float) = 0
+		SrcFactorA ("SrcFactorA", Float) = 0
+		DstFactorA ("DstFactorA", Float) = 0
 	}
 SubShader
 		{

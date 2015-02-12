@@ -96,7 +96,7 @@ namespace MetavoxelEngine
         // Resources
         public RenderTexture mainSceneRT; // camera draws all the objects in the scene but for the particles into this
         public RenderTexture particlesRT; // result of raymarching the metavoxels is stored in this    
-        public RenderTexture fillMetavoxelRT; // bind this as RT when filling a metavoxel. we don't sample/use it though..
+        public RenderTexture fillMetavoxelRT, fillMetavoxelRT1; // bind this as RT when filling a metavoxel. we don't sample/use it though..
         private RenderTexture[, ,] mvFillTextures; // 3D textures that hold metavoxel fill data
         private RenderTexture lightPropogationUAV; // Light propogation texture used while filling metavoxels
 
@@ -258,6 +258,16 @@ namespace MetavoxelEngine
                 fillMetavoxelRT.Create();
             }
 
+            if (!fillMetavoxelRT1)
+            {
+                fillMetavoxelRT1 = new RenderTexture(numVoxelsInMetavoxel, numVoxelsInMetavoxel, 0, RenderTextureFormat.ARGB32);
+                fillMetavoxelRT1.useMipMap = false;
+                fillMetavoxelRT1.isVolume = false;
+                fillMetavoxelRT1.enableRandomWrite = false;
+                fillMetavoxelRT1.Create();
+            }
+
+
             if (!lightPropogationUAV)
             {
                 lightPropogationUAV = new RenderTexture(numMetavoxelsX * numVoxelsInMetavoxel, numMetavoxelsY * numVoxelsInMetavoxel, 0 /* no need depth surface, just color*/, RenderTextureFormat.RFloat);
@@ -382,11 +392,7 @@ namespace MetavoxelEngine
             Graphics.SetRenderTarget(lightPropogationUAV);
             GL.Clear(false, true, Color.red);
             SetFillPassConstants();
-
-            // Set a RT the size of a metavoxel slice to fill each metavoxel (the RT isn't written to)
-            //Graphics.SetRenderTarget(fillMetavoxelRT);
-            RenderTexture.active = fillMetavoxelRT;
-
+         
             // process the metavoxels in order of Z-slice closest to light to farthest
             for (int zz = 0; zz < numMetavoxelsZ; zz++)
             {
@@ -435,6 +441,7 @@ namespace MetavoxelEngine
 
             // don't need to clear the mv fill texture since we write to every pixel on it (on every depth slice)
             // regardless of whether that pixel is covered or not.   
+            Graphics.SetRenderTarget(fillMetavoxelRT);
             Graphics.SetRandomWriteTarget(1, mvFillTextures[zz, yy, xx]);
             Graphics.SetRandomWriteTarget(2, lightPropogationUAV);
 
@@ -466,10 +473,10 @@ namespace MetavoxelEngine
             matFillVolume.SetVector("_MetavoxelIndex", new Vector3(xx, yy, zz));
             matFillVolume.SetInt("_NumParticles", numParticles);
             matFillVolume.SetBuffer("_Particles", dpBuffer);
-            matFillVolume.SetPass(0);
-           
-            //Graphics.Blit(src, src, matFillVolume);
-            Graphics.DrawMeshNow(quadMesh, Vector3.zero, Quaternion.identity);
+            //matFillVolume.SetPass(0);
+
+            Graphics.Blit(fillMetavoxelRT1, fillMetavoxelRT1, matFillVolume, 0);
+            //Graphics.DrawMeshNow(quadMesh, Vector3.zero, Quaternion.identity);
             // cleanup
             dpBuffer.Release();
             Graphics.ClearRandomWriteTargets();

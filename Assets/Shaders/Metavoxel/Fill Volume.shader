@@ -10,8 +10,8 @@
 		#pragma target 5.0
 		#pragma exclude_renderers flash gles opengl
 		#pragma enable_d3d11_debug_symbols
-		//#pragma vertex vert_img
-		#pragma vertex vert
+		#pragma vertex vert_img
+		//#pragma vertex vert
 		#pragma fragment frag
 		#define NUM_VOXELS 32
 
@@ -120,8 +120,8 @@
 		// For each voxel in the voxel column of our metavoxel, we iterate through all the displaced particles covered by the metavoxel and test for coverage. 
 		// If a displaced particle covers the voxel's center, we calculate its contribution to "density" and "ao". 
 		float4 
-		//frag(v2f_img i) : COLOR
-		frag(v2f i) : COLOR
+		frag(v2f_img i) : COLOR
+		//frag(v2f i) : COLOR
 		{
 			int slice, pp;
 			float lightIncidentOnVoxel, lightIncidentOnPreviousVoxel;
