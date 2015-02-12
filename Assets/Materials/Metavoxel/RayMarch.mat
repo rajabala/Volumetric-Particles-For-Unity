@@ -6,8 +6,8 @@ Material:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: RayMarchBlendOver
-  m_Shader: {fileID: 4800000, guid: bc89dda340d8b4c45b565b66a9088d40, type: 3}
+  m_Name: RayMarch
+  m_Shader: {fileID: 4800000, guid: c62d2fea6be6f2c4788c9ee70dbba3f1, type: 3}
   m_ShaderKeywords:
   - BLEND_UNDER
   m_CustomRenderQueue: -1
@@ -39,19 +39,19 @@ Material:
       data:
         first:
           name: SrcFactor
-        second: 0
+        second: 8
       data:
         first:
           name: DstFactor
-        second: 0
+        second: 1
       data:
         first:
           name: SrcFactorA
-        second: 0
+        second: 8
       data:
         first:
           name: DstFactorA
-        second: 0
+        second: 1
     m_Colors:
       data:
         first:

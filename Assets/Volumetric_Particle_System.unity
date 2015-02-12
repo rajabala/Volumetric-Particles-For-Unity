@@ -3050,11 +3050,11 @@ MonoBehaviour:
   moveSpeed: 2
   controlsText: {fileID: 1581667316}
   beingMovedText: {fileID: 957975254}
-  theParticleSystem: {fileID: 650980972}
-  numMetavoxelsX: 20
-  numMetavoxelsY: 20
-  numMetavoxelsZ: 20
-  mvScale: {x: 1, y: 1, z: 1}
+  particleSys: {fileID: 650980975}
+  numMetavoxelsX: 16
+  numMetavoxelsY: 16
+  numMetavoxelsZ: 16
+  mvScale: {x: 2, y: 2, z: 2}
   numVoxelsInMetavoxel: 32
   numBorderVoxels: 1
   updateInterval: 1
@@ -3064,8 +3064,7 @@ MonoBehaviour:
   fadeOutParticles: 0
   volumeTextureAnisoLevel: 0
   matFillVolume: {fileID: 2100000, guid: 742e800cae20c4547bc14935a578e998, type: 2}
-  matRayMarchOver: {fileID: 2100000, guid: 865bff02ba66c2b4490cdab2d995b16f, type: 2}
-  matRayMarchUnder: {fileID: 2100000, guid: 8461ba2f797724140b96267093939244, type: 2}
+  matRayMarch: {fileID: 2100000, guid: 865bff02ba66c2b4490cdab2d995b16f, type: 2}
   matBlendParticles: {fileID: 2100000, guid: 81bb6726bf20108478e2d39eedcfffce, type: 2}
   mvLineColor: {fileID: 2100000, guid: e091f90250c3ccc4eb5732506a7b76f6, type: 2}
   mainSceneRT: {fileID: 0}

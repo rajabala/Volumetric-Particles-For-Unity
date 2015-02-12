@@ -67,7 +67,7 @@ namespace MetavoxelEngine
         public Light dirLight;
         public float lookSpeed, moveSpeed;
         public GUIText controlsText, beingMovedText;
-        public GameObject theParticleSystem;
+        public ParticleSystem particleSys;
 
         public int numMetavoxelsX, numMetavoxelsY, numMetavoxelsZ; // # metavoxels in the grid along x, y & z
         public Vector3 mvScale;// world units
@@ -81,8 +81,7 @@ namespace MetavoxelEngine
         public int volumeTextureAnisoLevel;
 
         public Material matFillVolume;
-        public Material matRayMarchOver;
-        public Material matRayMarchUnder;
+        public Material matRayMarch;
         public Material matBlendParticles; // material to blend the raymarched volume with the camera's RT    
         public Material mvLineColor;
 
@@ -100,8 +99,7 @@ namespace MetavoxelEngine
         private RenderTexture[, ,] mvFillTextures; // 3D textures that hold metavoxel fill data
         private RenderTexture lightPropogationUAV; // Light propogation texture used while filling metavoxels
 
-        private AABBForParticles pBounds;
-        private ParticleSystem ps;
+        //private AABBForParticles pBounds;
         private int numParticlesEmitted;
 
         // Light movement detection
@@ -139,8 +137,7 @@ namespace MetavoxelEngine
             // [perf threat] Unity is going to do a Z-prepass simply because of this line.             
 
             mvScaleWithBorder = mvScale * numVoxelsInMetavoxel / (numVoxelsInMetavoxel - 2 * numBorderVoxels);
-            pBounds = theParticleSystem.GetComponent<AABBForParticles>();
-            ps = theParticleSystem.GetComponent<ParticleSystem>();            
+            //pBounds = particleSys.GetComponent<AABBForParticles>();        
             
             showMetavoxelCoverage = false;
             showNumSamples = false;
@@ -349,8 +346,8 @@ namespace MetavoxelEngine
 
         void UpdateMetavoxelParticleCoverage()
         {
-            ParticleSystem.Particle[] parts = new ParticleSystem.Particle[ps.maxParticles];
-            numParticlesEmitted = ps.GetParticles(parts);
+            ParticleSystem.Particle[] parts = new ParticleSystem.Particle[particleSys.maxParticles];
+            numParticlesEmitted = particleSys.GetParticles(parts);
 
             for (int zz = 0; zz < numMetavoxelsZ; zz++)
             {
@@ -367,7 +364,7 @@ namespace MetavoxelEngine
                         for (int pp = 0; pp < numParticlesEmitted; pp++)
                         {
                             // xform particle to mv space to make it a sphere-aabb intersection test
-                            Vector3 wsParticlePos = theParticleSystem.transform.localToWorldMatrix.MultiplyPoint3x4(parts[pp].position);
+                            Vector3 wsParticlePos = particleSys.transform.localToWorldMatrix.MultiplyPoint3x4(parts[pp].position);
                             Vector3 mvParticlePos = worldToMetavoxelMatrix.MultiplyPoint3x4(wsParticlePos);
                             float radius = (parts[pp].size / 2f) / mvScaleWithBorder.x;
 
@@ -453,7 +450,7 @@ namespace MetavoxelEngine
 
             foreach (ParticleSystem.Particle p in mvGrid[zz, yy, xx].mParticlesCovered)
             {
-                Vector3 wsPos = theParticleSystem.transform.localToWorldMatrix.MultiplyPoint3x4(p.position);
+                Vector3 wsPos = particleSys.transform.localToWorldMatrix.MultiplyPoint3x4(p.position);
                 dpArray[index].mWorldToLocal = Matrix4x4.TRS(wsPos, Quaternion.identity, new Vector3(p.size, p.size, p.size)).inverse;
                 dpArray[index].mWorldPos = wsPos;
                 dpArray[index].mRadius = p.size / 2f;
@@ -521,6 +518,14 @@ namespace MetavoxelEngine
             // Render metavoxel slices to the "left" of the camera in
             // (a) increasing order along the direction of the light
             // (b) farthest-to-nearest from the camera per slice
+
+            // Blend One OneMinusSrcAlpha, One OneMinusSrcAlpha // Back to Front blending (blend over)
+            matRayMarch.SetInt("SrcFactor", (int) UnityEngine.Rendering.BlendMode.One);
+            matRayMarch.SetInt("DstFactor", (int) UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+            matRayMarch.SetInt("SrcFactorA", (int) UnityEngine.Rendering.BlendMode.One);
+            matRayMarch.SetInt("DstFactorA", (int) UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+
+
             for (int zz = 0; zz < zBoundary; zz++)
             {
                 foreach (MetavoxelSortData vv in mvPerSliceFarToNear)
@@ -530,7 +535,7 @@ namespace MetavoxelEngine
 
                     if (mvGrid[zz, yy, xx].mParticlesCovered.Count != 0)
                     {
-                        RenderMetavoxel(xx, yy, zz, matRayMarchOver, mvCount++);
+                        RenderMetavoxel(xx, yy, zz, mvCount++);
                     }
 
                 }
@@ -540,6 +545,13 @@ namespace MetavoxelEngine
             // Render metavoxel slices to the "right" of the camera in
             // (a) increasing order along the direction of the light
             // (b) nearest-to-farthest from the camera per slice
+            
+			// Blend OneMinusDstAlpha One, OneMinusDstAlpha One // Front to Back blending (blend under)
+            matRayMarch.SetInt("SrcFactor", (int)UnityEngine.Rendering.BlendMode.OneMinusDstAlpha);
+            matRayMarch.SetInt("DstFactor", (int)UnityEngine.Rendering.BlendMode.One);
+            matRayMarch.SetInt("SrcFactorA", (int)UnityEngine.Rendering.BlendMode.OneMinusDstAlpha);
+            matRayMarch.SetInt("DstFactorA", (int)UnityEngine.Rendering.BlendMode.One);
+
 
             mvPerSliceFarToNear.Reverse(); // make it nearest-to-farthest
 
@@ -554,7 +566,7 @@ namespace MetavoxelEngine
                     {
                         //matRayMarchUnder.renderQueue = 5000 + mvCount;
                         //Debug.Log("N2F" + mvCount + "(" + vv.x + "," + vv.y + "," + zz + ") at dist " + cam2mv.sqrMagnitude);
-                        RenderMetavoxel(xx, yy, zz, matRayMarchUnder, mvCount++);
+                        RenderMetavoxel(xx, yy, zz, mvCount++);
                     }
 
                 }
@@ -565,78 +577,71 @@ namespace MetavoxelEngine
 
         void SetRaymarchPassConstants()
         {
-            Material[] over_under = { matRayMarchOver, matRayMarchUnder };
+            // Resources
+            matRayMarch.SetTexture("_LightPropogationTexture", lightPropogationUAV);
 
-            foreach (Material m in over_under)
-            {
-                // Resources
-                m.SetTexture("_LightPropogationTexture", lightPropogationUAV);
+            // Metavoxel grid uniforms
+            matRayMarch.SetFloat("_NumVoxels", numVoxelsInMetavoxel);
+            matRayMarch.SetVector("_MetavoxelSize", mvScale);
+            matRayMarch.SetVector("_MetavoxelGridDim", new Vector3(numMetavoxelsX, numMetavoxelsY, numMetavoxelsZ));
+            matRayMarch.SetInt("_MetavoxelBorderSize", numBorderVoxels);
 
-                // Metavoxel grid uniforms
-                m.SetFloat("_NumVoxels", numVoxelsInMetavoxel);
-                m.SetVector("_MetavoxelSize", mvScale);
-                m.SetVector("_MetavoxelGridDim", new Vector3(numMetavoxelsX, numMetavoxelsY, numMetavoxelsZ));
-                m.SetInt("_MetavoxelBorderSize", numBorderVoxels);
+            // Camera uniforms
+            matRayMarch.SetVector("_CameraWorldPos", Camera.main.transform.position);
+            // Unity sets the _CameraToWorld and _WorldToCamera constant buffers by default - but these would be on the metavoxel camera
+            // that's attached to the directional light. We're interested in the main camera's matrices, not the pseudo-mv cam!
+            matRayMarch.SetMatrix("_CameraToWorldMatrix", Camera.main.cameraToWorldMatrix);
+            matRayMarch.SetMatrix("_WorldToCameraMatrix", Camera.main.worldToCameraMatrix);
+            matRayMarch.SetFloat("_Fov", Mathf.Deg2Rad * Camera.main.fieldOfView);
+            matRayMarch.SetFloat("_Near", Camera.main.nearClipPlane);
+            matRayMarch.SetFloat("_Far", Camera.main.farClipPlane);
+            matRayMarch.SetVector("_ScreenRes", new Vector2(Screen.width, Screen.height));
 
-                // Camera uniforms
-                m.SetVector("_CameraWorldPos", Camera.main.transform.position);
-                // Unity sets the _CameraToWorld and _WorldToCamera constant buffers by default - but these would be on the metavoxel camera
-                // that's attached to the directional light. We're interested in the main camera's matrices, not the pseudo-mv cam!
-                m.SetMatrix("_CameraToWorldMatrix", Camera.main.cameraToWorldMatrix);
-                m.SetMatrix("_WorldToCameraMatrix", Camera.main.worldToCameraMatrix);
-                m.SetFloat("_Fov", Mathf.Deg2Rad * Camera.main.fieldOfView);
-                m.SetFloat("_Near", Camera.main.nearClipPlane);
-                m.SetFloat("_Far", Camera.main.farClipPlane);
-                m.SetVector("_ScreenRes", new Vector2(Screen.width, Screen.height));
+            // Ray march uniforms
+            matRayMarch.SetInt("_NumSteps", rayMarchSteps);
+            //m.SetVector("_AABBMin", pBounds.aabb.min);
+            //m.SetVector("_AABBMax", pBounds.aabb.max);
 
-                // Ray march uniforms
-                m.SetInt("_NumSteps", rayMarchSteps);
-                //m.SetVector("_AABBMin", pBounds.aabb.min);
-                //m.SetVector("_AABBMax", pBounds.aabb.max);
+            int showMetavoxelCoverage_i = 0;
+            if (showMetavoxelCoverage)
+                showMetavoxelCoverage_i = 1;
 
-                int showMetavoxelCoverage_i = 0;
-                if (showMetavoxelCoverage)
-                    showMetavoxelCoverage_i = 1;
+            matRayMarch.SetInt("_ShowMvCoverage", showMetavoxelCoverage_i);
 
-                m.SetInt("_ShowMvCoverage", showMetavoxelCoverage_i);
+            int showNumSamples_i = 0;
+            if (showNumSamples)
+                showNumSamples_i = 1;
 
-                int showNumSamples_i = 0;
-                if (showNumSamples)
-                    showNumSamples_i = 1;
+            matRayMarch.SetInt("_ShowNumSamples", showNumSamples_i);
 
-                m.SetInt("_ShowNumSamples", showNumSamples_i);
+            //int showMetavoxelDrawOrder_i = 0;
+            //if (showMetavoxelDrawOrder)
+            //    showMetavoxelDrawOrder_i = 1;
 
-                //int showMetavoxelDrawOrder_i = 0;
-                //if (showMetavoxelDrawOrder)
-                //    showMetavoxelDrawOrder_i = 1;
-
-                //m.SetInt("_ShowMetavoxelDrawOrder", showMetavoxelDrawOrder_i);
-
-            }
+            //m.SetInt("_ShowMetavoxelDrawOrder", showMetavoxelDrawOrder_i);
         }
 
-        void RenderMetavoxel(int xx, int yy, int zz, Material m, int orderIndex)
+
+        void RenderMetavoxel(int xx, int yy, int zz, int orderIndex)
         {
-
-
             //Debug.Log("rendering mv " + xx + "," + yy +"," + zz);
             mvFillTextures[zz, yy, xx].filterMode = FilterMode.Bilinear;
             mvFillTextures[zz, yy, xx].wrapMode = TextureWrapMode.Repeat;
             mvFillTextures[zz, yy, xx].anisoLevel = volumeTextureAnisoLevel;
 
-            m.SetTexture("_VolumeTexture", mvFillTextures[zz, yy, xx]);
+            matRayMarch.SetTexture("_VolumeTexture", mvFillTextures[zz, yy, xx]);
             Matrix4x4 mvToWorld = Matrix4x4.TRS(mvGrid[zz, yy, xx].mPos,
                                                 mvGrid[zz, yy, xx].mRot,
                                                 mvScale); // border should NOT be included here. we want to rasterize only the pixels covered by the metavoxel
-            m.SetMatrix("_MetavoxelToWorld", mvToWorld);
-            m.SetMatrix("_WorldToMetavoxel", mvToWorld.inverse);
-            m.SetVector("_MetavoxelIndex", new Vector3(xx, yy, zz));
-            m.SetFloat("_ParticleCoverageRatio", mvGrid[zz, yy, xx].mParticlesCovered.Count / (float)numParticlesEmitted);
+            matRayMarch.SetMatrix("_MetavoxelToWorld", mvToWorld);
+            matRayMarch.SetMatrix("_WorldToMetavoxel", mvToWorld.inverse);
+            matRayMarch.SetVector("_MetavoxelIndex", new Vector3(xx, yy, zz));
+            matRayMarch.SetFloat("_ParticleCoverageRatio", mvGrid[zz, yy, xx].mParticlesCovered.Count / (float)numParticlesEmitted);
             //m.SetInt("_OrderIndex", orderIndex);
 
             // Absence of the line below caused several hours of debugging madness.
             // SetPass needs to be called AFTER all material properties are set prior to every DrawMeshNow call.
-            bool setPass = m.SetPass(0);
+            bool setPass = matRayMarch.SetPass(0);
             if (!setPass)
             {
                 Debug.LogError("material set pass returned false;..");

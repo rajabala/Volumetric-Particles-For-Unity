@@ -1,16 +1,20 @@
-﻿Shader "Custom/RayMarchMetavoxelBlendUnder" {
+﻿Shader "Custom/RayMarchMetavoxel" {
 	Properties{
 		_VolumeTexture("Metavoxel fill data", 3D) = "" {}
-		_LightPropogationTexture("Light Propogation", 2D) = "" {}
+		_LightPropogationTexture("Light Propogation", 2D) = "" {}		
+		SrcFactor ("SrcFactor", Int) = 0
+		DstFactor ("DstFactor", Int) = 0
+		SrcFactorA ("SrcFactorA", Int) = 0
+		DstFactorA ("DstFactorA", Int) = 0
 	}
-	SubShader
+SubShader
 		{
 			Pass
 			{
 				Cull Front ZWrite Off ZTest Less
-				// Syntax: Blend SrcFactor DstFactor, SrcFactorA DstFactorA
-				// Cr = Cs * (1 - Ad) + Cd  &  Ar = As * (1 - Ad) + Ad
-				Blend OneMinusDstAlpha One, OneMinusDstAlpha One // Front to Back blending (blend under)-- this is b/w metavoxels.
+				// Syntax: Blend SrcFactor DstFactor, SrcFactorA DstFactorA				
+				// Set these properties via script to avoid having two shaders
+				Blend [SrcFactor] [DstFactor], [SrcFactorA] [DstFactorA]
 				BlendOp Add
 
 				CGPROGRAM

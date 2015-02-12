@@ -17,13 +17,13 @@
 
 		#include "UnityCG.cginc"
 
-		struct vs_input {
-			float4 vertex : POSITION;
-		};
+		//struct vs_input {
+		//	float4 vertex : POSITION;
+		//};
 
-		struct v2f {
-			float4 pos : SV_POSITION;
-		};
+		//struct v2f {
+		//	float4 pos : SV_POSITION;
+		//};
 
 		// particle
 		struct Particle {
@@ -108,12 +108,12 @@
 			v.ao = netDisplacement;
 		}
 
-		// Mesh is already in clip space. Just pipe it down.
-		v2f vert(vs_input i) {
-			v2f o;
-			o.pos = i.vertex;
-			return o;
-		}
+		//// Mesh is already in clip space. Just pipe it down.
+		//v2f vert(vs_input i) {
+		//	v2f o;
+		//	o.pos = i.vertex;
+		//	return o;
+		//}
 
 
 		// Fragment shader fills a "voxel column" of the metavoxel's volume texture
