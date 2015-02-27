@@ -26,9 +26,9 @@ Assumptions:
 2. Only directional lights affect (or light) the volume.
 
 TODO:
-1. The light propagation doesn't account for objects that occlude the volume from the light (i.e., the volume isn't shadowed by the scene)
-	This needs to be fixed in the "fill volume" stage, since the light propagation happens there.
-2. The volume doesn't cast shadows on the scene.
-	This needs to be done in the "ray march" stage.
-3. Add a box primitive
+- The volume doesn't cast shadows on the scene. This needs to be done in the "ray march" stage.
+- Voxel border is assumed to be 1 in the Fill Volume shader. Make it a variable.
+- Fix sampling artifacts when viewing the metavoxel grid at oblique angles 
+- Add more UI elements to play with the scene.
+- Add a box primitive
  

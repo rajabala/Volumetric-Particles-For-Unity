@@ -214,12 +214,8 @@ SubShader
 					// Blend the samples back-to-front in the process										
 					for (step = tend; step >= tstart; step--) {			
 						float3 samplePos = mvRayPos + 0.5; //[-0.5, 0.5] -->[0, 1]
-						// the metavoxel texture's Z follows the light direction, while the actual metavoxel orientation is towards the light
-						// see get_voxel_world_pos(..) in Fill Volume.shader ; we're mapping slice [0, n-1] to [+0.5, -0.5] in mv space
-						samplePos.z = 1.0 - samplePos.z; 
-
-
-						//// adjust for the metavoxel border -- the border voxels are only for filtering
+						
+						// adjust for the metavoxel border -- the border voxels are only for filtering
 						samplePos = samplePos * (1.0 - 2.0 * borderVoxelOffset) + borderVoxelOffset;  // [0, 1] ---> [offset, 1 - offset]
 
 						// supply 0 derivatives when sampling -- this ensures that the loop doesn't have to unrolled
