@@ -98,7 +98,7 @@ namespace MetavoxelEngine
         private RenderTexture particlesRT; // result of raymarching the metavoxels is stored in this    
         private RenderTexture fillMetavoxelRT, fillMetavoxelRT1; // bind this as RT when filling a metavoxel. we don't sample/use it though..
         private RenderTexture[, ,] mvFillTextures; // 3D textures that hold metavoxel fill data
-        private RenderTexture lightPropogationUAV; // Light propogation texture used while filling metavoxels
+        public RenderTexture lightPropogationUAV; // Light propogation texture used while filling metavoxels
         public RenderTexture lightDepthMap;
 
         // light depth map generation
@@ -114,7 +114,7 @@ namespace MetavoxelEngine
         private Quaternion lastLightRot;
 
         // GUI controls
-        private bool showMetavoxelCoverage, showNumSamples, showMetavoxelDrawOrder;
+        public bool showMetavoxelCoverage, showNumSamples, showMetavoxelDrawOrder;
         private float displacementScale;
 
         private Mesh mesh;
@@ -182,14 +182,14 @@ namespace MetavoxelEngine
 
             RenderTexture.active = mainSceneRT;
             GL.Clear(true, true, Color.black);
-            camera.targetTexture = mainSceneRT;
+            GetComponent<Camera>().targetTexture = mainSceneRT;
         }
 
         //// OnPostRender is called after a camera has finished rendering the scene.
         void OnPostRender()
         {
             // Generate the depth map from the light's pov
-            lightCamera.camera.RenderWithShader(generateLightDepthMapShader, null as string);
+            lightCamera.GetComponent<Camera>().RenderWithShader(generateLightDepthMapShader, null as string);
 
             if (Time.frameCount % updateInterval == 0)
             {
@@ -220,7 +220,7 @@ namespace MetavoxelEngine
             }
 
             // need to set the targetTexture to null, else the Blit doesn't work
-            camera.targetTexture = null;
+            GetComponent<Camera>().targetTexture = null;
             Graphics.Blit(mainSceneRT, null as RenderTexture); // copy to back buffer
         }
 
@@ -232,7 +232,8 @@ namespace MetavoxelEngine
             GUI.Label(new Rect(25, 75, 150, 50), "Displacement Scale [" + displacementScale + "]");
             displacementScale = GUI.HorizontalSlider(new Rect(175, 80, 100, 30), displacementScale, 0.0f, 1.0f);
 
-            showNumSamples = GUI.Toggle(new Rect(25, 100, 200, 30), showNumSamples, "Show steps marched");
+            showMetavoxelDrawOrder = GUI.Toggle(new Rect(25, 100, 200, 30), showMetavoxelDrawOrder, "Show metavoxel draw order");
+            //showNumSamples = GUI.Toggle(new Rect(25, 100, 200, 30), showNumSamples, "Show steps marched");
         }
 
         //-------------------------------  private fns ----------------------------------------
@@ -254,7 +255,7 @@ namespace MetavoxelEngine
                 mainSceneRT.isVolume = false;
                 mainSceneRT.enableRandomWrite = false;
                 mainSceneRT.Create();
-                camera.targetTexture = mainSceneRT;
+                GetComponent<Camera>().targetTexture = mainSceneRT;
             }
 
             if (!fillMetavoxelRT)
@@ -340,15 +341,14 @@ namespace MetavoxelEngine
             lightCamera.transform.localPosition = Vector3.zero;
             lightCamera.transform.localRotation = Quaternion.identity;
             lightCamera.gameObject.SetActive(false);
-
-            Vector3 wsMetavoxelDimensions = new Vector3(numMetavoxelsX, numMetavoxelsY, numMetavoxelsZ);
-            wsMetavoxelDimensions.Scale(mvScaleWithBorder * 0.5f);
-
-            Camera c = lightCamera.AddComponent("Camera") as Camera;
+          
+            Camera c = lightCamera.AddComponent<Camera>() as Camera;
             if (c != null)
             {
                 c.orthographic = true;
-                c.orthographicSize = wsMetavoxelDimensions.y;
+
+                // Set the camera extents to that of the metavoxel grid (vertically.. horizontal part is taken care of by aspect ratio)
+                c.orthographicSize = numMetavoxelsY * mvScale.y;
                 c.targetTexture = lightDepthMap;
                 c.cullingMask = 1 << LayerMask.NameToLayer("Default");
                 c.clearFlags = CameraClearFlags.Depth;
@@ -466,18 +466,19 @@ namespace MetavoxelEngine
             // metavoxel specific stuff
             matFillVolume.SetVector("_MetavoxelGridDim", new Vector3(numMetavoxelsX, numMetavoxelsY, numMetavoxelsZ));
             matFillVolume.SetFloat("_NumVoxels", numVoxelsInMetavoxel);
-            matFillVolume.SetInt("_MetavoxelBorderSize", numBorderVoxels);
+            matFillVolume.SetInt("_MetavoxelBorderSize", Mathf.Clamp(numBorderVoxels, 0, numVoxelsInMetavoxel - 2));
             matFillVolume.SetFloat("_MetavoxelScaleZ", mvScaleWithBorder.z);
 
             // scene related stuff
             // -- light
             matFillVolume.SetTexture("_LightDepthMap", lightDepthMap);
             matFillVolume.SetMatrix("_WorldToLight", lightCamera.transform.worldToLocalMatrix);
+            matFillVolume.SetVector("_LightForward", dirLight.transform.forward.normalized);
             matFillVolume.SetVector("_LightColor", dirLight.color);
             matFillVolume.SetVector("_AmbientColor", ambientColor);
             matFillVolume.SetFloat("_InitLightIntensity", 1.0f);
-            matFillVolume.SetFloat("_NearZ", lightCamera.camera.nearClipPlane);
-            matFillVolume.SetFloat("_FarZ", lightCamera.camera.farClipPlane);
+            matFillVolume.SetFloat("_NearZ", lightCamera.GetComponent<Camera>().nearClipPlane);
+            matFillVolume.SetFloat("_FarZ", lightCamera.GetComponent<Camera>().farClipPlane);
             //matFillVolume.SetMatrix("_LightProjection", lightCamera.camera.projectionMatrix);
 
             // -- particles
@@ -681,11 +682,11 @@ namespace MetavoxelEngine
 
             matRayMarch.SetInt("_ShowNumSamples", showNumSamples_i);
 
-            //int showMetavoxelDrawOrder_i = 0;
-            //if (showMetavoxelDrawOrder)
-            //    showMetavoxelDrawOrder_i = 1;
+            int showMetavoxelDrawOrder_i = 0;
+            if (showMetavoxelDrawOrder)
+                showMetavoxelDrawOrder_i = 1;
 
-            //m.SetInt("_ShowMetavoxelDrawOrder", showMetavoxelDrawOrder_i);
+            matRayMarch.SetInt("_ShowMetavoxelDrawOrder", showMetavoxelDrawOrder_i);
         }
 
 
@@ -704,7 +705,7 @@ namespace MetavoxelEngine
             matRayMarch.SetMatrix("_WorldToMetavoxel", mvToWorld.inverse);
             matRayMarch.SetVector("_MetavoxelIndex", new Vector3(xx, yy, zz));
             matRayMarch.SetFloat("_ParticleCoverageRatio", mvGrid[zz, yy, xx].mParticlesCovered.Count / (float)numParticlesEmitted);
-            //m.SetInt("_OrderIndex", orderIndex);
+            matRayMarch.SetInt("_OrderIndex", orderIndex);
 
             // Absence of the line below caused several hours of debugging madness.
             // SetPass needs to be called AFTER all material properties are set prior to every DrawMeshNow call.
@@ -955,6 +956,7 @@ namespace MetavoxelEngine
                 void OnDrawGizmos()
                 {
                     Gizmos.color = Color.blue;
+                    Vector3 lsWorldOrigin = dirLight.transform.worldToLocalMatrix.MultiplyPoint3x4(Vector3.zero); // xform origin to light space
 
                     for (int zz = 0; zz < numMetavoxelsZ; zz++)
                     {
@@ -964,57 +966,66 @@ namespace MetavoxelEngine
                             {
                                 List<Vector3> points = new List<Vector3>();
 
-
-                                Vector3 lsWorldOrigin = transform.worldToLocalMatrix.MultiplyPoint3x4(Vector3.zero); // xform origin to light space
-                                Vector3 lsOffset = Vector3.Scale(new Vector3(numMetavoxelsX / 2 - xx, numMetavoxelsY / 2 - yy, numMetavoxelsZ / 2 - zz), new Vector3(mvScale.x, mvScale.y, mvScale.z));
-                                Vector3 mvPos = transform.localToWorldMatrix.MultiplyPoint3x4(lsWorldOrigin - lsOffset);
+                                // if the scene isn't playing, the metavoxel grid wouldn't have been created.
+                                // recalculate metavoxel positions and rotations based on the light
+                                Vector3 lsOffset = Vector3.Scale(new Vector3(numMetavoxelsX / 2 - xx, numMetavoxelsY / 2 - yy, numMetavoxelsZ / 2 - zz), mvScale);
+                                Vector3 wsMetavoxelPos = dirLight.transform.localToWorldMatrix.MultiplyPoint3x4(lsWorldOrigin - lsOffset); // using - lsOffset means that zz = 0 is closer to the light
                                 Quaternion q = new Quaternion();
-                                q.SetLookRotation(-transform.forward, transform.up);
+                                q.SetLookRotation(dirLight.transform.forward, dirLight.transform.up);
+                                Gizmos.matrix = Matrix4x4.TRS(wsMetavoxelPos, q, mvScale);
+                                Gizmos.DrawWireCube(Vector3.zero, Vector3.one);
 
-                                float halfWidth = mvScale.x * 0.5f, halfHeight = mvScale.y * 0.5f, halfDepth = mvScale.z * 0.5f;
-                                // back, front --> Z ; top, bot --> Y ; left, right --> X
-                                Vector3 offBotLeftBack = q * new Vector3(-halfWidth, -halfHeight, halfDepth),
-                                        offBotLeftFront = q * new Vector3(-halfWidth, -halfHeight, -halfDepth),
-                                        offTopLeftBack = q * new Vector3(-halfWidth, halfHeight, halfDepth),
-                                        offTopLeftFront = q * new Vector3(-halfWidth, halfHeight, -halfDepth),
-                                        offBotRightBack = q * new Vector3(halfWidth, -halfHeight, halfDepth),
-                                        offBotRightFront = q * new Vector3(halfWidth, -halfHeight, -halfDepth),
-                                        offTopRightBack = q * new Vector3(halfWidth, halfHeight, halfDepth),
-                                        offTopRightFront = q * new Vector3(halfWidth, halfHeight, -halfDepth);
 
-                                // left 
-                                points.Add(mvPos + offBotLeftBack);
-                                points.Add(mvPos + offBotLeftFront);
-                                points.Add(mvPos + offBotLeftFront);
-                                points.Add(mvPos + offTopLeftFront);
-                                points.Add(mvPos + offTopLeftFront);
-                                points.Add(mvPos + offTopLeftBack);
-                                points.Add(mvPos + offTopLeftBack);
-                                points.Add(mvPos + offBotLeftBack);
-                                // right
-                                points.Add(mvPos + offBotRightBack);
-                                points.Add(mvPos + offBotRightFront);
-                                points.Add(mvPos + offBotRightFront);
-                                points.Add(mvPos + offTopRightFront);
-                                points.Add(mvPos + offTopRightFront);
-                                points.Add(mvPos + offTopRightBack);
-                                points.Add(mvPos + offTopRightBack);
-                                points.Add(mvPos + offBotRightBack);
-                                // join left and right
-                                points.Add(mvPos + offTopLeftBack);
-                                points.Add(mvPos + offTopRightBack);
-                                points.Add(mvPos + offTopLeftFront);
-                                points.Add(mvPos + offTopRightFront);
+                                //Vector3 lsWorldOrigin = transform.worldToLocalMatrix.MultiplyPoint3x4(Vector3.zero); // xform origin to light space
+                                //Vector3 lsOffset = Vector3.Scale(new Vector3(numMetavoxelsX / 2 - xx, numMetavoxelsY / 2 - yy, numMetavoxelsZ / 2 - zz), new Vector3(mvScale.x, mvScale.y, mvScale.z));
+                                //Vector3 mvPos = transform.localToWorldMatrix.MultiplyPoint3x4(lsWorldOrigin - lsOffset);
+                                //Quaternion q = new Quaternion();
+                                //q.SetLookRotation(-transform.forward, transform.up);
 
-                                points.Add(mvPos + offBotLeftBack);
-                                points.Add(mvPos + offBotRightBack);
-                                points.Add(mvPos + offBotLeftFront);
-                                points.Add(mvPos + offBotRightFront);
+                                //float halfWidth = mvScale.x * 0.5f, halfHeight = mvScale.y * 0.5f, halfDepth = mvScale.z * 0.5f;
+                                //// back, front --> Z ; top, bot --> Y ; left, right --> X
+                                //Vector3 offBotLeftBack = q * new Vector3(-halfWidth, -halfHeight, halfDepth),
+                                //        offBotLeftFront = q * new Vector3(-halfWidth, -halfHeight, -halfDepth),
+                                //        offTopLeftBack = q * new Vector3(-halfWidth, halfHeight, halfDepth),
+                                //        offTopLeftFront = q * new Vector3(-halfWidth, halfHeight, -halfDepth),
+                                //        offBotRightBack = q * new Vector3(halfWidth, -halfHeight, halfDepth),
+                                //        offBotRightFront = q * new Vector3(halfWidth, -halfHeight, -halfDepth),
+                                //        offTopRightBack = q * new Vector3(halfWidth, halfHeight, halfDepth),
+                                //        offTopRightFront = q * new Vector3(halfWidth, halfHeight, -halfDepth);
 
-                                for (int ii = 0; ii < points.Count; ii += 2)
-                                {
-                                    Gizmos.DrawLine(points[ii], points[ii + 1]);
-                                }
+                                //// left 
+                                //points.Add(mvPos + offBotLeftBack);
+                                //points.Add(mvPos + offBotLeftFront);
+                                //points.Add(mvPos + offBotLeftFront);
+                                //points.Add(mvPos + offTopLeftFront);
+                                //points.Add(mvPos + offTopLeftFront);
+                                //points.Add(mvPos + offTopLeftBack);
+                                //points.Add(mvPos + offTopLeftBack);
+                                //points.Add(mvPos + offBotLeftBack);
+                                //// right
+                                //points.Add(mvPos + offBotRightBack);
+                                //points.Add(mvPos + offBotRightFront);
+                                //points.Add(mvPos + offBotRightFront);
+                                //points.Add(mvPos + offTopRightFront);
+                                //points.Add(mvPos + offTopRightFront);
+                                //points.Add(mvPos + offTopRightBack);
+                                //points.Add(mvPos + offTopRightBack);
+                                //points.Add(mvPos + offBotRightBack);
+                                //// join left and right
+                                //points.Add(mvPos + offTopLeftBack);
+                                //points.Add(mvPos + offTopRightBack);
+                                //points.Add(mvPos + offTopLeftFront);
+                                //points.Add(mvPos + offTopRightFront);
+
+                                //points.Add(mvPos + offBotLeftBack);
+                                //points.Add(mvPos + offBotRightBack);
+                                //points.Add(mvPos + offBotLeftFront);
+                                //points.Add(mvPos + offBotRightFront);
+
+                                //for (int ii = 0; ii < points.Count; ii += 2)
+                                //{
+                                //    Gizmos.DrawLine(points[ii], points[ii + 1]);
+                                //}
                             }
                         }
                     }

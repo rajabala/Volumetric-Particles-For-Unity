@@ -2,14 +2,14 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!21 &2100000
 Material:
-  serializedVersion: 3
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: RayMarch
   m_Shader: {fileID: 4800000, guid: c62d2fea6be6f2c4788c9ee70dbba3f1, type: 3}
-  m_ShaderKeywords:
-  - BLEND_UNDER
+  m_ShaderKeywords: BLEND_UNDER
+  m_LightmapFlags: 5
   m_CustomRenderQueue: -1
   m_SavedProperties:
     serializedVersion: 2

@@ -36,7 +36,7 @@ public class CSFill3DTexture : MonoBehaviour {
             rt.isVolume = true;
             rt.enableRandomWrite = true;
             rt.Create();
-            renderer.material.SetTexture("_Volume", rt);
+            GetComponent<Renderer>().material.SetTexture("_Volume", rt);
         }
     }
 }

@@ -15,7 +15,7 @@ public class Exp1 : MonoBehaviour {
 	void Start () {
         mainRT = new RenderTexture(Screen.width, Screen.height, 0);
         mainRT.Create();
-        camera.targetTexture = mainRT;
+        GetComponent<Camera>().targetTexture = mainRT;
 
         secRT = new RenderTexture(Screen.width, Screen.height, 0);
         secRT.Create();
@@ -27,7 +27,7 @@ public class Exp1 : MonoBehaviour {
         RenderTexture.active = mainRT;
         GL.Clear(true, true, Color.blue);
 
-        camera.targetTexture = mainRT;
+        GetComponent<Camera>().targetTexture = mainRT;
     }
 
 
@@ -39,7 +39,7 @@ public class Exp1 : MonoBehaviour {
 
     void OnRenderImage(RenderTexture src, RenderTexture dest)
     {
-        camera.targetTexture = null;
+        GetComponent<Camera>().targetTexture = null;
 
         if (src == mainRT)
             Debug.Log("src is rt");

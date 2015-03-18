@@ -17,8 +17,8 @@ public class PSFill2DAnd3DTexture : MonoBehaviour {
         CreateResources();
 
         // Don't do unnecessary work on the camera. We don't use rtCam.
-        this.camera.clearFlags = CameraClearFlags.Nothing;
-        this.camera.cullingMask = 0;
+        this.GetComponent<Camera>().clearFlags = CameraClearFlags.Nothing;
+        this.GetComponent<Camera>().cullingMask = 0;
     }
 	
 	// Update is called once per frame
@@ -55,7 +55,7 @@ public class PSFill2DAnd3DTexture : MonoBehaviour {
             rtVol.enableRandomWrite = true;
             rtVol.Create();
             if (rtVol.IsCreated())
-                psCube.renderer.material.SetTexture("_Volume", rtVol);
+                psCube.GetComponent<Renderer>().material.SetTexture("_Volume", rtVol);
         }
 
         if (!rtPlane)
@@ -66,7 +66,7 @@ public class PSFill2DAnd3DTexture : MonoBehaviour {
             rtPlane.enableRandomWrite = true;
             rtPlane.Create();
             if (rtPlane.IsCreated())
-                psPlane.renderer.material.SetTexture("_Plane", rtPlane);
+                psPlane.GetComponent<Renderer>().material.SetTexture("_Plane", rtPlane);
         }
 
         if (!rtCam)
@@ -77,7 +77,7 @@ public class PSFill2DAnd3DTexture : MonoBehaviour {
             rtCam.enableRandomWrite = false;
             rtCam.Create();
             if (rtCam.IsCreated())
-                camera.targetTexture = rtCam;
+                GetComponent<Camera>().targetTexture = rtCam;
         }
     }
 }
