@@ -1,4 +1,4 @@
-﻿Shader "Custom/Blend Particles" {
+﻿Shader "Custom/Composite Particles" {
 	Properties {
 		_MainTex ("Particle Texture", 2D) = "white" {}
 	}

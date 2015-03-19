@@ -1,5 +1,5 @@
 ﻿
-Shader "DX11/Sample 3D Texture" {
+Shader "Custom/Sample 3D Texture" {
 	Properties{
 		_Volume("Volume Texture", 3D) = "blue" {}
 	}

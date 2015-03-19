@@ -1,4 +1,4 @@
-﻿Shader "Custom/GenerateLightDepthMap" {
+﻿Shader "Custom/Generate Light Depth Map" {
 	Properties {
 	}
 	SubShader {

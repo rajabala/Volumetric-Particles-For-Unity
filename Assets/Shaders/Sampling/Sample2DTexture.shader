@@ -1,5 +1,5 @@
 ﻿
-Shader "DX11/Sample 2D Texture" {
+Shader "Custom/Sample 2D Texture" {
 	Properties{
 		_Plane("Plane Texture", 2D) = "blue" {}
 	}

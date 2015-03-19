@@ -69,7 +69,6 @@ int _NumSteps;
 //float4 _AABBMax;
 
 // tmp
-int _ShowMvCoverage;
 int _ShowNumSamples;
 int _ShowMetavoxelDrawOrder;
 int _OrderIndex;
@@ -132,18 +131,6 @@ vert(appdata_base i) {
 float4
 frag(v2f i) : COLOR
 {			
-	if (_ShowMvCoverage == 1) // Color metavoxels that are covered by particles 
-	{
-		if (_ParticleCoverageRatio < 0.15)
-			return green1;
-		else if (_ParticleCoverageRatio < 0.35)
-			return yellow;
-		else if (_ParticleCoverageRatio < 0.55)
-			return orange;
-		else
-			return red;
-	}
-
 	if (_ShowMetavoxelDrawOrder == 1) 
 	{
 		int totalMetavoxels = _MetavoxelGridDim.x * _MetavoxelGridDim.y * _MetavoxelGridDim.z;
