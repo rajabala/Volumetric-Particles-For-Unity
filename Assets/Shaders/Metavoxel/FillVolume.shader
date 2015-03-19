@@ -235,7 +235,7 @@ CBUFFER_END
 			if (_MetavoxelIndex.z != 0) // if metavoxel isn't nearest to light, look up how much light was transmitted by the voxel columns in front of it (wrt the light)
 				lightIncidentOnVoxel *= lightPropogationTex[int2(i.pos.xy + _MetavoxelIndex.xy * _NumVoxels)];
 
-			float diffuseCoeff = 1.0;
+			float diffuseCoeff = 0.5;
 			float lsVoxelDepth = lsVoxel0.z; 
 			int borderVoxelIndex = _NumVoxels;// - _MetavoxelBorderSize;
 

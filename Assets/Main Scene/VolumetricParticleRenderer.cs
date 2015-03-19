@@ -348,7 +348,10 @@ namespace MetavoxelEngine
 
         void UpdatePositionOfCameraAtLight()
         {
-            lightCamera.transform.position = Vector3.zero - dirLight.transform.forward * numMetavoxelsZ * mvScale.z;
+            // ideally we want to set the near plane based on the bounding box of the scene. 
+            // for now, keep it at 200 units from the metavoxel center
+            lightCamera.transform.position = Vector3.zero - dirLight.transform.forward * 200f;
+
             lightCamera.transform.localRotation = Quaternion.identity;            
         }
     
