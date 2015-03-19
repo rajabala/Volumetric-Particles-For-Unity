@@ -168,14 +168,18 @@ namespace MetavoxelEngine
         void OnPostRender()
         {
             // Generate the depth map from the light's pov
+            Camera c = lightCamera.GetComponent<Camera>();
+            Shader.SetGlobalMatrix("_LightProj", c.projectionMatrix);
+            Shader.SetGlobalMatrix("_LightView", lightCamera.transform.worldToLocalMatrix);
             lightCamera.GetComponent<Camera>().RenderWithShader(generateLightDepthMapShader, null as string);
 
             if (Time.frameCount % updateInterval == 0)
             {
                 if (dirLight.transform.rotation != lightOrientation)
                 {
-                    UpdateMetavoxelPositions();
                     lightOrientation = dirLight.transform.rotation;
+                    UpdateMetavoxelPositions();
+                    UpdatePositionOfCameraAtLight();
                 }
 
                 UpdateMetavoxelParticleCoverage();
@@ -306,8 +310,9 @@ namespace MetavoxelEngine
             lightCamera = new GameObject();
             lightCamera.name = "LightCamera";
             lightCamera.transform.parent = dirLight.transform;
-            lightCamera.transform.localPosition = Vector3.zero;
-            lightCamera.transform.localRotation = Quaternion.identity;
+            // make the shadow map camera look at the center of the metavoxel grid
+            UpdatePositionOfCameraAtLight();
+
             lightCamera.gameObject.SetActive(false);
           
             Camera c = lightCamera.AddComponent<Camera>() as Camera;
@@ -316,10 +321,18 @@ namespace MetavoxelEngine
                 c.orthographic = true;
 
                 // Set the camera extents to that of the metavoxel grid (vertically.. horizontal part is taken care of by aspect ratio)
-                c.orthographicSize = numMetavoxelsY * mvScale.y;
+                // setting ortho size below wont work, since l,r are t,b scaled by aspect ratio. we need a tight fit to the metavoxel grid
+                // so we need to explicitly generate the projection matrix as we need it
+                //c.orthographicSize = numMetavoxelsY * mvScale.y * 0.5f; // Camera's half-vertical-size when in orthographic mode.
+
+                float r = numMetavoxelsX * mvScale.x * 0.5f, t = numMetavoxelsY * mvScale.y * 0.5f;
+
+                Matrix4x4 orthoProjectionMatrix = Matrix4x4.Ortho(-r, r, -t, t, 0.3f, 1000f);
+                c.projectionMatrix = orthoProjectionMatrix; // todo: is this pixel correct? check http://docs.unity3d.com/ScriptReference/GL.LoadPixelMatrix.html
+
                 c.targetTexture = lightDepthMap;
                 c.cullingMask = 1 << LayerMask.NameToLayer("Default");
-                c.clearFlags = CameraClearFlags.Depth;
+                c.clearFlags = CameraClearFlags.Depth | CameraClearFlags.Color;
                 c.useOcclusionCulling = false;
             }
             else
@@ -330,6 +343,13 @@ namespace MetavoxelEngine
             //c.projectionMatrix = Matrix4x4.Ortho(-wsMetavoxelDimensions.x, wsMetavoxelDimensions.x,
             //                                               -wsMetavoxelDimensions.y, wsMetavoxelDimensions.y,
             //                                               0.3f, 1000);
+        }
+
+
+        void UpdatePositionOfCameraAtLight()
+        {
+            lightCamera.transform.position = Vector3.zero - dirLight.transform.forward * numMetavoxelsZ * mvScale.z;
+            lightCamera.transform.localRotation = Quaternion.identity;            
         }
     
 
@@ -443,7 +463,9 @@ namespace MetavoxelEngine
             matFillVolume.SetFloat("_InitLightIntensity", 1.0f);
             matFillVolume.SetFloat("_NearZ", lightCamera.GetComponent<Camera>().nearClipPlane);
             matFillVolume.SetFloat("_FarZ", lightCamera.GetComponent<Camera>().farClipPlane);
-            //matFillVolume.SetMatrix("_LightProjection", lightCamera.camera.projectionMatrix);
+
+            Camera c = lightCamera.GetComponent<Camera>();
+            matFillVolume.SetMatrix("_LightProjection", c.projectionMatrix);
 
             // -- particles
             matFillVolume.SetFloat("_OpacityFactor", opacityFactor);

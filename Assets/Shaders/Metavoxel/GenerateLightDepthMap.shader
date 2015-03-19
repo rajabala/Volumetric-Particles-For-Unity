@@ -11,7 +11,6 @@
 		#pragma vertex vert		
 		#pragma fragment frag
 		
-
 		#include "UnityCG.cginc"
 
 		struct v2f {
@@ -22,12 +21,12 @@
 		v2f vert(appdata_base i) 
 		{
 			v2f o;					
-			o.pos = mul(UNITY_MATRIX_MVP, i.vertex);		
+			o.pos = mul(UNITY_MATRIX_MVP, i.vertex);	
 			return o;
 		}
 
-		float4 frag(v2f i) : COLOR
-		{
+		float4 frag(v2f i) : COLOR		
+		{					
 			return float4(1,1,1,1); // Invoking this shader with only a depth texture bound makes this line useless (i.e., only the depth is written to. Color isn't even bound)
 		}
 

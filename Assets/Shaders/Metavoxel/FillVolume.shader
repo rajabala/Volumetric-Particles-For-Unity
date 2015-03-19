@@ -8,7 +8,7 @@ SubShader {
 	Cull Off ZWrite Off ZTest Off
 	CGPROGRAM
 	#pragma target 5.0
-	#pragma exclude_renderers flash gles opengl
+	#pragma exclude_renderers flash
 	#pragma enable_d3d11_debug_symbols
 	#pragma vertex vert_img		
 	//#pragma vertex vert
@@ -69,6 +69,7 @@ CBUFFER_END
 	// -- light stuff
 CBUFFER_START(LightConstants)
 	float4x4 _WorldToLight;		
+	float4x4 _LightProjection;
 	float3 _LightForward; // worldspace
 	float3 _LightColor;			
 	float3 _AmbientColor;
@@ -202,10 +203,10 @@ CBUFFER_END
 		float2 lsTexCoord = (i.pos.xy + _MetavoxelIndex.xy * _NumVoxels) / (_MetavoxelGridDim.xy * _NumVoxels);
 		// don't need to invert the y component of UV (even though Unity renders to the depth texture with Y inverted).
 		float d = tex2D(_LightDepthMap, lsTexCoord); // [0,1]						
-		float a = _FarZ * rcp(_FarZ - _NearZ), b = -1.0 * _FarZ * _NearZ * rcp(_FarZ - _NearZ);
+		float a = rcp(_FarZ - _NearZ), b = -_NearZ * a;			
 		float bias = 0.1;
-		float lsSceneDepth = b * rcp(d - a) + bias; // light space depth of the occluder
-
+		float lsSceneDepth = (d - b) * rcp(a);
+	
 		float lightTransmittedByVoxelColumn;
 
 		if (lsSceneDepth < lsVoxel0.z) 
