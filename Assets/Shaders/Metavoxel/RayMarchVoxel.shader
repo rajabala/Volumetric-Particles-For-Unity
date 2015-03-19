@@ -43,35 +43,41 @@ sampler3D _VolumeTexture;
 sampler2D _LightPropogationTexture;
 
 // Metavoxel uniforms
-float4x4 _MetavoxelToWorld;
-float4x4 _WorldToMetavoxel;
-float3 _MetavoxelIndex;
-float3 _MetavoxelGridDim;
-float3 _MetavoxelSize;
-float _ParticleCoverageRatio; 
-float _NumVoxels; // metavoxel's voxel dimensions
-int _MetavoxelBorderSize;
-//float3 _MetavoxelScale;
+CBUFFER_START(MetavoxelConstants)
+	float4x4 _MetavoxelToWorld;
+	float4x4 _WorldToMetavoxel;
+	float3 _MetavoxelIndex;	
+	float _ParticleCoverageRatio; 
+CBUFFER_END
 
+CBUFFER_START(VolumeConstants)
+	float3 _MetavoxelGridDim;
+	float3 _MetavoxelSize;
+	float _NumVoxels; // metavoxel's voxel dimensions
+	int _MetavoxelBorderSize;	
+	int _NumRaymarchStepsPerMV;
+	//float4 _AABBMin;
+	//float4 _AABBMax;
+	//float3 _MetavoxelScale;
+CBUFFER_END
 
 // Camera uniforms
-float4x4 _CameraToWorldMatrix; // need to explicitly define this to get the main camera's matrices
-float4x4 _WorldToCameraMatrix;
-float3 _CameraWorldPos;
-float _Fov;
-//float _Near;
-//float _Far;
-float4 _ScreenRes;
-
-// Ray march constants
-int _NumSteps;
-//float4 _AABBMin;
-//float4 _AABBMax;
+CBUFFER_START(CameraConstants)
+	float4x4 _CameraToWorldMatrix; // need to explicitly define this to get the main camera's matrices
+	float4x4 _WorldToCameraMatrix;
+	float3 _CameraWorldPos;
+	float _Fov;
+	//float _Near;
+	//float _Far;
+	float4 _ScreenRes;
+CBUFFER_END
 
 // tmp
-int _ShowNumSamples;
-int _ShowMetavoxelDrawOrder;
-int _OrderIndex;
+CBUFFER_START(TmpConstants)
+	int _ShowNumSamples;
+	int _ShowMetavoxelDrawOrder;
+	int _OrderIndex;
+CBUFFER_END
 
 struct Ray {
 	float3 o; // origin
@@ -171,7 +177,7 @@ frag(v2f i) : COLOR
 	float3 mvAABBEnd	= mul(CameraToMetavoxel, float4(csAABBEnd, 1));
 
 	float3 mvRay = mvAABBEnd - mvAABBStart;
-	float totalRayMarchSteps = n * float(_NumSteps);
+	float totalRayMarchSteps = n * float(_NumRaymarchStepsPerMV);
 	float oneOverTotalRayMarchSteps = rcp(totalRayMarchSteps);
 
 	float stepSize = sqrt(dot(mvRay, mvRay)) * oneOverTotalRayMarchSteps;

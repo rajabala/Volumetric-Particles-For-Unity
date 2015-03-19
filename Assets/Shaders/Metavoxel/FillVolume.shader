@@ -59,30 +59,37 @@ SubShader {
 	sampler2D _LightDepthMap;
 		
 	// Current metavoxel's constants
+CBUFFER_START(MetavoxelConstants)
 	float4x4 _MetavoxelToWorld;	
 	float3 _MetavoxelIndex;
 	int _NumParticles;		
+CBUFFER_END
 		
 	// Uniforms over entire fill pass
 	// -- light stuff
+CBUFFER_START(LightConstants)
 	float4x4 _WorldToLight;		
 	float3 _LightForward; // worldspace
 	float3 _LightColor;			
 	float3 _AmbientColor;
 	float _InitLightIntensity;
 	float _NearZ, _FarZ;	
+CBUFFER_END
 
 	// -- metavoxel stuff
+CBUFFER_START(VolumeConstants)
 	float3 _MetavoxelGridDim;		
 	float _NumVoxels; // (nv) each metavoxel is made up of nv * nv * nv voxels
 	int _MetavoxelBorderSize;
 	float _MetavoxelScaleZ;
-		
+CBUFFER_END
+	
 	// -- particle stuff
+CBUFFER_START(ParticleConstants)
 	float _OpacityFactor;
 	int _FadeOutParticles;
 	float _DisplacementScale;
-		
+CBUFFER_END	
 
 	// helper methods
 	float4 
