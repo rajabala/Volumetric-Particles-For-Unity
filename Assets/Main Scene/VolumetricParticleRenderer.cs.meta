@@ -1,8 +1,23 @@
 fileFormatVersion: 2
 guid: 43ce582a35930e042899371fcfbb1102
+timeCreated: 1426787257
+licenseType: Free
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - dirLight: {instanceID: 0}
+  - particleSys: {instanceID: 0}
+  - guiOptions: {instanceID: 0}
+  - matFillVolume: {fileID: 2100000, guid: 742e800cae20c4547bc14935a578e998, type: 2}
+  - matRayMarch: {fileID: 2100000, guid: 865bff02ba66c2b4490cdab2d995b16f, type: 2}
+  - matBlendParticles: {fileID: 2100000, guid: 81bb6726bf20108478e2d39eedcfffce, type: 2}
+  - mvLineColor: {fileID: 2100000, guid: e091f90250c3ccc4eb5732506a7b76f6, type: 2}
+  - generateLightDepthMapShader: {fileID: 4800000, guid: d503664f424880d40a00f7762d575f5c,
+      type: 3}
+  - lightPropogationUAV: {instanceID: 0}
+  - lightDepthMap: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
+  assetBundleName: 
+  assetBundleVariant: 

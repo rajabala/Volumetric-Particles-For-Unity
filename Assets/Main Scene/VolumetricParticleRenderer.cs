@@ -632,7 +632,7 @@ namespace MetavoxelEngine
             matRayMarch.SetVector("_ScreenRes", new Vector2(Screen.width, Screen.height));
 
             // Ray march uniforms
-            matRayMarch.SetInt("_NumSteps", rayMarchSteps);
+            matRayMarch.SetInt("_NumRaymarchStepsPerMV", rayMarchSteps);
             //m.SetVector("_AABBMin", pBounds.aabb.min);
             //m.SetVector("_AABBMax", pBounds.aabb.max);
 
