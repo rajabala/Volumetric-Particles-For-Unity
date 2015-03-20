@@ -77,6 +77,9 @@ CBUFFER_START(TmpConstants)
 	int _ShowNumSamples;
 	int _ShowMetavoxelDrawOrder;
 	int _OrderIndex;
+	int _NumMetavoxelsCovered;
+	int _ShowRayMarchBlendFunc;
+	int _RayMarchBlendOver;
 CBUFFER_END
 
 struct Ray {
@@ -111,6 +114,26 @@ IntersectBox(Ray r, float3 boxmin, float3 boxmax,
 }
 
 
+float4 DrawOrderColoring()
+{	
+	int numColorsPerChannel = ceil(_NumMetavoxelsCovered / (float) 3);
+
+	// draw order coloring: bright green --> dull green --> bright blue --> dull blue --> bright red --> dull red
+
+	int channelSelect = _OrderIndex / numColorsPerChannel;
+	int channelIndex = _OrderIndex % numColorsPerChannel;
+
+	float channelIntensity = (numColorsPerChannel - channelIndex) / float (numColorsPerChannel);
+
+	if (channelSelect == 0)
+		return float4(0, channelIntensity, 0, 1);
+	else if (channelSelect == 1)
+		return float4(0, 0, channelIntensity, 1);
+	else
+		return float4(channelIntensity, 0, 0, 1);	
+}
+
+
 struct v2f {
 	float4 pos : SV_POSITION;
 	//float3 worldPos : TEXCOORD;
@@ -139,10 +162,16 @@ frag(v2f i) : COLOR
 {			
 	if (_ShowMetavoxelDrawOrder == 1) 
 	{
-		int totalMetavoxels = _MetavoxelGridDim.x * _MetavoxelGridDim.y * _MetavoxelGridDim.z;
-		return float4(0, 1 - (_OrderIndex / float(totalMetavoxels)), 0, 0.5);						
+		return DrawOrderColoring();
 	}
+	else if (_ShowRayMarchBlendFunc == 1)
+	{
+		if (_RayMarchBlendOver == 1)
+			return float4(0.5, 0.5, 0, 1);
+		else
+			return float4(0, 0.5, 0.5, 1);
 
+	}
 					 
 	// Find ray direction from camera through this pixel
 	// -- Normalize the pixel position to a [-1, 1] range to help find its world space position

@@ -6,10 +6,17 @@ public class GUIOptions : MonoBehaviour {
     public bool bShowMetavoxelGrid, 
                 bShowMetavoxelDrawOrder, 
                 bShowInstructions, 
-                bShowRayMarchSamplesPerPixel
+                bShowRayMarchSamplesPerPixel,
+                bShowRayMarchBlendFunc
                 ;
 
     public float fDisplacementScale;
+
+    public void Start()
+    {
+        bShowMetavoxelGrid = bShowMetavoxelDrawOrder = false;
+
+    }
 
     public void ShowOrHideAllGUIElements()
     {
@@ -25,6 +32,12 @@ public class GUIOptions : MonoBehaviour {
     {
         bShowMetavoxelDrawOrder = !bShowMetavoxelDrawOrder;
     }
+
+    public void ToggleShowRayMarchBlendFunc()
+    {
+        bShowRayMarchBlendFunc = !bShowRayMarchBlendFunc;
+    }
+
 
     public void SetDisplacementScale(float ds)
     {

@@ -123,7 +123,7 @@ CBUFFER_END
 		// how dense is this particle at the current voxel? (density falls quickly as we move to the outer surface of the particle)
 		// voxelParticleDistSq < 0.7 * netDisplacement ==> baseDensity = 1, voxelParticleDistSq > netDisplacement ==> baseDensity = 0
 		// 0.7 * netDisplacement < voxelParticleDistSq < netDisplacement ==> baseDensity ==> linear drop
-		float baseDensity = smoothstep(netDisplacement, 0.3 * netDisplacement, voxelParticleDistSq); // [0.0, 1.0]
+		float baseDensity = smoothstep(netDisplacement, 0.7 * netDisplacement, voxelParticleDistSq); // [0.0, 1.0]
 		float density = baseDensity *  _OpacityFactor; 
 			
 		// factor in the particle's lifetime opacity & opacity factor
@@ -132,6 +132,17 @@ CBUFFER_END
 
 		v.density = density;
 		v.ao = netDisplacement;
+	}
+
+
+	// return a lightTransmission factor in the range [0.0, 1.0] for hardShadows .. softShadows
+	float 
+	shadowDropOff(int voxelIndex, int shadowIndex)
+	{
+		// the closer the voxel is to a shadow caster, the lesser light it receives and the "harder" the shadow casted on it looks
+		// we know for sure that shadowIndex <= voxelIndex (since hte voxel is in shadow)
+		 
+		return ( 1 - rcp(1 + (voxelIndex - shadowIndex)) );
 	}
 
 
@@ -215,7 +226,7 @@ CBUFFER_END
 		// propagated light is what ends up written to the light propagation texture (duh!). it represents the amount of light that made it through the volume
 		// prior to occlusion. this way, we can project the light propagation texture on to the scene to correctly influence lighting (and thus have shadows cast by the volume)
 		float propagatedLight = transmittedLight;
-		float diffuseColor = 0.5; // constant "color" if not emissive
+		float diffuseColor = 0.4; // constant "color" if not emissive
 		float intensity = 1.0;
 		int borderVoxelIndex = _NumVoxels - _MetavoxelBorderSize;
 
@@ -223,8 +234,10 @@ CBUFFER_END
 		{
 			bool inShadow = (slice >= shadowIndex);
 
-			if (inShadow)
+			if (inShadow) {
+				//transmittedLight *= shadowDropOff(slice, shadowIndex);
 				transmittedLight = 0.0;
+			}
 			else
 				propagatedLight = transmittedLight;
 

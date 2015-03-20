@@ -112,6 +112,7 @@ namespace MetavoxelEngine
         // misc state
         //private AABBForParticles pBounds;
         private int numParticlesEmitted;
+        private int numMetavoxelsCovered;
         private Quaternion lightOrientation; // Light movement detection
         private Mesh cubeMesh;
         private Mesh quadMesh;
@@ -123,6 +124,7 @@ namespace MetavoxelEngine
             fadeOutParticles = false;
             volumeTextureAnisoLevel = 1; // The value range of this variable goes from 1 to 9, where 1 equals no filtering applied and 9 equals full filtering applied
             lightOrientation = dirLight.transform.rotation;
+            numMetavoxelsCovered = 0;
             mvScaleWithBorder = mvScale * numVoxelsInMetavoxel / (numVoxelsInMetavoxel - 2 * numBorderVoxels);
 
             CreateResources();
@@ -169,8 +171,6 @@ namespace MetavoxelEngine
         {
             // Generate the depth map from the light's pov
             Camera c = lightCamera.GetComponent<Camera>();
-            Shader.SetGlobalMatrix("_LightProj", c.projectionMatrix);
-            Shader.SetGlobalMatrix("_LightView", lightCamera.transform.worldToLocalMatrix);
             lightCamera.GetComponent<Camera>().RenderWithShader(generateLightDepthMapShader, null as string);
 
             if (Time.frameCount % updateInterval == 0)
@@ -429,7 +429,8 @@ namespace MetavoxelEngine
             GL.Clear(false, true, Color.red);
 
             SetFillPassConstants();
-         
+            numMetavoxelsCovered = 0;
+
             // process the metavoxels in order of Z-slice closest to light to farthest
             for (int zz = 0; zz < numMetavoxelsZ; zz++)
             {
@@ -438,7 +439,10 @@ namespace MetavoxelEngine
                     for (int xx = 0; xx < numMetavoxelsX; xx++)
                     {
                         if (mvGrid[zz, yy, xx].mParticlesCovered.Count != 0)
+                        {
                             FillMetavoxel(xx, yy, zz);
+                            numMetavoxelsCovered++;
+                        }
                     }
                 }
             }
@@ -567,39 +571,46 @@ namespace MetavoxelEngine
 
             Vector3 lsCameraPos = dirLight.transform.worldToLocalMatrix.MultiplyPoint3x4(Camera.main.transform.position);
             float lsFirstZSlice = dirLight.transform.worldToLocalMatrix.MultiplyPoint3x4(mvGrid[0, 0, 0].mPos).z;
-            int zBoundary = Mathf.Clamp((int)(lsCameraPos.z - lsFirstZSlice), 0, numMetavoxelsZ - 1);
+            float mvBlendOverIndex = (lsCameraPos.z - lsFirstZSlice) / mvScale.z;
 
-            // todo: find a way to merge the two shaders since the only difference is the blend state
-            //matRayMarchOver.EnableKeyword("BLEND_UNDER"); 
+            //float x = -0.6f;
+            //Debug.Log("X: " + x + " Rounding x: " + Mathf.RoundToInt(x) + "Ceil(x): " + Mathf.Ceil(x) + " Floor(x): " + Mathf.Floor(x));
+            int zBoundary = Mathf.Clamp( Mathf.RoundToInt(mvBlendOverIndex), -1, numMetavoxelsZ - 1);
+
             int mvCount = 0;
-            // Render metavoxel slices to the "left" of the camera in
-            // (a) increasing order along the direction of the light
-            // (b) farthest-to-nearest from the camera per slice
 
-            // Blend One OneMinusSrcAlpha, One OneMinusSrcAlpha // Back to Front blending (blend over)
-            matRayMarch.SetInt("SrcFactor", (int) UnityEngine.Rendering.BlendMode.One);
-            matRayMarch.SetInt("DstFactor", (int) UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
-            matRayMarch.SetInt("SrcFactorA", (int) UnityEngine.Rendering.BlendMode.One);
-            matRayMarch.SetInt("DstFactorA", (int) UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
-
-
-            for (int zz = 0; zz < zBoundary; zz++)
+            if (zBoundary >= 0)
             {
-                foreach (MetavoxelSortData vv in mvPerSliceFarToNear)
+                // Render metavoxel slices with back to front blending
+                // (a) increasing order along the direction of the light
+                // (b) farthest-to-nearest from the camera per slice
+
+                // Blend One OneMinusSrcAlpha, One OneMinusSrcAlpha // Back to Front blending (blend over)
+                matRayMarch.SetInt("SrcFactor", (int)UnityEngine.Rendering.BlendMode.One);
+                matRayMarch.SetInt("DstFactor", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+                matRayMarch.SetInt("SrcFactorA", (int)UnityEngine.Rendering.BlendMode.One);
+                matRayMarch.SetInt("DstFactorA", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+
+                matRayMarch.SetInt("_RayMarchBlendOver", 1);
+
+
+                for (int zz = 0; zz <= zBoundary; zz++)
                 {
-                    //Debug.Log("F2N " + mvCount + "(" + vv.x + "," + vv.y + ")");
-                    int xx = (int)vv.x, yy = (int)vv.y;
-
-                    if (mvGrid[zz, yy, xx].mParticlesCovered.Count != 0)
+                    foreach (MetavoxelSortData vv in mvPerSliceFarToNear)
                     {
-                        RenderMetavoxel(xx, yy, zz, mvCount++);
-                    }
+                        //Debug.Log("F2N " + mvCount + "(" + vv.x + "," + vv.y + ")");
+                        int xx = (int)vv.x, yy = (int)vv.y;
 
+                        if (mvGrid[zz, yy, xx].mParticlesCovered.Count != 0)
+                        {
+                            RenderMetavoxel(xx, yy, zz, mvCount++);
+                        }
+
+                    }
                 }
             }
 
-            mvCount = 0;
-            // Render metavoxel slices to the "right" of the camera in
+            // Render metavoxel slices
             // (a) increasing order along the direction of the light
             // (b) nearest-to-farthest from the camera per slice
             
@@ -609,10 +620,11 @@ namespace MetavoxelEngine
             matRayMarch.SetInt("SrcFactorA", (int)UnityEngine.Rendering.BlendMode.OneMinusDstAlpha);
             matRayMarch.SetInt("DstFactorA", (int)UnityEngine.Rendering.BlendMode.One);
 
+            matRayMarch.SetInt("_RayMarchBlendOver", 0);
 
             mvPerSliceFarToNear.Reverse(); // make it nearest-to-farthest
 
-            for (int zz = zBoundary; zz < numMetavoxelsZ; zz++)
+            for (int zz = zBoundary + 1; zz < numMetavoxelsZ; zz++)
             {
                 foreach (MetavoxelSortData vv in mvPerSliceFarToNear)
                 {
@@ -625,7 +637,6 @@ namespace MetavoxelEngine
                         //Debug.Log("N2F" + mvCount + "(" + vv.x + "," + vv.y + "," + zz + ") at dist " + cam2mv.sqrMagnitude);
                         RenderMetavoxel(xx, yy, zz, mvCount++);
                     }
-
                 }
             }
 
@@ -670,6 +681,13 @@ namespace MetavoxelEngine
                 showMetavoxelDrawOrder_i = 1;
 
             matRayMarch.SetInt("_ShowMetavoxelDrawOrder", showMetavoxelDrawOrder_i);
+            matRayMarch.SetInt("_NumMetavoxelsCovered", numMetavoxelsCovered);
+
+            int showRayMarchBlendFunc_i = 0;
+            if (guiOptions.bShowRayMarchBlendFunc)
+                showRayMarchBlendFunc_i = 1;
+
+            matRayMarch.SetInt("_ShowRayMarchBlendFunc", showRayMarchBlendFunc_i);
         }
 
 
@@ -689,6 +707,7 @@ namespace MetavoxelEngine
             matRayMarch.SetVector("_MetavoxelIndex", new Vector3(xx, yy, zz));
             matRayMarch.SetFloat("_ParticleCoverageRatio", mvGrid[zz, yy, xx].mParticlesCovered.Count / (float)numParticlesEmitted);
             matRayMarch.SetInt("_OrderIndex", orderIndex);
+            
 
             // Absence of the line below caused several hours of debugging madness.
             // SetPass needs to be called AFTER all material properties are set prior to every DrawMeshNow call.
