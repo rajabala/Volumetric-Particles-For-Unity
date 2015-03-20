@@ -123,7 +123,7 @@ CBUFFER_END
 		// how dense is this particle at the current voxel? (density falls quickly as we move to the outer surface of the particle)
 		// voxelParticleDistSq < 0.7 * netDisplacement ==> baseDensity = 1, voxelParticleDistSq > netDisplacement ==> baseDensity = 0
 		// 0.7 * netDisplacement < voxelParticleDistSq < netDisplacement ==> baseDensity ==> linear drop
-		float baseDensity = smoothstep(netDisplacement, 0.7 * netDisplacement, voxelParticleDistSq); // [0.0, 1.0]
+		float baseDensity = smoothstep(netDisplacement, 0.3 * netDisplacement, voxelParticleDistSq); // [0.0, 1.0]
 		float density = baseDensity *  _OpacityFactor; 
 			
 		// factor in the particle's lifetime opacity & opacity factor
@@ -199,107 +199,63 @@ CBUFFER_END
 			
 		// Account for occlusion of the voxel column by objects in the scene
 		float4 lsVoxel0 =  mul(_WorldToLight, get_voxel_world_pos(i.pos.xy, 0));							
-			
+		
+		// don't need to convert voxel to light clip space since our shadow map is constrained to the exact dimensions of a "slice" of the volume grid			
 		float2 lsTexCoord = (i.pos.xy + _MetavoxelIndex.xy * _NumVoxels) / (_MetavoxelGridDim.xy * _NumVoxels);
 		// don't need to invert the y component of UV (even though Unity renders to the depth texture with Y inverted).
 		float d = tex2D(_LightDepthMap, lsTexCoord); // [0,1]						
 		float a = rcp(_FarZ - _NearZ), b = -_NearZ * a;			
-		float bias = 0.1;
 		float lsSceneDepth = (d - b) * rcp(a);
-	
-		float lightTransmittedByVoxelColumn;
+		float lsVoxelColumnStart = lsVoxel0.z;
 
-		if (lsSceneDepth < lsVoxel0.z) 
+		int shadowIndex = (lsSceneDepth - lsVoxelColumnStart) / (oneVoxelSize);	
+
+		// transmitted light is used to shade a voxel (and is attenuated by density or occlusion)
+		float transmittedLight = (_MetavoxelIndex.z == 0)? _InitLightIntensity  :  lightPropogationTex[int2(i.pos.xy + _MetavoxelIndex.xy * _NumVoxels)];
+		// propagated light is what ends up written to the light propagation texture (duh!). it represents the amount of light that made it through the volume
+		// prior to occlusion. this way, we can project the light propagation texture on to the scene to correctly influence lighting (and thus have shadows cast by the volume)
+		float propagatedLight = transmittedLight;
+		float diffuseColor = 0.5; // constant "color" if not emissive
+		float intensity = 1.0;
+		int borderVoxelIndex = _NumVoxels - _MetavoxelBorderSize;
+
+		for (slice = 0; slice < borderVoxelIndex; slice++)
 		{
-			lightTransmittedByVoxelColumn = 0.0;
+			bool inShadow = (slice >= shadowIndex);
 
-			// all voxels in this column are behind an object, and hence shadowed (i.e., no direct lighting)
-			for (slice = 0; slice < _NumVoxels; slice++)
-			{
-				float4 voxelColor;
-						
-				if (voxelColumn[slice].density == 0)
-					voxelColor = float4(0,0,0,0);
-				else
-					voxelColor = float4(voxelColumn[slice].ao * _AmbientColor, 
-										voxelColumn[slice].density);
-				
-				volumeTex[int3(i.pos.xy, slice)]	=	voxelColor;			
-			}				
-		} // voxel column completely occluded
-		else 
+			if (inShadow)
+				transmittedLight = 0.0;
+			else
+				propagatedLight = transmittedLight;
+
+			float3 finalColor = (diffuseColor * intensity) * transmittedLight /* direct lighting */ +
+								(_AmbientColor * voxelColumn[slice].ao);	  /* indirect lighting */
+
+			transmittedLight *= rcp(1.0 + voxelColumn[slice].density);
+
+			volumeTex[int3(i.pos.xy, slice)]	= float4(finalColor, voxelColumn[slice].density);
+		}
+
+		lightPropogationTex[int2(i.pos.xy + _MetavoxelIndex.xy * _NumVoxels)] = propagatedLight;
+
+		// go over border voxels in the "far" end of the voxel column (this can be simplified if border is restricted to 0 or 1)
+		// light transmitted by the "far border voxels" isn't written to the light propagation texture to ensure correct light transmittance to
+		// the "near border voxels" of the voxel column behind this one 
+
+		for(slice = borderVoxelIndex; slice < _NumVoxels; slice++) 
 		{
-			float lightIncidentOnVoxel;			
-			lightIncidentOnVoxel = _InitLightIntensity;
+			bool inShadow = (slice >= shadowIndex);
 
-			if (_MetavoxelIndex.z != 0) // if metavoxel isn't nearest to light, look up how much light was transmitted by the voxel columns in front of it (wrt the light)
-				lightIncidentOnVoxel *= lightPropogationTex[int2(i.pos.xy + _MetavoxelIndex.xy * _NumVoxels)];
-
-			float diffuseCoeff = 0.5;
-			float lsVoxelDepth = lsVoxel0.z; 
-			int borderVoxelIndex = _NumVoxels;// - _MetavoxelBorderSize;
-
-			for (slice = 0; slice < borderVoxelIndex; slice++)
-			{
-				float4 voxelColor;
+			if (inShadow)
+				transmittedLight = 0.0;
 						
-				if (voxelColumn[slice].density == 0)
-					voxelColor = float4(0,0,0,0);
-				else
-					voxelColor = float4(lightIncidentOnVoxel * _LightColor * diffuseCoeff  /* direct lighting */ +   
-										voxelColumn[slice].ao * _AmbientColor /* ambient component */, 
-										voxelColumn[slice].density);
-				
-				volumeTex[int3(i.pos.xy, slice)]	=	voxelColor;
-				
-				if (lsVoxelDepth < lsSceneDepth) 			
-				{
-					// not in shadow. light incident on the next voxel depends on current voxel's density			
-					lightIncidentOnVoxel *= rcp(1.0 + voxelColumn[slice].density);
-				}
-				else 
-				{
-					// voxel is occluded
-					lightTransmittedByVoxelColumn = lightIncidentOnVoxel;
-					lightIncidentOnVoxel = 0.0;
-				}
+			float3 finalColor = (diffuseColor * intensity) * transmittedLight /* direct lighting */ +
+								(_AmbientColor * voxelColumn[slice].ao);	  /* indirect lighting */
 
-				lsVoxelDepth += oneVoxelSize; 
-			} // per voxel in column	
+			transmittedLight *= rcp(1.0 + voxelColumn[slice].density);
 
-
-			// go over border voxels in the "far" end of the voxel column (this can be simplified if border is restricted to 0 or 1)
-			// light transmitted by the "far border voxels" isn't written to the light propagation texture to ensure correct light transmittance to
-			// the "near border voxels" of the voxel column behind this one 
-			for(slice = borderVoxelIndex; slice < _NumVoxels; slice++) 
-			{
-				float4 voxelColor;
-						
-				if (voxelColumn[slice].density == 0)
-					voxelColor = float4(0,0,0,0);
-				else
-					voxelColor = float4(lightIncidentOnVoxel * _LightColor * diffuseCoeff  /* direct lighting */ +   
-										voxelColumn[slice].ao * _AmbientColor /* ambient component */, 
-										voxelColumn[slice].density);
-				
-				volumeTex[int3(i.pos.xy, slice)]	=	voxelColor;
-				
-				if (lsVoxelDepth < lsSceneDepth) 			
-				{
-					// not in shadow. light incident on the next voxel depends on current voxel's density			
-					lightIncidentOnVoxel *= rcp(1.0 + voxelColumn[slice].density);
-				}
-				else 
-				{
-					// voxel is occluded
-					lightIncidentOnVoxel = 0.0;
-				}
-
-				lsVoxelDepth += oneVoxelSize; 
-			}						
-		} // voxel column not completely occluded
-				
-		lightPropogationTex[int2(i.pos.xy + _MetavoxelIndex.xy * _NumVoxels)] = lightTransmittedByVoxelColumn; // exclude the exit border voxel to prevent inconsistencies in next metavoxel		
+			volumeTex[int3(i.pos.xy, slice)]	= float4(finalColor, voxelColumn[slice].density);
+		}						
 
 		/* this fragment shader does NOT return anything. it's merely used for filling a voxel column while propagating light through it*/
 		discard;

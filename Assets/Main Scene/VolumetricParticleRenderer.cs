@@ -232,7 +232,7 @@ namespace MetavoxelEngine
 
             if (!fillMetavoxelRT)
             {
-                fillMetavoxelRT = new RenderTexture(numVoxelsInMetavoxel, numVoxelsInMetavoxel, 0, RenderTextureFormat.ARGBFloat);
+                fillMetavoxelRT = new RenderTexture(numVoxelsInMetavoxel, numVoxelsInMetavoxel, 0, RenderTextureFormat.R8);
                 fillMetavoxelRT.useMipMap = false;
                 fillMetavoxelRT.isVolume = false;
                 fillMetavoxelRT.enableRandomWrite = false;
@@ -241,7 +241,7 @@ namespace MetavoxelEngine
 
             if (!fillMetavoxelRT1)
             {
-                fillMetavoxelRT1 = new RenderTexture(numVoxelsInMetavoxel, numVoxelsInMetavoxel, 0, RenderTextureFormat.ARGBFloat);
+                fillMetavoxelRT1 = new RenderTexture(numVoxelsInMetavoxel, numVoxelsInMetavoxel, 0, RenderTextureFormat.R8);
                 fillMetavoxelRT1.useMipMap = false;
                 fillMetavoxelRT1.isVolume = false;
                 fillMetavoxelRT1.enableRandomWrite = false;
@@ -428,8 +428,6 @@ namespace MetavoxelEngine
             Graphics.SetRenderTarget(lightPropogationUAV);
             GL.Clear(false, true, Color.red);
 
-            //Graphics.SetRenderTarget(lightDepthMap);
-            //GL.Clear(true, false, Color.red);
             SetFillPassConstants();
          
             // process the metavoxels in order of Z-slice closest to light to farthest
@@ -507,8 +505,8 @@ namespace MetavoxelEngine
 
             foreach (ParticleSystem.Particle p in mvGrid[zz, yy, xx].mParticlesCovered)
             {
-                Vector3 wsPos = particleSys.transform.localToWorldMatrix.MultiplyPoint3x4(p.position);
-                dpArray[index].mWorldToLocal = Matrix4x4.TRS(wsPos, Quaternion.identity, new Vector3(p.size, p.size, p.size)).inverse;
+                Vector3 wsPos = particleSys.transform.localToWorldMatrix.MultiplyPoint3x4(p.position);                
+                dpArray[index].mWorldToLocal = Matrix4x4.TRS(wsPos, Quaternion.AngleAxis(p.rotation, particleSys.transform.forward), new Vector3(p.size, p.size, p.size)).inverse;
                 dpArray[index].mWorldPos = wsPos;
                 dpArray[index].mRadius = p.size / 2f;
                 dpArray[index].mOpacity = p.lifetime / p.startLifetime; // [time-particle-will-remain-alive / particle-lifetime] use this to make particles less "dense" as they meet their end.
