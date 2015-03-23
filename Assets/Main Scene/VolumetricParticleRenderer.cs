@@ -70,7 +70,6 @@ namespace MetavoxelEngine
         /********************* game objects/components that need to be set *************************/
         public Light dirLight;
         public ParticleSystem particleSys;
-        public GUIOptions guiOptions;
         public Material matFillVolume;
         public Material matRayMarch;
         public Material matBlendParticles; // material to blend the raymarched volume with the camera's RT    
@@ -84,12 +83,20 @@ namespace MetavoxelEngine
         public int numBorderVoxels; // per end (i.e. a value of 1 means 2 voxels per dimension are border voxels)    
 
         /********************** rendering vars **********************************************/
-        public int updateInterval;
+        public int updateInterval;        
         public int rayMarchSteps;
-        public float opacityFactor;
-        public Vector3 ambientColor;
-        public bool fadeOutParticles;
+        public Vector3 ambientColor;        
         public int volumeTextureAnisoLevel;
+
+            /*** gui controls ****/
+        private bool bShowMetavoxelGrid;
+        private float fDisplacementScale;
+        private bool bShowRayMarchSamplesPerPixel;
+        private bool bShowMetavoxelDrawOrder;
+        private bool bShowRayMarchBlendFunc;
+        private bool fadeOutParticles;
+        public float opacityFactor;
+
 
         /*
         * private members 
@@ -197,7 +204,7 @@ namespace MetavoxelEngine
             // blend the particles onto the main (opaque) scene. [todo] what happens to billboarded particles on the main scene? when're they rendered?
             Graphics.Blit(particlesRT, mainSceneRT, matBlendParticles);
 
-            if (guiOptions.bShowMetavoxelGrid)
+            if (bShowMetavoxelGrid)
             {
                 DrawMetavoxelGrid();
             }
@@ -474,7 +481,7 @@ namespace MetavoxelEngine
 
             // -- particles
             matFillVolume.SetFloat("_OpacityFactor", opacityFactor);
-            matFillVolume.SetFloat("_DisplacementScale", guiOptions.fDisplacementScale);
+            matFillVolume.SetFloat("_DisplacementScale", fDisplacementScale);
                       
             int fadeParticles = 0;
             if (fadeOutParticles)
@@ -671,20 +678,20 @@ namespace MetavoxelEngine
             //m.SetVector("_AABBMax", pBounds.aabb.max);
 
             int showNumSamples_i = 0;
-            if (guiOptions.bShowRayMarchSamplesPerPixel)
+            if (bShowRayMarchSamplesPerPixel)
                 showNumSamples_i = 1;
 
             matRayMarch.SetInt("_ShowNumSamples", showNumSamples_i);
 
             int showMetavoxelDrawOrder_i = 0;
-            if (guiOptions.bShowMetavoxelDrawOrder)
+            if (bShowMetavoxelDrawOrder)
                 showMetavoxelDrawOrder_i = 1;
 
             matRayMarch.SetInt("_ShowMetavoxelDrawOrder", showMetavoxelDrawOrder_i);
             matRayMarch.SetInt("_NumMetavoxelsCovered", numMetavoxelsCovered);
 
             int showRayMarchBlendFunc_i = 0;
-            if (guiOptions.bShowRayMarchBlendFunc)
+            if (bShowRayMarchBlendFunc)
                 showRayMarchBlendFunc_i = 1;
 
             matRayMarch.SetInt("_ShowRayMarchBlendFunc", showRayMarchBlendFunc_i);
@@ -960,6 +967,68 @@ namespace MetavoxelEngine
         }
 
 
+        /*********************** Gui callback setters **************************************
+         *  Functions below have been hooked to the appropriate GUI element in the inspector
+         */        
+        //-- render options
+        public void SetDisplacementScale(float ds)
+        {
+            fDisplacementScale = ds;
+        }
+
+        public void SetGridDimensions(float a)
+        {
+            // Resize grid
+            //ResizeMVGrid(a);
+        }
+
+        public void SetGridScale(float s)
+        {
+            mvScale = new Vector3(s, s, s);
+            UpdateMetavoxelPositions();
+        }
+
+
+        //-- render debug options
+        public void SetShowMetavoxelGrid(bool show)
+        {
+            bShowMetavoxelGrid = show;
+        }
+
+        public void SetShowRayMarchSamples(bool show)
+        {
+            bShowRayMarchSamplesPerPixel = show;
+        }
+
+        public void SetShowMetavoxelDrawOrder(bool show)     
+        {
+            bShowMetavoxelDrawOrder = show;
+        }
+
+        public void SetShowRayMarchBlendFunc(bool show)
+        {
+            bShowRayMarchBlendFunc = show;
+        }
+
+
+        //-- particle options
+        public void SetFadeOutParticles(bool fade)
+        {
+            fadeOutParticles = fade;
+        }
+
+        public void SetParticleOpacityFactor(float f)
+        {
+            opacityFactor = f;
+        }
+
+        public void SetNumParticles(float n)
+        {
+            particleSys.maxParticles = (int) n;
+        }
+
+
+
         #if UNITY_EDITOR
         void OnDrawGizmos()
         {
@@ -986,4 +1055,7 @@ namespace MetavoxelEngine
         }
         #endif        
     }
+
+
+
 }

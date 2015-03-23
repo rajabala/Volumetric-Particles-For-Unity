@@ -227,7 +227,6 @@ CBUFFER_END
 		// prior to occlusion. this way, we can project the light propagation texture on to the scene to correctly influence lighting (and thus have shadows cast by the volume)
 		float propagatedLight = transmittedLight;
 		float diffuseColor = 0.4; // constant "color" if not emissive
-		float intensity = 1.0;
 		int borderVoxelIndex = _NumVoxels - _MetavoxelBorderSize;
 
 		for (slice = 0; slice < borderVoxelIndex; slice++)
@@ -235,13 +234,13 @@ CBUFFER_END
 			bool inShadow = (slice >= shadowIndex);
 
 			if (inShadow) {
-				//transmittedLight *= shadowDropOff(slice, shadowIndex);
+				//transmittedLight = propagatedLight * shadowDropOff(slice, shadowIndex);
 				transmittedLight = 0.0;
 			}
 			else
 				propagatedLight = transmittedLight;
 
-			float3 finalColor = (diffuseColor * intensity) * transmittedLight /* direct lighting */ +
+			float3 finalColor = diffuseColor * transmittedLight /* direct lighting */ +
 								(_AmbientColor * voxelColumn[slice].ao);	  /* indirect lighting */
 
 			transmittedLight *= rcp(1.0 + voxelColumn[slice].density);
@@ -262,7 +261,7 @@ CBUFFER_END
 			if (inShadow)
 				transmittedLight = 0.0;
 						
-			float3 finalColor = (diffuseColor * intensity) * transmittedLight /* direct lighting */ +
+			float3 finalColor = diffuseColor * transmittedLight /* direct lighting */ +
 								(_AmbientColor * voxelColumn[slice].ao);	  /* indirect lighting */
 
 			transmittedLight *= rcp(1.0 + voxelColumn[slice].density);
@@ -270,7 +269,7 @@ CBUFFER_END
 			volumeTex[int3(i.pos.xy, slice)]	= float4(finalColor, voxelColumn[slice].density);
 		}						
 
-		/* this fragment shader does NOT return anything. it's merely used for filling a voxel column while propagating light through it*/
+		/* this fragment shader does NOT return anything. it's merely used for filling a voxel column with color and density values by propagating light through it*/
 		discard;
 		return float4(d,  lsVoxel0.z, lsSceneDepth, 1.0f);	// return statement is required by the compiler					
 	}
