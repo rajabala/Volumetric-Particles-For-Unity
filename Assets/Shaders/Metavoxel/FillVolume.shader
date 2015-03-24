@@ -8,7 +8,7 @@ SubShader {
 	Cull Off ZWrite Off ZTest Off
 	CGPROGRAM
 	#pragma target 5.0
-	#pragma exclude_renderers flash
+	//#pragma exclude_renderers flash
 	#pragma enable_d3d11_debug_symbols
 	#pragma vertex vert_img		
 	//#pragma vertex vert
@@ -42,8 +42,8 @@ SubShader {
 	};
 
 	struct Voxel {
-		float density; // affects opacity
-		float ao; // affects color
+		half density; // affects opacity
+		half ao; // affects color
 	};
 		
 	// UAVs
@@ -113,18 +113,18 @@ CBUFFER_END
 						out Voxel v)
 	{
 		// sample the displacement noise texture for the particle
-		float rawDisplacement = texCUBE(_DisplacementTexture,  2*psVoxelPos).x; // [todo] -- is the texcoord correct for cube sampling??
+		half rawDisplacement = texCUBE(_DisplacementTexture,  2*psVoxelPos).x; // [todo] -- is the texcoord correct for cube sampling??
 
 		// the scale factor can be used to weigh the above calculated noise displacement. 
-		float netDisplacement = _DisplacementScale * rawDisplacement + (1.0 - _DisplacementScale); // disp. from center in the range [0, 1]
+		half netDisplacement = _DisplacementScale * rawDisplacement + (1.0 - _DisplacementScale); // disp. from center in the range [0, 1]
 
 		float voxelParticleDistSq = dot(2 * psVoxelPos,  2 * psVoxelPos); // make it [0, 1]
 
 		// how dense is this particle at the current voxel? (density falls quickly as we move to the outer surface of the particle)
 		// voxelParticleDistSq < 0.7 * netDisplacement ==> baseDensity = 1, voxelParticleDistSq > netDisplacement ==> baseDensity = 0
 		// 0.7 * netDisplacement < voxelParticleDistSq < netDisplacement ==> baseDensity ==> linear drop
-		float baseDensity = smoothstep(netDisplacement, 0.7 * netDisplacement, voxelParticleDistSq); // [0.0, 1.0]
-		float density = baseDensity *  _OpacityFactor; 
+		half baseDensity = smoothstep(netDisplacement, 0.7 * netDisplacement, voxelParticleDistSq); // [0.0, 1.0]
+		half density = baseDensity *  _OpacityFactor; 
 			
 		// factor in the particle's lifetime opacity & opacity factor
 		if (_FadeOutParticles == 1)
@@ -136,7 +136,7 @@ CBUFFER_END
 
 
 	// return a lightTransmission factor in the range [0.0, 1.0] for hardShadows .. softShadows
-	float 
+	half 
 	shadowDropOff(int voxelIndex, int shadowIndex)
 	{
 		// the closer the voxel is to a shadow caster, the lesser light it receives and the "harder" the shadow casted on it looks
@@ -149,9 +149,8 @@ CBUFFER_END
 	// Fragment shader fills a "voxel column" of the metavoxel's volume texture
 	// For each voxel in the voxel column of our metavoxel, we iterate through all the displaced particles covered by the metavoxel and test for coverage. 
 	// If a displaced particle covers the voxel's center, we calculate its contribution to "density" and "ao". 
-	float4 
+	half4 
 	frag(v2f_img i) : COLOR
-	//frag(v2f i) : COLOR
 	{
 		int slice, pp; // loop counters  			
 		Voxel voxelColumn[NUM_VOXELS]; // temporary storage for the voxel column associated with the current fragment
@@ -240,12 +239,12 @@ CBUFFER_END
 			else
 				propagatedLight = transmittedLight;
 
-			float3 finalColor = diffuseColor * transmittedLight /* direct lighting */ +
+			half3 finalColor = diffuseColor * transmittedLight /* direct lighting */ +
 								(_AmbientColor * voxelColumn[slice].ao);	  /* indirect lighting */
 
 			transmittedLight *= rcp(1.0 + voxelColumn[slice].density);
 
-			volumeTex[int3(i.pos.xy, slice)]	= float4(finalColor, voxelColumn[slice].density);
+			volumeTex[int3(i.pos.xy, slice)]	= half4(finalColor, voxelColumn[slice].density);
 		}
 
 		lightPropogationTex[int2(i.pos.xy + _MetavoxelIndex.xy * _NumVoxels)] = propagatedLight;
@@ -261,17 +260,17 @@ CBUFFER_END
 			if (inShadow)
 				transmittedLight = 0.0;
 						
-			float3 finalColor = diffuseColor * transmittedLight /* direct lighting */ +
+			half3 finalColor = diffuseColor * transmittedLight /* direct lighting */ +
 								(_AmbientColor * voxelColumn[slice].ao);	  /* indirect lighting */
 
 			transmittedLight *= rcp(1.0 + voxelColumn[slice].density);
 
-			volumeTex[int3(i.pos.xy, slice)]	= float4(finalColor, voxelColumn[slice].density);
+			volumeTex[int3(i.pos.xy, slice)]	= half4(finalColor, voxelColumn[slice].density);
 		}						
 
 		/* this fragment shader does NOT return anything. it's merely used for filling a voxel column with color and density values by propagating light through it*/
 		discard;
-		return float4(d,  lsVoxel0.z, lsSceneDepth, 1.0f);	// return statement is required by the compiler					
+		return half4(d,  lsVoxel0.z, lsSceneDepth, 1.0f);	// return statement is required by the compiler					
 	}
 
 	ENDCG

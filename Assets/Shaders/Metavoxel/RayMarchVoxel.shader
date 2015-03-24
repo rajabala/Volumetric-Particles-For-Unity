@@ -19,7 +19,7 @@ BlendOp Add
 
 CGPROGRAM
 #pragma target 5.0
-#pragma exclude_renderers flash gles opengl
+//#pragma exclude_renderers flash
 #pragma enable_d3d11_debug_symbols
 #pragma vertex vert
 #pragma fragment frag
@@ -157,7 +157,7 @@ vert(appdata_base i) {
 // For each fragment, we have to iterate through all the particles covered
 // by the MV and fill the voxel column by iterating through each voxel slice.
 // [todo] this can be parallelized.
-float4
+half4
 frag(v2f i) : COLOR
 {			
 	if (_ShowMetavoxelDrawOrder == 1) 
@@ -242,10 +242,10 @@ frag(v2f i) : COLOR
 
 		// supply 0 derivatives when sampling -- this ensures that the loop doesn't have to unrolled
 		// due to a gradient instruction (such as tex3D)
-		float4 voxelColor = tex3D(_VolumeTexture, samplePos, float3(0,0,0), float3(0,0,0));
-		float3 color = voxelColor.rgb;
-		float  density = voxelColor.a;
-		float blendFactor = rcp(1.0 + density);
+		half4 voxelColor = tex3D(_VolumeTexture, samplePos, float3(0,0,0), float3(0,0,0));
+		half3 color = voxelColor.rgb;
+		half  density = voxelColor.a;
+		half blendFactor = rcp(1.0 + density);
 
 		result.rgb = lerp(color, result.rgb, blendFactor);
 		transmittance *= blendFactor;

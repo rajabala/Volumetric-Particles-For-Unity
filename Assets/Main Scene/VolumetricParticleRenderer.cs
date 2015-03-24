@@ -89,12 +89,12 @@ namespace MetavoxelEngine
         public int volumeTextureAnisoLevel;
 
             /*** gui controls ****/
+        public float fDisplacementScale;
+        public bool fadeOutParticles;
         private bool bShowMetavoxelGrid;
-        private float fDisplacementScale;
         private bool bShowRayMarchSamplesPerPixel;
         private bool bShowMetavoxelDrawOrder;
         private bool bShowRayMarchBlendFunc;
-        private bool fadeOutParticles;
         public float opacityFactor;
 
 
@@ -177,7 +177,6 @@ namespace MetavoxelEngine
         void OnPostRender()
         {
             // Generate the depth map from the light's pov
-            Camera c = lightCamera.GetComponent<Camera>();
             lightCamera.GetComponent<Camera>().RenderWithShader(generateLightDepthMapShader, null as string);
 
             if (Time.frameCount % updateInterval == 0)
@@ -304,7 +303,7 @@ namespace MetavoxelEngine
         {
             // Note that constructing a RenderTexture object does not create the hardware representation immediately. The actual render texture is created upon first use or when Create is called manually
             // file:///C:/Program%20Files%20(x86)/Unity/Editor/Data/Documentation/html/en/ScriptReference/RenderTexture-ctor.html
-            mvFillTextures[zz, yy, xx] = new RenderTexture(numVoxelsInMetavoxel, numVoxelsInMetavoxel, 0 /* no need depth surface, just color*/, RenderTextureFormat.ARGBFloat);
+            mvFillTextures[zz, yy, xx] = new RenderTexture(numVoxelsInMetavoxel, numVoxelsInMetavoxel, 0 /* no need depth surface, just color*/, RenderTextureFormat.ARGBHalf);
             mvFillTextures[zz, yy, xx].isVolume = true;
             mvFillTextures[zz, yy, xx].volumeDepth = numVoxelsInMetavoxel;
             mvFillTextures[zz, yy, xx].generateMips = false;
@@ -976,6 +975,13 @@ namespace MetavoxelEngine
             fDisplacementScale = ds;
         }
 
+
+        public void SetRayMarchSteps(float steps)
+        {
+            rayMarchSteps = (int) steps;
+        }
+
+
         public void SetGridDimensions(float a)
         {
             // Resize grid
@@ -988,6 +994,26 @@ namespace MetavoxelEngine
             UpdateMetavoxelPositions();
         }
 
+        //-- particle options
+        public void SetFadeOutParticles(bool fade)
+        {
+            fadeOutParticles = fade;
+        }
+
+        public void SetParticleOpacityFactor(float f)
+        {
+            opacityFactor = f;
+        }
+
+        public void SetNumParticles(float n)
+        {
+            particleSys.maxParticles = (int)n;
+        }
+
+        public void SetFadeParticles(bool fade)
+        {
+            fadeOutParticles = fade;
+        }
 
         //-- render debug options
         public void SetShowMetavoxelGrid(bool show)
@@ -1010,21 +1036,14 @@ namespace MetavoxelEngine
             bShowRayMarchBlendFunc = show;
         }
 
-
-        //-- particle options
-        public void SetFadeOutParticles(bool fade)
+        public void SetUpdateInterval(float interval)
         {
-            fadeOutParticles = fade;
+            updateInterval = (int) interval;
         }
 
-        public void SetParticleOpacityFactor(float f)
+        public void SetTimeScale(float ts)
         {
-            opacityFactor = f;
-        }
-
-        public void SetNumParticles(float n)
-        {
-            particleSys.maxParticles = (int) n;
+            Time.timeScale = ts;
         }
 
 
