@@ -96,7 +96,7 @@ namespace MetavoxelEngine
         private bool bShowMetavoxelDrawOrder;
         private bool bShowRayMarchBlendFunc;
         public float opacityFactor;
-
+        public int softParticleStepDistance;
 
         /*
         * private members 
@@ -661,14 +661,14 @@ namespace MetavoxelEngine
             matRayMarch.SetInt("_MetavoxelBorderSize", numBorderVoxels);
 
             // Camera uniforms
-            matRayMarch.SetVector("_CameraWorldPos", Camera.main.transform.position);
+            //matRayMarch.SetVector("_CameraWorldPos", Camera.main.transform.position);
             // Unity sets the _CameraToWorld and _WorldToCamera constant buffers by default - but these would be on the metavoxel camera
             // that's attached to the directional light. We're interested in the main camera's matrices, not the pseudo-mv cam!
-            matRayMarch.SetMatrix("_CameraToWorldMatrix", Camera.main.cameraToWorldMatrix);
+            //matRayMarch.SetMatrix("_CameraToWorldMatrix", Camera.main.cameraToWorldMatrix);
             matRayMarch.SetMatrix("_WorldToCameraMatrix", Camera.main.worldToCameraMatrix);
             matRayMarch.SetFloat("_Fov", Mathf.Deg2Rad * Camera.main.fieldOfView);
-            matRayMarch.SetFloat("_Near", Camera.main.nearClipPlane);
-            matRayMarch.SetFloat("_Far", Camera.main.farClipPlane);
+            //matRayMarch.SetFloat("_Near", Camera.main.nearClipPlane);
+            //matRayMarch.SetFloat("_Far", Camera.main.farClipPlane);
             matRayMarch.SetVector("_ScreenRes", new Vector2(Screen.width, Screen.height));
 
             // Ray march uniforms
@@ -693,7 +693,8 @@ namespace MetavoxelEngine
             if (bShowRayMarchBlendFunc)
                 showRayMarchBlendFunc_i = 1;
 
-            matRayMarch.SetInt("_ShowRayMarchBlendFunc", showRayMarchBlendFunc_i);
+            matRayMarch.SetInt("_ShowRayMarchBlendFunc", showRayMarchBlendFunc_i);            
+            matRayMarch.SetInt("_SoftDistance", softParticleStepDistance);
         }
 
 
@@ -709,7 +710,8 @@ namespace MetavoxelEngine
                                                 lightOrientation,
                                                 mvScale); // border should NOT be included here. we want to rasterize only the pixels covered by the metavoxel
             matRayMarch.SetMatrix("_MetavoxelToWorld", mvToWorld);
-            matRayMarch.SetMatrix("_WorldToMetavoxel", mvToWorld.inverse);
+            matRayMarch.SetMatrix("_CameraToMetavoxel", mvToWorld.inverse * Camera.main.cameraToWorldMatrix);
+            //matRayMarch.SetMatrix("_WorldToMetavoxel", mvToWorld.inverse);
             matRayMarch.SetVector("_MetavoxelIndex", new Vector3(xx, yy, zz));
             matRayMarch.SetFloat("_ParticleCoverageRatio", mvGrid[zz, yy, xx].mParticlesCovered.Count / (float)numParticlesEmitted);
             matRayMarch.SetInt("_OrderIndex", orderIndex);
@@ -1046,7 +1048,10 @@ namespace MetavoxelEngine
             Time.timeScale = ts;
         }
 
-
+        public void SetSoftParticleDistance(float stepDistance)
+        {
+            softParticleStepDistance = (int) stepDistance;
+        }
 
         #if UNITY_EDITOR
         void OnDrawGizmos()

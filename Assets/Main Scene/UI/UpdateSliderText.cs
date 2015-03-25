@@ -13,6 +13,6 @@ public class UpdateSliderText : MonoBehaviour {
 
 	public void UpdateText(float value)
     {
-        textValue.text = "(" + value.ToString() + ")";
+        textValue.text = "(" + value.ToString("f2") + ")";
     }
 }

@@ -13,7 +13,7 @@ Pass
 {
 Cull Front ZWrite Off ZTest Less
 // Syntax: Blend SrcFactor DstFactor, SrcFactorA DstFactorA				
-// Set these properties via script to avoid having two shaders
+// Set these properties via script to avoid having two shaders that differ only in the blend modes
 Blend [SrcFactor] [DstFactor], [SrcFactorA] [DstFactorA]
 BlendOp Add
 
@@ -32,12 +32,12 @@ CGPROGRAM
 #define red float4(0.6, 0.0, 0.0, 0.5)
 #define red2 float4(0.8, 0.0, 0.0, 0.5)
 #define red3 float4(1.0, 0.0, 0.0, 0.5)
-
 #define redb float4(0.5, 0.0, 0.0, 1.0)
 #define blueb float4(0.0, 0.0, 0.5, 1.0)
 #define greenb float4(0.0, 0.5, 0.0, 1.0)
 #define seethrough float4(0.0, 0.0, 0.0, 0.0)
 
+#define SQ_ROOT_3 1.73205
 
 sampler3D _VolumeTexture;
 sampler2D _LightPropogationTexture;
@@ -45,7 +45,8 @@ sampler2D _LightPropogationTexture;
 // Metavoxel uniforms
 CBUFFER_START(MetavoxelConstants)
 	float4x4 _MetavoxelToWorld;
-	float4x4 _WorldToMetavoxel;
+	float4x4 _CameraToMetavoxel;
+	//float4x4 _WorldToMetavoxel;
 	float3 _MetavoxelIndex;	
 	float _ParticleCoverageRatio; 
 CBUFFER_END
@@ -56,6 +57,7 @@ CBUFFER_START(VolumeConstants)
 	float _NumVoxels; // metavoxel's voxel dimensions
 	int _MetavoxelBorderSize;	
 	int _NumRaymarchStepsPerMV;
+	int _SoftDistance;
 	//float4 _AABBMin;
 	//float4 _AABBMax;
 	//float3 _MetavoxelScale;
@@ -63,9 +65,9 @@ CBUFFER_END
 
 // Camera uniforms
 CBUFFER_START(CameraConstants)
-	float4x4 _CameraToWorldMatrix; // need to explicitly define this to get the main camera's matrices
+	//float4x4 _CameraToWorldMatrix; // need to explicitly define this to get the main camera's matrices	
 	float4x4 _WorldToCameraMatrix;
-	float3 _CameraWorldPos;
+	//float3 _CameraWorldPos;
 	float _Fov;
 	//float _Near;
 	//float _Far;
@@ -87,7 +89,8 @@ struct Ray {
 	float3 d; // direction (normalized)
 };
 				
-				
+			
+// Simon Green's beautiful ray-box intersection code
 bool
 IntersectBox(Ray r, float3 boxmin, float3 boxmax, 
 				out float tnear, out float tfar)
@@ -114,11 +117,11 @@ IntersectBox(Ray r, float3 boxmin, float3 boxmax,
 }
 
 
+// Color the metavoxels being raymarched in the order they were submitted
+// [t = 0] bright green --> dull green --> bright blue --> dull blue --> bright red --> dull red [t = end]
 float4 DrawOrderColoring()
 {	
 	int numColorsPerChannel = ceil(_NumMetavoxelsCovered / (float) 3);
-
-	// draw order coloring: bright green --> dull green --> bright blue --> dull blue --> bright red --> dull red
 
 	int channelSelect = _OrderIndex / numColorsPerChannel;
 	int channelIndex = _OrderIndex % numColorsPerChannel;
@@ -154,12 +157,15 @@ vert(appdata_base i) {
 }
 	
 // Fragment shader
-// For each fragment, we have to iterate through all the particles covered
-// by the MV and fill the voxel column by iterating through each voxel slice.
-// [todo] this can be parallelized.
+// Ray march the current metavoxel (against the light direction), sampling from its 3D texture and 
+// blending samples back-to-front. 
+// The number of samples per ray through the volume is constant. i.e., the step length when projected onto 
+// the view direction is constant (step length varies to ensure
+// same # of samples per ray)
 half4
 frag(v2f i) : COLOR
 {			
+	// Debug options
 	if (_ShowMetavoxelDrawOrder == 1) 
 	{
 		return DrawOrderColoring();
@@ -167,84 +173,101 @@ frag(v2f i) : COLOR
 	else if (_ShowRayMarchBlendFunc == 1)
 	{
 		if (_RayMarchBlendOver == 1)
-			return float4(0.5, 0.5, 0, 1);
+			return float4(0.5, 0.5, 0, 1); // yellow for back-to-front blending
 		else
-			return float4(0, 0.5, 0.5, 1);
+			return float4(0, 0.5, 0.5, 1); // cyan for front-to-back blending
 
 	}
+
+
+	// positions and directions are generally prefixed with their space [cs = camera (view) space, mv = metavoxel space]
+	// cs is RHS (see link below), while everything else is LHS (as in the Unity editor)
 					 
 	// Find ray direction from camera through this pixel
-	// -- Normalize the pixel position to a [-1, 1] range to help find its world space position
-	// Note that view space uses a RHS system (looks down -Z) while Unity's editor uses a LHS system
 	float3 csRayDir;
 	csRayDir.xy = (2.0 * i.pos.xy / _ScreenRes) - 1.0; // [0, wh] to [-1, 1];
 	csRayDir.x *= (_ScreenRes.x / _ScreenRes.y); // account for aspect ratio
+	// Note that camera space (alone) matches OpenGL convention: camera's forward is the negative Z axis http://docs.unity3d.com/ScriptReference/Camera-worldToCameraMatrix.html
+	// Hence the - sign below
 	csRayDir.z = -rcp(tan(_Fov / 2.0)); // tan(fov_y / 2) = 1 / (norm_z)
 	csRayDir = normalize(csRayDir);
-							
-	// Holy fucking balls, it took forever to find that aspect ratio bug.			
-	//float3 csRayDir2 = normalize(mul(_WorldToCameraMatrix, float4(i.worldPos - _CameraWorldPos, 0)));
-	//return float4(csRayDir2 - csRayDir, 1.0);
+					
+	// alternative way to find ray direction using interpolated world pos from the VS		
+	//float3 csRayDir = normalize(mul(_WorldToCameraMatrix, float4(i.worldPos - _CameraWorldPos, 0)));
 
 	// Using a camere-AABB for the volume shows a snapping artifact as the camera moves
 	// Unsure if this is a lag problem or sth else.
 	//float3 csAABBStart	= csRayDir * (_AABBMin.z / csRayDir.z);
 	//float3 csAABBEnd	= csRayDir * (_AABBMax.z / csRayDir.z);
 			
-	float3 csVolOrigin = mul(_WorldToCameraMatrix, float4(0, 0, 0, 1));
-					
-	float2 n = max(_MetavoxelGridDim.xx, _MetavoxelGridDim.yz);
-	float csVolHalfZ = sqrt(3) * 0.5 * max(n.x, n.y) * _MetavoxelSize.x;
-	float csZVolMin = csVolOrigin.z + csVolHalfZ,
-			csZVolMax = csVolOrigin.z - csVolHalfZ;
-	float3 csAABBStart	= csRayDir * (csZVolMin / csRayDir.z);
-	float3 csAABBEnd	= csRayDir * (csZVolMax / csRayDir.z);
-				
-	// Xform to the current metavoxel's space
-	float4x4 CameraToMetavoxel = mul(_WorldToMetavoxel, _CameraToWorldMatrix);
-	float3 mvAABBStart	= mul(CameraToMetavoxel, float4(csAABBStart, 1));
-	float3 mvAABBEnd	= mul(CameraToMetavoxel, float4(csAABBEnd, 1));
+	// Find the approximate bounds of the entire metavoxel grid region in camera space
+	// This is done to to find the near and far AABB planes of the volume (parallel to camera view plane) to start/end the ray march through the volume
+	float3 csVolOrigin = mul(_WorldToCameraMatrix, float4(0, 0, 0, 1)); // [todo] remove restriction on grid being centered at world origin		
+	float2 nn = max(_MetavoxelGridDim.xx, _MetavoxelGridDim.yz);
+	float maxGridDim = max(nn.x, nn.y);
 
-	float3 mvRay = mvAABBEnd - mvAABBStart;
-	float totalRayMarchSteps = n * float(_NumRaymarchStepsPerMV);
+	float csVolHalfZ = SQ_ROOT_3 * 0.5 * maxGridDim * _MetavoxelSize.x;
+	float csZVolMin = csVolOrigin.z + csVolHalfZ, // minZ > maxZ since -Z is the camera view direction
+		  csZVolMax = csVolOrigin.z - csVolHalfZ;
+	float3 csAABBStart	= csRayDir * (csZVolMin / csRayDir.z); // start is closer to the camera; camera is at the origin in camera space
+	float csRayLength = 2 * csVolHalfZ;
+
+	Ray mvRay;
+	mvRay.o = mul(_CameraToMetavoxel, float4(csAABBStart, 1));
+	mvRay.d = normalize( mul(_CameraToMetavoxel, float4(csRayDir, 0)) );
+	 
+	// The number of steps marched along any ray from the camera is a constant. The step length varies as a result (oblique rays == longer steps)
+	float totalRayMarchSteps = /*SQ_ROOT_3*/ maxGridDim * float(_NumRaymarchStepsPerMV); // per ray
 	float oneOverTotalRayMarchSteps = rcp(totalRayMarchSteps);
+	float mvRayLength = csRayLength * rcp(_MetavoxelSize.z); // [todo] this restricts metavoxel to only cubes
+	float mvStepSize = mvRayLength * oneOverTotalRayMarchSteps;
 
-	float stepSize = sqrt(dot(mvRay, mvRay)) * oneOverTotalRayMarchSteps;
-	float3 mvRayStep = mvRay * oneOverTotalRayMarchSteps;
-	float3 mvRayDir = normalize(mvRay);
+	// Find the intersection between the ray and the current metavoxel	
+	float3 mvMin = float3(-0.5, -0.5, -0.5);				
+	float t1, t2; // t1 and t2 represent distance from the ray origin (near plane of the volume AABB) of the intersection points on the metavoxel (t1, t2 >= 0)
+	bool intersects = IntersectBox(mvRay, mvMin, -mvMin, t1, t2);
+	if (!intersects)
+		return seethrough; // ray passes through the cube corner
+	
+	// find step indices; note that tentry and texit are guaranteed to be >=0
+	// however, it is possible for the camera to be within the current metavoxel, in which case texit > tcamera >= tentry. 
+	// for this case, we should ensure we don't sample points (within the metavoxel) behind the camera
+	int tEntry = ceil(t1 / mvStepSize); // entry index
+	int tExit  = floor(t2 / mvStepSize); // exit index
+	float3 mvCameraPos = mul(_CameraToMetavoxel, float4(0, 0, 0, 1)); // camera position along this ray (for soft particles)		
+	int tCamera = sqrt(dot(mvCameraPos - mvRay.o, mvCameraPos - mvRay.o)) / mvStepSize;
+	tEntry = max(tEntry, tCamera);	
 
-	float3 mvMin = float3(-0.5, -0.5, -0.5), mvMax = -1.0 * mvMin;				
-	float t1, t2;
-	Ray mvRay1;
-	mvRay1.o = mvAABBStart;
-	mvRay1.d = mvRayDir;
-	bool intersects = IntersectBox(mvRay1, mvMin, mvMax, t1, t2);
-						
-	// if the volume AABB's near plane is within the metavoxel, t1 will be negative. clamp to 0				
-	int tstart = ceil(t1 / stepSize), tend = floor(t2 / stepSize);
-	tstart = max(0, tstart);
-	tend   = min(totalRayMarchSteps - 1, tend);
-
+	// loop variables
 	float3 result = float3(0, 0, 0);
 	float transmittance = 1.0f;
 	float borderVoxelOffset = rcp(_NumVoxels) * _MetavoxelBorderSize;
-	float3 mvRayPos = mvAABBStart + tend * mvRayStep;
 	int samples = 0;
-	int step;
-	// Sample uniformly along the ray starting from the current metavoxel's exit index (along the ray), 
-	// and moving towards the camera while stopping once we're no longer within the current metavoxel.
-	// Blend the samples back-to-front in the process										
-	for (step = tend; step >= tstart; step--) {			
+	int stepIndex;
+	float3 mvRayStep = mvRay.d * mvStepSize,
+		   mvRayPos = mvRay.o + tExit * mvRayStep;
+
+	// Sample uniformly in the opposite direction of the ray, starting from the current metavoxel's exit and stopping
+	// once we hit the camera (or) are outside the metavoxel. 	
+	// Samples are blended back-to-front. (This is orthogonal to the metavoxel raymarch blend mode, which is b/w metavoxels)
+	for (stepIndex = tExit; stepIndex >= tEntry; stepIndex--) {			
 		float3 samplePos = mvRayPos + 0.5; //[-0.5, 0.5] -->[0, 1]
 						
 		// adjust for the metavoxel border -- the border voxels are only for filtering
 		samplePos = samplePos * (1.0 - 2.0 * borderVoxelOffset) + borderVoxelOffset;  // [0, 1] ---> [offset, 1 - offset]
 
-		// supply 0 derivatives when sampling -- this ensures that the loop doesn't have to unrolled
+		// supply 0 derivatives when sampling -- this ensures that the loop doesn't have to unrolled on SM 5.0 (hlsl)
 		// due to a gradient instruction (such as tex3D)
 		half4 voxelColor = tex3D(_VolumeTexture, samplePos, float3(0,0,0), float3(0,0,0));
 		half3 color = voxelColor.rgb;
 		half  density = voxelColor.a;
+
+		// if samples are very close to the camera, make them more transparent (a la soft particles)
+		if (stepIndex - tCamera < _SoftDistance) {
+			// make less dense
+			density *= (stepIndex - tCamera) * rcp(_SoftDistance);
+		}
+
 		half blendFactor = rcp(1.0 + density);
 
 		result.rgb = lerp(color, result.rgb, blendFactor);
@@ -252,8 +275,10 @@ frag(v2f i) : COLOR
 						
 		mvRayPos -= mvRayStep;
 		samples++;
-	}
+	}		
 
+
+	// Another debug viewer to color code number of samples per ray for this metavoxel
 	if (_ShowNumSamples == 1) {
 		// Ray march steps per metavoxel caps the # of samples we'll make (64 for a 32-voxel-wide metavoxel => 2 samples per voxel)
 		if (samples < 5)
