@@ -26,6 +26,7 @@ namespace MetavoxelEngine
     {
         public Vector3 mPos;
         public List<ParticleSystem.Particle> mParticlesCovered;
+        public bool mCleared;
     }
 
     // When "filling a metavoxel" using the "Fill Volume" shader, we send per-particle-info
@@ -75,6 +76,7 @@ namespace MetavoxelEngine
         public Material matBlendParticles; // material to blend the raymarched volume with the camera's RT    
         public Material mvLineColor;
         public Shader generateLightDepthMapShader;
+        public GameObject gridCenter;
 
         /********************** metavoxel layout/size **********************************************/
         public int numMetavoxelsX, numMetavoxelsY, numMetavoxelsZ; // # metavoxels in the grid along x, y & z
@@ -103,6 +105,7 @@ namespace MetavoxelEngine
         */
         // Metavoxel grid state
         private MetaVoxel[, ,] mvGrid;
+        private Vector3 wsGridCenter;
         private Vector3 mvScaleWithBorder;
 
         // Render target resources
@@ -132,6 +135,7 @@ namespace MetavoxelEngine
             volumeTextureAnisoLevel = 1; // The value range of this variable goes from 1 to 9, where 1 equals no filtering applied and 9 equals full filtering applied
             lightOrientation = dirLight.transform.rotation;
             numMetavoxelsCovered = 0;
+            wsGridCenter = Vector3.zero;
             mvScaleWithBorder = mvScale * numVoxelsInMetavoxel / (numVoxelsInMetavoxel - 2 * numBorderVoxels);
 
             CreateResources();
@@ -181,14 +185,16 @@ namespace MetavoxelEngine
 
             if (Time.frameCount % updateInterval == 0)
             {
-                if (dirLight.transform.rotation != lightOrientation)
+                if (dirLight.transform.rotation != lightOrientation /* light direction has changed*/ ||
+                    wsGridCenter != gridCenter.transform.position)
                 {
                     lightOrientation = dirLight.transform.rotation;
+                    wsGridCenter = gridCenter.transform.position;
                     UpdateMetavoxelPositions();
                     UpdatePositionOfCameraAtLight();
                 }
 
-                UpdateMetavoxelParticleCoverage();
+                BinParticlesToMetavoxels();
                 FillMetavoxels();
             }
 
@@ -356,8 +362,7 @@ namespace MetavoxelEngine
         {
             // ideally we want to set the near plane based on the bounding box of the scene. 
             // for now, keep it at 200 units from the metavoxel center
-            lightCamera.transform.position = Vector3.zero - dirLight.transform.forward * 200f;
-
+            lightCamera.transform.position = wsGridCenter - dirLight.transform.forward * 200f;
             lightCamera.transform.localRotation = Quaternion.identity;            
         }
     
@@ -372,7 +377,7 @@ namespace MetavoxelEngine
            * the orientation of each metavoxel however faces the light (X and Z are reversed). this is just confusing. please fix [todo]
           */
 
-            Vector3 lsWorldOrigin = dirLight.transform.worldToLocalMatrix.MultiplyPoint3x4(Vector3.zero); // xform origin to light space
+            Vector3 lsWorldOrigin = dirLight.transform.worldToLocalMatrix.MultiplyPoint3x4(wsGridCenter); // xform origin to light space
 
             for (int zz = 0; zz < numMetavoxelsZ; zz++)
             {
@@ -389,11 +394,9 @@ namespace MetavoxelEngine
         }
 
 
-        void UpdateMetavoxelParticleCoverage()
+        void BinParticlesToMetavoxels()
         {
-            ParticleSystem.Particle[] parts = new ParticleSystem.Particle[particleSys.maxParticles];
-            numParticlesEmitted = particleSys.GetParticles(parts);
-            
+            // Clear previous particle lists
             for (int zz = 0; zz < numMetavoxelsZ; zz++)
             {
                 for (int yy = 0; yy < numMetavoxelsY; yy++)
@@ -401,30 +404,91 @@ namespace MetavoxelEngine
                     for (int xx = 0; xx < numMetavoxelsX; xx++)
                     {
                         mvGrid[zz, yy, xx].mParticlesCovered.Clear();
+                    }
+                }
+            }
 
-                        Matrix4x4 worldToMetavoxelMatrix = Matrix4x4.TRS(mvGrid[zz, yy, xx].mPos,
-                                                                         lightOrientation,
-                                                                         mvScaleWithBorder).inverse; // Account for the border of the metavoxel while scaling
 
-                        for (int pp = 0; pp < numParticlesEmitted; pp++)
+            ParticleSystem.Particle[] parts = new ParticleSystem.Particle[particleSys.maxParticles];
+            numParticlesEmitted = particleSys.GetParticles(parts);
+
+            for (int pp = 0; pp < numParticlesEmitted; pp++)
+            {
+                // xform particle to mv space to make it a sphere-aabb intersection test
+                Vector3 wsParticlePos = particleSys.transform.localToWorldMatrix.MultiplyPoint3x4(parts[pp].position);
+                Vector3 lsParticlePos = dirLight.transform.worldToLocalMatrix.MultiplyPoint3x4(wsParticlePos);
+                Vector3 lsMVGridCenter = dirLight.transform.worldToLocalMatrix.MultiplyPoint3x4(wsGridCenter);
+
+                Vector3 pIndexOffset = (lsParticlePos - lsMVGridCenter) / mvScale.x;
+                Vector3 pIndex = pIndexOffset + new Vector3(numMetavoxelsX, numMetavoxelsY, numMetavoxelsZ) * 0.5f;
+ 
+                int pExtents = Mathf.RoundToInt( (parts[pp].size / 2f) / mvScale.x );
+                Vector3 minIndex = pIndex - Vector3.one * pExtents, 
+                        maxIndex = pIndex + Vector3.one * pExtents;
+
+                Vector3 mvGridIndexLimit = new Vector3(numMetavoxelsX - 1, numMetavoxelsY - 1, numMetavoxelsZ - 1);
+
+                minIndex = Vector3.Max(Vector3.zero, minIndex);
+                maxIndex = Vector3.Min(mvGridIndexLimit, maxIndex);
+
+                for (int zz = (int)minIndex.z; zz <= (int)maxIndex.z; zz++)
+                {
+                    for (int yy = (int)minIndex.y; yy <= (int)maxIndex.y; yy++)
+                    {
+                        for (int xx = (int)minIndex.x; xx <= (int)maxIndex.x; xx++)
                         {
-                            // xform particle to mv space to make it a sphere-aabb intersection test
-                            Vector3 wsParticlePos = particleSys.transform.localToWorldMatrix.MultiplyPoint3x4(parts[pp].position);
+                            Matrix4x4 worldToMetavoxelMatrix = Matrix4x4.TRS(mvGrid[zz, yy, xx].mPos,
+                                                                             lightOrientation,
+                                                                             mvScaleWithBorder).inverse; // Account for the border of the metavoxel while binning
+
                             Vector3 mvParticlePos = worldToMetavoxelMatrix.MultiplyPoint3x4(wsParticlePos);
-                            float radius = (parts[pp].size / 2f) / mvScaleWithBorder.x;
+                            float mvParticleRadius = (parts[pp].size / 2f) / mvScaleWithBorder.x; // Intersection test is with the enlarged metavoxel (i.e. with the border), so 
 
                             bool particle_intersects_metavoxel = MathUtil.DoesBoxIntersectSphere(new Vector3(-0.5f, -0.5f, -0.5f),
-                                                                                                    new Vector3(0.5f, 0.5f, 0.5f),
-                                                                                                    mvParticlePos,
-                                                                                                    radius);
+                                                                                                 new Vector3(0.5f, 0.5f, 0.5f),
+                                                                                                 mvParticlePos,
+                                                                                                 mvParticleRadius);
 
                             if (particle_intersects_metavoxel)
                                 mvGrid[zz, yy, xx].mParticlesCovered.Add(parts[pp]);
-                        } // pp
+                        }
+                    }
+                }
+            } // pp
 
-                    } // xx
-                } // yy
-            } // zz       
+
+
+            //for (int zz = 0; zz < numMetavoxelsZ; zz++)
+            //{
+            //    for (int yy = 0; yy < numMetavoxelsY; yy++)
+            //    {
+            //        for (int xx = 0; xx < numMetavoxelsX; xx++)
+            //        {
+            //            mvGrid[zz, yy, xx].mParticlesCovered.Clear();
+
+            //            Matrix4x4 worldToMetavoxelMatrix = Matrix4x4.TRS(mvGrid[zz, yy, xx].mPos,
+            //                                                             lightOrientation,
+            //                                                             mvScaleWithBorder).inverse; // Account for the border of the metavoxel while scaling
+
+            //            for (int pp = 0; pp < numParticlesEmitted; pp++)
+            //            {
+            //                // xform particle to mv space to make it a sphere-aabb intersection test
+            //                Vector3 wsParticlePos = particleSys.transform.localToWorldMatrix.MultiplyPoint3x4(parts[pp].position);
+            //                Vector3 mvParticlePos = worldToMetavoxelMatrix.MultiplyPoint3x4(wsParticlePos);
+            //                float radius = (parts[pp].size / 2f) / mvScaleWithBorder.x;
+
+            //                bool particle_intersects_metavoxel = MathUtil.DoesBoxIntersectSphere(new Vector3(-0.5f, -0.5f, -0.5f),
+            //                                                                                        new Vector3(0.5f, 0.5f, 0.5f),
+            //                                                                                        mvParticlePos,
+            //                                                                                        radius);
+
+            //                if (particle_intersects_metavoxel)
+            //                    mvGrid[zz, yy, xx].mParticlesCovered.Add(parts[pp]);
+            //            } // pp
+
+            //        } // xx
+            //    } // yy
+            //} // zz       
         }
 
 
@@ -658,6 +722,7 @@ namespace MetavoxelEngine
             matRayMarch.SetFloat("_NumVoxels", numVoxelsInMetavoxel);
             matRayMarch.SetVector("_MetavoxelSize", mvScale);
             matRayMarch.SetVector("_MetavoxelGridDim", new Vector3(numMetavoxelsX, numMetavoxelsY, numMetavoxelsZ));
+            matRayMarch.SetVector("_MetavoxelGridCenter", wsGridCenter);
             matRayMarch.SetInt("_MetavoxelBorderSize", numBorderVoxels);
 
             // Camera uniforms
@@ -1057,7 +1122,7 @@ namespace MetavoxelEngine
         void OnDrawGizmos()
         {
             Gizmos.color = Color.blue;
-            Vector3 lsWorldOrigin = dirLight.transform.worldToLocalMatrix.MultiplyPoint3x4(Vector3.zero); // xform origin to light space
+            Vector3 lsWorldOrigin = dirLight.transform.worldToLocalMatrix.MultiplyPoint3x4(wsGridCenter); // xform origin to light space
 
             for (int zz = 0; zz < numMetavoxelsZ; zz++)
             {

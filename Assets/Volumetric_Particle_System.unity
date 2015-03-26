@@ -3687,6 +3687,33 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 697461630}
+--- !u!1 &703036626
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 703036627}
+  m_Layer: 0
+  m_Name: Gridcenter
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &703036627
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 703036626}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1703466573}
+  m_RootOrder: 10
 --- !u!1 &705706149
 GameObject:
   m_ObjectHideFlags: 0
@@ -6515,6 +6542,7 @@ Transform:
   - {fileID: 1912476520}
   - {fileID: 650980976}
   - {fileID: 1799249135}
+  - {fileID: 703036627}
   m_Father: {fileID: 0}
   m_RootOrder: 2
 --- !u!1 &1717350146
@@ -8981,6 +9009,7 @@ MonoBehaviour:
   mvLineColor: {fileID: 2100000, guid: e091f90250c3ccc4eb5732506a7b76f6, type: 2}
   generateLightDepthMapShader: {fileID: 4800000, guid: d503664f424880d40a00f7762d575f5c,
     type: 3}
+  gridCenter: {fileID: 703036626}
   numMetavoxelsX: 10
   numMetavoxelsY: 10
   numMetavoxelsZ: 10

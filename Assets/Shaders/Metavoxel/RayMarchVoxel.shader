@@ -54,6 +54,7 @@ CBUFFER_END
 CBUFFER_START(VolumeConstants)
 	float3 _MetavoxelGridDim;
 	float3 _MetavoxelSize;
+	float3 _MetavoxelGridCenter;
 	float _NumVoxels; // metavoxel's voxel dimensions
 	int _MetavoxelBorderSize;	
 	int _NumRaymarchStepsPerMV;
@@ -202,7 +203,7 @@ frag(v2f i) : COLOR
 			
 	// Find the approximate bounds of the entire metavoxel grid region in camera space
 	// This is done to to find the near and far AABB planes of the volume (parallel to camera view plane) to start/end the ray march through the volume
-	float3 csVolOrigin = mul(_WorldToCameraMatrix, float4(0, 0, 0, 1)); // [todo] remove restriction on grid being centered at world origin		
+	float3 csVolOrigin = mul(_WorldToCameraMatrix, float4(_MetavoxelGridCenter, 1)); // [todo] remove restriction on grid being centered at world origin		
 	float2 nn = max(_MetavoxelGridDim.xx, _MetavoxelGridDim.yz);
 	float maxGridDim = max(nn.x, nn.y);
 
