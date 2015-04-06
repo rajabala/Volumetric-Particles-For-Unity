@@ -24,8 +24,13 @@ namespace MetavoxelEngine
     // the particles it covers
     struct MetaVoxel
     {
+        public struct ParticleInfo
+        {
+            public ParticleSystem.Particle mParticle;
+            public ParticleSystem mParent; // particle system corresponding to the particle above
+        }
         public Vector3 mPos;
-        public List<ParticleSystem.Particle> mParticlesCovered;
+        public List<ParticleInfo> mParticlesCovered;
         public bool mCleared;
     }
 
@@ -70,12 +75,7 @@ namespace MetavoxelEngine
          */
         /********************* game objects/components that need to be set *************************/
         public Light dirLight;
-        public ParticleSystem particleSys;
-        public Material matFillVolume;
-        public Material matRayMarch;
-        public Material matBlendParticles; // material to blend the raymarched volume with the camera's RT    
-        public Material mvLineColor;
-        public Shader generateLightDepthMapShader;
+        public LayerMask particlesLayer;       
         public GameObject gridCenter;
 
         /********************** metavoxel layout/size **********************************************/
@@ -89,6 +89,13 @@ namespace MetavoxelEngine
         public int rayMarchSteps;
         public Vector3 ambientColor;        
         public int volumeTextureAnisoLevel;
+
+        /*********************** materials/shaders (should be auto set via prefab) ***********/
+        public Material matFillVolume;
+        public Material matRayMarch;
+        public Material matBlendParticles; // material to blend the raymarched volume with the camera's RT    
+        public Material mvLineColor;
+        public Shader generateLightDepthMapShader;
 
             /*** gui controls ****/
         public float fDisplacementScale;
@@ -108,12 +115,14 @@ namespace MetavoxelEngine
         private Vector3 wsGridCenter;
         private Vector3 mvScaleWithBorder;
 
+        private ParticleSystem[] pPSys;
+
         // Render target resources
         private RenderTexture mainSceneRT; // camera draws all the objects in the scene but for the particles into this
         private RenderTexture particlesRT; // result of raymarching the metavoxels is stored in this    
         private RenderTexture fillMetavoxelRT, fillMetavoxelRT1; // bind this as RT when filling a metavoxel. we don't sample/use it though..
         private RenderTexture[, ,] mvFillTextures; // 3D textures that hold metavoxel fill data
-        public RenderTexture lightPropogationUAV; // Light propogation texture used while filling metavoxels
+        public RenderTexture[,] lightPropogationUAVs; // Light propogation texture used while filling metavoxels
         public RenderTexture lightDepthMap;
 
         // scripted camera for mini-shadow map generation
@@ -141,6 +150,7 @@ namespace MetavoxelEngine
             CreateResources();
             CreateMeshes();
             InitCameraAtLight();
+            GetParticleSystems();
 
             // [perf threat] Unity is going to do a Z-prepass simply because of the line below
             this.GetComponent<Camera>().depthTextureMode = DepthTextureMode.Depth; // this makes the depth buffer available for all the shaders as _CameraDepthTexture
@@ -261,13 +271,13 @@ namespace MetavoxelEngine
             }
 
 
-            if (!lightPropogationUAV)
-            {
-                lightPropogationUAV = new RenderTexture(numMetavoxelsX * numVoxelsInMetavoxel, numMetavoxelsY * numVoxelsInMetavoxel, 0 /* no need depth surface, just color*/, RenderTextureFormat.RFloat);
-                lightPropogationUAV.generateMips = false;
-                lightPropogationUAV.enableRandomWrite = true; // use as UAV
-                lightPropogationUAV.Create();
-            }
+            //if (!lightPropogationUAVs)
+            //{
+            //    lightPropogationUAVs = new RenderTexture(numMetavoxelsX * numVoxelsInMetavoxel, numMetavoxelsY * numVoxelsInMetavoxel, 0 /* no need depth surface, just color*/, RenderTextureFormat.RFloat);
+            //    lightPropogationUAVs.generateMips = false;
+            //    lightPropogationUAVs.enableRandomWrite = true; // use as UAV
+            //    lightPropogationUAVs.Create();
+            //}
 
             if (!lightDepthMap)
             {
@@ -277,25 +287,38 @@ namespace MetavoxelEngine
                 lightDepthMap.Create();
             }
            
-            CreateMetavoxelGrid(); // creates the fill texture per metavoxel
+            CreateMetavoxelGrid(numMetavoxelsX, numMetavoxelsY, numMetavoxelsZ); // creates the fill texture per metavoxel
+            CreateLightPropagationUAVs();
         }
 
 
-        // Create mv info & associated fill texture for every mv in the grid
-        void CreateMetavoxelGrid()
+        void ReleaseResources()
         {
-            mvGrid = new MetaVoxel[numMetavoxelsZ, numMetavoxelsY, numMetavoxelsX]; // note index order -- prefer locality in X,Y
-            mvFillTextures = new RenderTexture[numMetavoxelsZ, numMetavoxelsY, numMetavoxelsX];
+            particlesRT.Release();
+            mainSceneRT.Release();            
+            lightDepthMap.Release(); 
+            fillMetavoxelRT.Release();
+            fillMetavoxelRT1.Release();
+
+            ReleaseMetavoxelTextures();
+            ReleaseLightPropagationUAVs();
+        }
+
+        // Create mv info & associated fill texture for every mv in the grid
+        void CreateMetavoxelGrid(int xDim, int yDim, int zDim)
+        {
+            mvGrid = new MetaVoxel[xDim, yDim, zDim]; // note index order -- prefer locality in X,Y
+            mvFillTextures = new RenderTexture[zDim, yDim, xDim];
 
             // Init fill texture and particle list per metavoxel
-            for (int zz = 0; zz < numMetavoxelsZ; zz++)
+            for (int zz = 0; zz < zDim; zz++)
             {
-                for (int yy = 0; yy < numMetavoxelsY; yy++)
+                for (int yy = 0; yy < yDim; yy++)
                 {
-                    for (int xx = 0; xx < numMetavoxelsX; xx++)
+                    for (int xx = 0; xx < xDim; xx++)
                     {
-                        mvGrid[zz, yy, xx].mParticlesCovered = new List<ParticleSystem.Particle>();
-                        CreateFillTexture(xx, yy, zz);
+                        mvGrid[zz, yy, xx].mParticlesCovered = new List<MetaVoxel.ParticleInfo>();
+                        CreateMetavoxelTexture(xx, yy, zz);
                     }
                 }
             }
@@ -305,7 +328,7 @@ namespace MetavoxelEngine
         }
 
 
-        void CreateFillTexture(int xx, int yy, int zz)
+        void CreateMetavoxelTexture(int xx, int yy, int zz)
         {
             // Note that constructing a RenderTexture object does not create the hardware representation immediately. The actual render texture is created upon first use or when Create is called manually
             // file:///C:/Program%20Files%20(x86)/Unity/Editor/Data/Documentation/html/en/ScriptReference/RenderTexture-ctor.html
@@ -316,6 +339,49 @@ namespace MetavoxelEngine
             mvFillTextures[zz, yy, xx].enableRandomWrite = true; // use as UAV
         }
    
+
+        void ReleaseMetavoxelTextures()
+        {
+            for (int zz = 0; zz < numMetavoxelsZ; zz++)
+            {
+                for (int yy = 0; yy < numMetavoxelsY; yy++)
+                {
+                    for (int xx = 0; xx < numMetavoxelsX; xx++)
+                    {
+                        mvFillTextures[zz, yy, xx].Release();
+                    }
+                }
+            }
+        }
+
+
+        void CreateLightPropagationUAVs()
+        {
+            lightPropogationUAVs = new RenderTexture[numMetavoxelsX, numMetavoxelsY];
+
+            for (int yy = 0; yy < numMetavoxelsY; yy++)
+            {
+                for (int xx = 0; xx < numMetavoxelsX; xx++)
+                {
+                    lightPropogationUAVs[xx, yy] = new RenderTexture(numVoxelsInMetavoxel, numVoxelsInMetavoxel, 0 /* no need depth surface, just color*/, RenderTextureFormat.RFloat);
+                    lightPropogationUAVs[xx, yy].isVolume = false;
+                    lightPropogationUAVs[xx, yy].generateMips = false;
+                    lightPropogationUAVs[xx, yy].enableRandomWrite = true; // use as UAV
+                    lightPropogationUAVs[xx, yy].Create();
+                }
+            }
+        }
+
+        void ReleaseLightPropagationUAVs()
+        {
+            for (int yy = 0; yy < numMetavoxelsY; yy++)
+            {
+                for (int xx = 0; xx < numMetavoxelsX; xx++)
+                {
+                    lightPropogationUAVs[xx, yy].Release();
+                }
+            }
+        }
         
         void InitCameraAtLight()
         {
@@ -394,6 +460,28 @@ namespace MetavoxelEngine
         }
 
 
+        void GetParticleSystems()
+        {
+            // Add all particle systems that use the particlesLayer
+            ParticleSystem[] objs = GameObject.FindObjectsOfType<ParticleSystem>();
+            
+            List<ParticleSystem> lps = new List<ParticleSystem>(); // tmp storage
+            int count = 0;
+
+            foreach(ParticleSystem ps in objs)
+            {
+                if (particlesLayer.value == (1 << ps.gameObject.layer))
+                {
+                    count++;
+                    lps.Add(ps);
+                }
+            }
+
+            pPSys = new ParticleSystem[count];
+            pPSys = lps.ToArray();
+        }
+
+
         void BinParticlesToMetavoxels()
         {
             // Clear previous particle lists
@@ -408,53 +496,61 @@ namespace MetavoxelEngine
                 }
             }
 
-
-            ParticleSystem.Particle[] parts = new ParticleSystem.Particle[particleSys.maxParticles];
-            numParticlesEmitted = particleSys.GetParticles(parts);
-
-            for (int pp = 0; pp < numParticlesEmitted; pp++)
+            foreach (ParticleSystem ps in pPSys)
             {
-                // xform particle to mv space to make it a sphere-aabb intersection test
-                Vector3 wsParticlePos = particleSys.transform.localToWorldMatrix.MultiplyPoint3x4(parts[pp].position);
-                Vector3 lsParticlePos = dirLight.transform.worldToLocalMatrix.MultiplyPoint3x4(wsParticlePos);
-                Vector3 lsMVGridCenter = dirLight.transform.worldToLocalMatrix.MultiplyPoint3x4(wsGridCenter);
+                ParticleSystem.Particle[] particles = new ParticleSystem.Particle[ps.maxParticles];
+                numParticlesEmitted = ps.GetParticles(particles);
 
-                Vector3 pIndexOffset = (lsParticlePos - lsMVGridCenter) / mvScale.x;
-                Vector3 pIndex = pIndexOffset + new Vector3(numMetavoxelsX, numMetavoxelsY, numMetavoxelsZ) * 0.5f;
- 
-                int pExtents = Mathf.RoundToInt( (parts[pp].size / 2f) / mvScale.x );
-                Vector3 minIndex = pIndex - Vector3.one * pExtents, 
-                        maxIndex = pIndex + Vector3.one * pExtents;
-
-                Vector3 mvGridIndexLimit = new Vector3(numMetavoxelsX - 1, numMetavoxelsY - 1, numMetavoxelsZ - 1);
-
-                minIndex = Vector3.Max(Vector3.zero, minIndex);
-                maxIndex = Vector3.Min(mvGridIndexLimit, maxIndex);
-
-                for (int zz = (int)minIndex.z; zz <= (int)maxIndex.z; zz++)
+                for (int pp = 0; pp < numParticlesEmitted; pp++)
                 {
-                    for (int yy = (int)minIndex.y; yy <= (int)maxIndex.y; yy++)
+                    // xform particle to mv space to make it a sphere-aabb intersection test
+                    Vector3 wsParticlePos = ps.transform.localToWorldMatrix.MultiplyPoint3x4(particles[pp].position);
+                    Vector3 lsParticlePos = dirLight.transform.worldToLocalMatrix.MultiplyPoint3x4(wsParticlePos);
+                    Vector3 lsMVGridCenter = dirLight.transform.worldToLocalMatrix.MultiplyPoint3x4(wsGridCenter);
+
+                    Vector3 pIndexOffset = (lsParticlePos - lsMVGridCenter) / mvScale.x;
+                    Vector3 pIndex = pIndexOffset + new Vector3(numMetavoxelsX, numMetavoxelsY, numMetavoxelsZ) * 0.5f;
+
+                    int pExtents = Mathf.RoundToInt((particles[pp].size / 2f) / mvScale.x);
+                    Vector3 minIndex = pIndex - Vector3.one * pExtents,
+                            maxIndex = pIndex + Vector3.one * pExtents;
+
+                    Vector3 mvGridIndexLimit = new Vector3(numMetavoxelsX - 1, numMetavoxelsY - 1, numMetavoxelsZ - 1);
+
+                    minIndex = Vector3.Max(Vector3.zero, minIndex);
+                    maxIndex = Vector3.Min(mvGridIndexLimit, maxIndex);
+
+                    for (int zz = (int)minIndex.z; zz <= (int)maxIndex.z; zz++)
                     {
-                        for (int xx = (int)minIndex.x; xx <= (int)maxIndex.x; xx++)
+                        for (int yy = (int)minIndex.y; yy <= (int)maxIndex.y; yy++)
                         {
-                            Matrix4x4 worldToMetavoxelMatrix = Matrix4x4.TRS(mvGrid[zz, yy, xx].mPos,
-                                                                             lightOrientation,
-                                                                             mvScaleWithBorder).inverse; // Account for the border of the metavoxel while binning
+                            for (int xx = (int)minIndex.x; xx <= (int)maxIndex.x; xx++)
+                            {
+                                Matrix4x4 worldToMetavoxelMatrix = Matrix4x4.TRS(mvGrid[zz, yy, xx].mPos,
+                                                                                 lightOrientation,
+                                                                                 mvScaleWithBorder).inverse; // Account for the border of the metavoxel while binning
 
-                            Vector3 mvParticlePos = worldToMetavoxelMatrix.MultiplyPoint3x4(wsParticlePos);
-                            float mvParticleRadius = (parts[pp].size / 2f) / mvScaleWithBorder.x; // Intersection test is with the enlarged metavoxel (i.e. with the border), so 
+                                Vector3 mvParticlePos = worldToMetavoxelMatrix.MultiplyPoint3x4(wsParticlePos);
+                                float mvParticleRadius = (particles[pp].size / 2f) / mvScaleWithBorder.x; // Intersection test is with the enlarged metavoxel (i.e. with the border), so 
 
-                            bool particle_intersects_metavoxel = MathUtil.DoesBoxIntersectSphere(new Vector3(-0.5f, -0.5f, -0.5f),
-                                                                                                 new Vector3(0.5f, 0.5f, 0.5f),
-                                                                                                 mvParticlePos,
-                                                                                                 mvParticleRadius);
+                                bool particle_intersects_metavoxel = MathUtil.DoesBoxIntersectSphere(new Vector3(-0.5f, -0.5f, -0.5f),
+                                                                                                     new Vector3(0.5f, 0.5f, 0.5f),
+                                                                                                     mvParticlePos,
+                                                                                                     mvParticleRadius);
 
-                            if (particle_intersects_metavoxel)
-                                mvGrid[zz, yy, xx].mParticlesCovered.Add(parts[pp]);
+                                if (particle_intersects_metavoxel)
+                                {
+                                    MetaVoxel.ParticleInfo pinfo;
+                                    pinfo.mParticle = particles[pp];
+                                    pinfo.mParent = ps;
+                                    mvGrid[zz, yy, xx].mParticlesCovered.Add(pinfo);
+                                }
+                            }
                         }
                     }
-                }
-            } // pp
+                } // pp
+            }
+            
 
 
 
@@ -495,19 +591,25 @@ namespace MetavoxelEngine
         void FillMetavoxels()
         {
             // Clear the light propogation texture before we write to it
-            Graphics.SetRenderTarget(lightPropogationUAV);
-            GL.Clear(false, true, Color.red);
+            //Graphics.SetRenderTarget(lightPropogationUAVs);
+            //GL.Clear(false, true, Color.red);
 
             SetFillPassConstants();
             numMetavoxelsCovered = 0;
 
             // process the metavoxels in order of Z-slice closest to light to farthest
             for (int zz = 0; zz < numMetavoxelsZ; zz++)
-            {
+            {                
                 for (int yy = 0; yy < numMetavoxelsY; yy++)
                 {
                     for (int xx = 0; xx < numMetavoxelsX; xx++)
                     {
+                        if (zz == 0)
+                        {
+                            Graphics.SetRenderTarget(lightPropogationUAVs[xx, yy]);
+                            GL.Clear(false, true, new Color(dirLight.intensity, 0f, 0f));
+                        }
+
                         if (mvGrid[zz, yy, xx].mParticlesCovered.Count != 0)
                         {
                             FillMetavoxel(xx, yy, zz);
@@ -535,7 +637,7 @@ namespace MetavoxelEngine
             matFillVolume.SetVector("_LightForward", dirLight.transform.forward.normalized);
             matFillVolume.SetVector("_LightColor", dirLight.color);
             matFillVolume.SetVector("_AmbientColor", ambientColor);
-            matFillVolume.SetFloat("_InitLightIntensity", 1.0f);
+            matFillVolume.SetFloat("_InitLightIntensity", dirLight.intensity);
             matFillVolume.SetFloat("_NearZ", lightCamera.GetComponent<Camera>().nearClipPlane);
             matFillVolume.SetFloat("_FarZ", lightCamera.GetComponent<Camera>().farClipPlane);
 
@@ -569,7 +671,7 @@ namespace MetavoxelEngine
             // regardless of whether that pixel is covered or not.   
             Graphics.SetRenderTarget(fillMetavoxelRT);
             Graphics.SetRandomWriteTarget(1, mvFillTextures[zz, yy, xx]);
-            Graphics.SetRandomWriteTarget(2, lightPropogationUAV);
+            Graphics.SetRandomWriteTarget(2, lightPropogationUAVs[xx, yy]);
 
             // fill structured buffer
             int numParticles = mvGrid[zz, yy, xx].mParticlesCovered.Count;
@@ -577,10 +679,13 @@ namespace MetavoxelEngine
 
             int index = 0;
 
-            foreach (ParticleSystem.Particle p in mvGrid[zz, yy, xx].mParticlesCovered)
+            foreach (MetaVoxel.ParticleInfo pinfo in mvGrid[zz, yy, xx].mParticlesCovered)
             {
-                Vector3 wsPos = particleSys.transform.localToWorldMatrix.MultiplyPoint3x4(p.position);                
-                dpArray[index].mWorldToLocal = Matrix4x4.TRS(wsPos, Quaternion.AngleAxis(p.rotation, particleSys.transform.forward), new Vector3(p.size, p.size, p.size)).inverse;
+                ParticleSystem.Particle p = pinfo.mParticle;
+                ParticleSystem psys = pinfo.mParent;
+
+                Vector3 wsPos = psys.transform.localToWorldMatrix.MultiplyPoint3x4(p.position);
+                dpArray[index].mWorldToLocal = Matrix4x4.TRS(wsPos, Quaternion.AngleAxis(p.rotation, psys.transform.forward), new Vector3(p.size, p.size, p.size)).inverse;
                 dpArray[index].mWorldPos = wsPos;
                 dpArray[index].mRadius = p.size / 2f;
                 dpArray[index].mOpacity = p.lifetime / p.startLifetime; // [time-particle-will-remain-alive / particle-lifetime] use this to make particles less "dense" as they meet their end.
@@ -715,9 +820,6 @@ namespace MetavoxelEngine
 
         void SetRaymarchPassConstants()
         {
-            // Resources
-            matRayMarch.SetTexture("_LightPropogationTexture", lightPropogationUAV);
-
             // Metavoxel grid uniforms
             matRayMarch.SetFloat("_NumVoxels", numVoxelsInMetavoxel);
             matRayMarch.SetVector("_MetavoxelSize", mvScale);
@@ -730,7 +832,7 @@ namespace MetavoxelEngine
             // Unity sets the _CameraToWorld and _WorldToCamera constant buffers by default - but these would be on the metavoxel camera
             // that's attached to the directional light. We're interested in the main camera's matrices, not the pseudo-mv cam!
             //matRayMarch.SetMatrix("_CameraToWorldMatrix", Camera.main.cameraToWorldMatrix);
-            matRayMarch.SetMatrix("_WorldToCameraMatrix", Camera.main.worldToCameraMatrix);
+            //matRayMarch.SetMatrix("_WorldToCameraMatrix", Camera.main.worldToCameraMatrix);
             matRayMarch.SetFloat("_Fov", Mathf.Deg2Rad * Camera.main.fieldOfView);
             //matRayMarch.SetFloat("_Near", Camera.main.nearClipPlane);
             //matRayMarch.SetFloat("_Far", Camera.main.farClipPlane);
@@ -775,7 +877,7 @@ namespace MetavoxelEngine
                                                 lightOrientation,
                                                 mvScale); // border should NOT be included here. we want to rasterize only the pixels covered by the metavoxel
             matRayMarch.SetMatrix("_MetavoxelToWorld", mvToWorld);
-            matRayMarch.SetMatrix("_CameraToMetavoxel", mvToWorld.inverse * Camera.main.cameraToWorldMatrix);
+            matRayMarch.SetMatrix("_CameraToMetavoxel", mvToWorld.inverse * Camera.main.transform.localToWorldMatrix);
             //matRayMarch.SetMatrix("_WorldToMetavoxel", mvToWorld.inverse);
             matRayMarch.SetVector("_MetavoxelIndex", new Vector3(xx, yy, zz));
             matRayMarch.SetFloat("_ParticleCoverageRatio", mvGrid[zz, yy, xx].mParticlesCovered.Count / (float)numParticlesEmitted);
@@ -1051,8 +1153,10 @@ namespace MetavoxelEngine
 
         public void SetGridDimensions(float a)
         {
+            // Free up current grid resources, if need be.            
+
             // Resize grid
-            //ResizeMVGrid(a);
+            CreateMetavoxelGrid((int)a, (int)a, (int)a);
         }
 
         public void SetGridScale(float s)
@@ -1074,7 +1178,8 @@ namespace MetavoxelEngine
 
         public void SetNumParticles(float n)
         {
-            particleSys.maxParticles = (int)n;
+            foreach(ParticleSystem p in pPSys)
+                p.maxParticles = (int)n;
         }
 
         public void SetFadeParticles(bool fade)

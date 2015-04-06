@@ -40,7 +40,6 @@ CGPROGRAM
 #define SQ_ROOT_3 1.73205
 
 sampler3D _VolumeTexture;
-sampler2D _LightPropogationTexture;
 
 // Metavoxel uniforms
 CBUFFER_START(MetavoxelConstants)
@@ -67,7 +66,8 @@ CBUFFER_END
 // Camera uniforms
 CBUFFER_START(CameraConstants)
 	//float4x4 _CameraToWorldMatrix; // need to explicitly define this to get the main camera's matrices	
-	float4x4 _WorldToCameraMatrix;
+	//float4x4 _WorldToCameraMatrix;
+	float4x4 _WorldToCamera;
 	//float3 _CameraWorldPos;
 	float _Fov;
 	//float _Near;
@@ -183,16 +183,17 @@ frag(v2f i) : COLOR
 
 	// positions and directions are generally prefixed with their space [cs = camera (view) space, mv = metavoxel space]
 	// cs is RHS (see link below), while everything else is LHS (as in the Unity editor)
-					 
+					
 	// Find ray direction from camera through this pixel
 	float3 csRayDir;
 	csRayDir.xy = (2.0 * i.pos.xy / _ScreenRes) - 1.0; // [0, wh] to [-1, 1];
 	csRayDir.x *= (_ScreenRes.x / _ScreenRes.y); // account for aspect ratio
+	//csRayDir.y *= -1.0;
 	// Note that camera space (alone) matches OpenGL convention: camera's forward is the negative Z axis http://docs.unity3d.com/ScriptReference/Camera-worldToCameraMatrix.html
 	// Hence the - sign below
-	csRayDir.z = -rcp(tan(_Fov / 2.0)); // tan(fov_y / 2) = 1 / (norm_z)
+	csRayDir.z = rcp(tan(_Fov / 2.0)); // tan(fov_y / 2) = 1 / (norm_z)
 	csRayDir = normalize(csRayDir);
-					
+			
 	// alternative way to find ray direction using interpolated world pos from the VS		
 	//float3 csRayDir = normalize(mul(_WorldToCameraMatrix, float4(i.worldPos - _CameraWorldPos, 0)));
 
@@ -203,13 +204,13 @@ frag(v2f i) : COLOR
 			
 	// Find the approximate bounds of the entire metavoxel grid region in camera space
 	// This is done to to find the near and far AABB planes of the volume (parallel to camera view plane) to start/end the ray march through the volume
-	float3 csVolOrigin = mul(_WorldToCameraMatrix, float4(_MetavoxelGridCenter, 1)); // [todo] remove restriction on grid being centered at world origin		
+	float3 csVolOrigin = mul(_WorldToCamera, float4(_MetavoxelGridCenter, 1)); // [todo] remove restriction on grid being centered at world origin		
 	float2 nn = max(_MetavoxelGridDim.xx, _MetavoxelGridDim.yz);
 	float maxGridDim = max(nn.x, nn.y);
 
 	float csVolHalfZ = SQ_ROOT_3 * 0.5 * maxGridDim * _MetavoxelSize.x;
-	float csZVolMin = csVolOrigin.z + csVolHalfZ, // minZ > maxZ since -Z is the camera view direction
-		  csZVolMax = csVolOrigin.z - csVolHalfZ;
+	float csZVolMin = csVolOrigin.z - csVolHalfZ, // minZ > maxZ since -Z is the camera view direction
+		  csZVolMax = csVolOrigin.z + csVolHalfZ;
 	float3 csAABBStart	= csRayDir * (csZVolMin / csRayDir.z); // start is closer to the camera; camera is at the origin in camera space
 	float csRayLength = 2 * csVolHalfZ;
 

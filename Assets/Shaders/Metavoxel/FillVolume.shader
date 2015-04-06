@@ -16,7 +16,7 @@ SubShader {
 	#define NUM_VOXELS 32
 
 	#include "UnityCG.cginc"
-
+		
 	// If filling the metavoxels via DrawMeshNow, we'll need to use a standard VS instead of the built-in vert_img
 	// Note: DrawMeshNow doesn't work with multiple UAV writes. Hence going with Graphics.Blit in the main script
 	//struct vs_input {
@@ -90,6 +90,7 @@ CBUFFER_START(ParticleConstants)
 	float _OpacityFactor;
 	int _FadeOutParticles;
 	float _DisplacementScale;
+	float3 _ParticleColor;
 CBUFFER_END	
 
 	// helper methods
@@ -109,7 +110,7 @@ CBUFFER_END
 
 	void 
 	compute_voxel_color(float3 psVoxelPos	/*voxel position in particle space*/, 
-						float opacity,		/*particle opacity -- particle fades away as it dies*/
+						float fadeFactor,		/*particle opacity -- particle fades away as it dies*/
 						out Voxel v)
 	{
 		// sample the displacement noise texture for the particle
@@ -126,9 +127,9 @@ CBUFFER_END
 		half baseDensity = smoothstep(netDisplacement, 0.7 * netDisplacement, voxelParticleDistSq); // [0.0, 1.0]
 		half density = baseDensity *  _OpacityFactor; 
 			
-		// factor in the particle's lifetime opacity & opacity factor
+		// factor in the particle's lifetime fade factor
 		if (_FadeOutParticles == 1)
-			density *= opacity;
+			density *= fadeFactor;
 
 		v.density = density;
 		v.ao = netDisplacement;
@@ -199,7 +200,7 @@ CBUFFER_END
 				{
 					compute_voxel_color(psVoxelPos, p.mLifetimeOpacity, v);
 
-					voxelColumn[slice].density += v.density;
+					voxelColumn[slice].density = max(voxelColumn[slice].density , v.density);
 					voxelColumn[slice].ao		= max(voxelColumn[slice].ao, v.ao);
 				}
 			} // per particle
@@ -221,7 +222,7 @@ CBUFFER_END
 		int shadowIndex = (lsSceneDepth - lsVoxelColumnStart) / (oneVoxelSize);	
 
 		// transmitted light is used to shade a voxel (and is attenuated by density or occlusion)
-		float transmittedLight = (_MetavoxelIndex.z == 0)? _InitLightIntensity  :  lightPropogationTex[int2(i.pos.xy + _MetavoxelIndex.xy * _NumVoxels)];
+		float transmittedLight = (_MetavoxelIndex.z == 0)? _InitLightIntensity  :  lightPropogationTex[i.pos.xy];
 		// propagated light is what ends up written to the light propagation texture (duh!). it represents the amount of light that made it through the volume
 		// prior to occlusion. this way, we can project the light propagation texture on to the scene to correctly influence lighting (and thus have shadows cast by the volume)
 		float propagatedLight = transmittedLight;
@@ -247,7 +248,7 @@ CBUFFER_END
 			volumeTex[int3(i.pos.xy, slice)]	= half4(finalColor, voxelColumn[slice].density);
 		}
 
-		lightPropogationTex[int2(i.pos.xy + _MetavoxelIndex.xy * _NumVoxels)] = propagatedLight;
+		lightPropogationTex[i.pos.xy] = propagatedLight;
 
 		// go over border voxels in the "far" end of the voxel column (this can be simplified if border is restricted to 0 or 1)
 		// light transmitted by the "far border voxels" isn't written to the light propagation texture to ensure correct light transmittance to
