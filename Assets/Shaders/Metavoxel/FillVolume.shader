@@ -8,7 +8,6 @@ SubShader {
 	Cull Off ZWrite Off ZTest Off
 	CGPROGRAM
 	#pragma target 5.0
-	//#pragma exclude_renderers flash
 	#pragma enable_d3d11_debug_symbols
 	#pragma vertex vert_img		
 	//#pragma vertex vert
@@ -90,7 +89,7 @@ CBUFFER_START(ParticleConstants)
 	float _OpacityFactor;
 	int _FadeOutParticles;
 	float _DisplacementScale;
-	float3 _ParticleColor;
+	float _ParticleGreyscale;	
 CBUFFER_END	
 
 	// helper methods
@@ -226,7 +225,7 @@ CBUFFER_END
 		// propagated light is what ends up written to the light propagation texture (duh!). it represents the amount of light that made it through the volume
 		// prior to occlusion. this way, we can project the light propagation texture on to the scene to correctly influence lighting (and thus have shadows cast by the volume)
 		float propagatedLight = transmittedLight;
-		float diffuseColor = 0.4; // constant "color" if not emissive
+		float diffuseColor = _ParticleGreyscale; // constant "color" if not emissive
 		int borderVoxelIndex = _NumVoxels - _MetavoxelBorderSize;
 
 		for (slice = 0; slice < borderVoxelIndex; slice++)
@@ -240,7 +239,7 @@ CBUFFER_END
 			else
 				propagatedLight = transmittedLight;
 
-			half3 finalColor = diffuseColor * transmittedLight /* direct lighting */ +
+			half3 finalColor = diffuseColor * _LightColor * transmittedLight /* direct lighting */ +
 								(_AmbientColor * voxelColumn[slice].ao);	  /* indirect lighting */
 
 			transmittedLight *= rcp(1.0 + voxelColumn[slice].density);
@@ -261,7 +260,7 @@ CBUFFER_END
 			if (inShadow)
 				transmittedLight = 0.0;
 						
-			half3 finalColor = diffuseColor * transmittedLight /* direct lighting */ +
+			half3 finalColor = diffuseColor * _LightColor * transmittedLight /* direct lighting */ +
 								(_AmbientColor * voxelColumn[slice].ao);	  /* indirect lighting */
 
 			transmittedLight *= rcp(1.0 + voxelColumn[slice].density);

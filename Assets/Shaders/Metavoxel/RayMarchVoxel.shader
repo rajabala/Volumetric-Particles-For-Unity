@@ -19,7 +19,6 @@ BlendOp Add
 
 CGPROGRAM
 #pragma target 5.0
-//#pragma exclude_renderers flash
 #pragma enable_d3d11_debug_symbols
 #pragma vertex vert
 #pragma fragment frag
@@ -41,13 +40,12 @@ CGPROGRAM
 
 sampler3D _VolumeTexture;
 
-// Metavoxel uniforms
+// Per Metavoxel uniforms
 CBUFFER_START(MetavoxelConstants)
 	float4x4 _MetavoxelToWorld;
 	float4x4 _CameraToMetavoxel;
-	//float4x4 _WorldToMetavoxel;
 	float3 _MetavoxelIndex;	
-	float _ParticleCoverageRatio; 
+	// float _ParticleCoverageRatio; 
 CBUFFER_END
 
 CBUFFER_START(VolumeConstants)
@@ -65,19 +63,15 @@ CBUFFER_END
 
 // Camera uniforms
 CBUFFER_START(CameraConstants)
-	//float4x4 _CameraToWorldMatrix; // need to explicitly define this to get the main camera's matrices	
-	//float4x4 _WorldToCameraMatrix;
 	float4x4 _WorldToCamera;
 	//float3 _CameraWorldPos;
 	float _Fov;
-	//float _Near;
-	//float _Far;
 	float4 _ScreenRes;
 CBUFFER_END
 
 // tmp
 CBUFFER_START(TmpConstants)
-	int _ShowNumSamples;
+	//int _ShowNumSamples;
 	int _ShowMetavoxelDrawOrder;
 	int _OrderIndex;
 	int _NumMetavoxelsCovered;
@@ -280,24 +274,24 @@ frag(v2f i) : COLOR
 	}		
 
 
-	// Another debug viewer to color code number of samples per ray for this metavoxel
-	if (_ShowNumSamples == 1) {
-		// Ray march steps per metavoxel caps the # of samples we'll make (64 for a 32-voxel-wide metavoxel => 2 samples per voxel)
-		if (samples < 5)
-			return green1;
-		if (samples < 10)
-			return green2;
-		if (samples < 20)
-			return yellow;
-		if (samples < 30)
-			return orange;
-		if (samples < 40)
-			return red;
-		if (samples < 50)
-			return red2;
+	//// Another debug viewer to color code number of samples per ray for this metavoxel
+	//if (_ShowNumSamples == 1) {
+	//	// Ray march steps per metavoxel caps the # of samples we'll make (64 for a 32-voxel-wide metavoxel => 2 samples per voxel)
+	//	if (samples < 5)
+	//		return green1;
+	//	if (samples < 10)
+	//		return green2;
+	//	if (samples < 20)
+	//		return yellow;
+	//	if (samples < 30)
+	//		return orange;
+	//	if (samples < 40)
+	//		return red;
+	//	if (samples < 50)
+	//		return red2;
 							
-		return red3;
-	}
+	//	return red3;
+	//}
 
 	return float4(result.rgb, 1 - transmittance);			
 } // frag
