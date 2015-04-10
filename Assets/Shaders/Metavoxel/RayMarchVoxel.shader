@@ -1,4 +1,4 @@
-﻿Shader "Custom/RayMarchMetavoxel" {
+﻿Shader "Hidden/RayMarchMetavoxel" {
 Properties{
 	_VolumeTexture("Metavoxel fill data", 3D) = "" {}
 	_LightPropogationTexture("Light Propogation", 2D) = "" {}		
@@ -19,9 +19,15 @@ BlendOp Add
 
 CGPROGRAM
 #pragma target 5.0
-#pragma enable_d3d11_debug_symbols
+//#pragma enable_d3d11_debug_symbols
+
 #pragma vertex vert
 #pragma fragment frag
+// Following pragma can be commented out to avoid generation of various permutations of this shader
+// They are purely debug options
+#pragma multi_compile DBG_ON_DRAW_ORDER DBG_OFF_DRAW_ORDER
+#pragma multi_compile DBG_ON_BLEND_FUNC DBG_OFF_BLEND_FUNC
+#pragma multi_compile DBG_ON_NUM_SAMPLES DBG_OFF_NUM_SAMPLES
 
 #include "UnityCG.cginc"
 #define green1 float4(0.0, 0.2, 0.0, 0.5)
@@ -29,44 +35,36 @@ CGPROGRAM
 #define yellow float4(0.5, 0.5, 0.0, 0.5)
 #define orange float4(0.6, 0.4, 0.0, 0.5)
 #define red float4(0.6, 0.0, 0.0, 0.5)
-#define red2 float4(0.8, 0.0, 0.0, 0.5)
-#define red3 float4(1.0, 0.0, 0.0, 0.5)
-#define redb float4(0.5, 0.0, 0.0, 1.0)
-#define blueb float4(0.0, 0.0, 0.5, 1.0)
-#define greenb float4(0.0, 0.5, 0.0, 1.0)
 #define seethrough float4(0.0, 0.0, 0.0, 0.0)
-
 #define SQ_ROOT_3 1.73205
 
-sampler3D _VolumeTexture;
+sampler3D _VolumeTexture; // per-voxel data for the current metavoxel
 
 // Per Metavoxel uniforms
 CBUFFER_START(MetavoxelConstants)
 	float4x4 _MetavoxelToWorld;
 	float4x4 _CameraToMetavoxel;
-	float3 _MetavoxelIndex;	
-	// float _ParticleCoverageRatio; 
+	float3 _MetavoxelIndex;		
 CBUFFER_END
 
+// Metavoxel Grid (Volume) rendering uniforms
 CBUFFER_START(VolumeConstants)
-	float3 _MetavoxelGridDim;
-	float3 _MetavoxelSize;
+	float3 _MetavoxelGridDim;	
 	float3 _MetavoxelGridCenter;
+	float _MetavoxelScale;
 	float _NumVoxels; // metavoxel's voxel dimensions
 	int _MetavoxelBorderSize;	
 	int _NumRaymarchStepsPerMV;
 	int _SoftDistance;
 	//float4 _AABBMin;
-	//float4 _AABBMax;
-	//float3 _MetavoxelScale;
+	//float4 _AABBMax;	
 CBUFFER_END
 
 // Camera uniforms
 CBUFFER_START(CameraConstants)
-	float4x4 _WorldToCamera;
-	//float3 _CameraWorldPos;
+	float4x4 _WorldToCamera; // set by Unity when declared
 	float _Fov;
-	float4 _ScreenRes;
+	//float4 _ScreenParams; // built-in Unity shader variable; http://docs.unity3d.com/462/Documentation/Manual/SL-BuiltinValues.html
 CBUFFER_END
 
 // tmp
@@ -132,6 +130,23 @@ float4 DrawOrderColoring()
 }
 
 
+// Ray march steps per metavoxel caps the # of samples we'll make
+float4 RayMarchSamplesColoring(int samples)
+{
+	int samplesby5 = _NumRaymarchStepsPerMV/5;
+
+	if (samples < samplesby5)
+		return red;
+	if (samples < 2*samplesby5)
+		return orange;
+	if (samples < 3*samplesby5)
+		return yellow;
+	if (samples < 4*samplesby5)
+		return green2;
+	
+	return green1;						
+}
+
 struct v2f {
 	float4 pos : SV_POSITION;
 	//float3 worldPos : TEXCOORD;
@@ -153,56 +168,48 @@ vert(appdata_base i) {
 	
 // Fragment shader
 // Ray march the current metavoxel (against the light direction), sampling from its 3D texture and 
-// blending samples back-to-front. 
-// The number of samples per ray through the volume is constant. i.e., the step length when projected onto 
-// the view direction is constant (step length varies to ensure
-// same # of samples per ray)
+// blending samples back-to-front. Avoid artifacts from metavoxel-discretization of the volume by
+// choosing the same number of samples per ray across the volume (step lengths will differ as a result)
 half4
 frag(v2f i) : COLOR
 {			
 	// Debug options
-	if (_ShowMetavoxelDrawOrder == 1) 
-	{
+	#if defined(DBG_ON_DRAW_ORDER)
 		return DrawOrderColoring();
-	}
-	else if (_ShowRayMarchBlendFunc == 1)
-	{
+	#endif
+
+	#if defined(DBG_ON_BLEND_FUNC)
 		if (_RayMarchBlendOver == 1)
 			return float4(0.5, 0.5, 0, 1); // yellow for back-to-front blending
 		else
 			return float4(0, 0.5, 0.5, 1); // cyan for front-to-back blending
+	#endif
 
-	}
 
-
-	// positions and directions are generally prefixed with their space [cs = camera (view) space, mv = metavoxel space]
-	// cs is RHS (see link below), while everything else is LHS (as in the Unity editor)
+	// Naming convention: 
+	// Positions and directions are generally prefixed with their space [cs = camera (view) space, mv = metavoxel space]
+	// All spaces use the LHS convention
 					
 	// Find ray direction from camera through this pixel
 	float3 csRayDir;
-	csRayDir.xy = (2.0 * i.pos.xy / _ScreenRes) - 1.0; // [0, wh] to [-1, 1];
-	csRayDir.x *= (_ScreenRes.x / _ScreenRes.y); // account for aspect ratio
-	//csRayDir.y *= -1.0;
-	// Note that camera space (alone) matches OpenGL convention: camera's forward is the negative Z axis http://docs.unity3d.com/ScriptReference/Camera-worldToCameraMatrix.html
-	// Hence the - sign below
+	csRayDir.xy = (2.0 * i.pos.xy / _ScreenParams) - 1.0; // [0, wh] to [-1, 1];
+	csRayDir.x *= (_ScreenParams.x / _ScreenParams.y); // account for aspect ratio
+	
+	// in DX, screen space origin is at the top. however, with DrawMeshNow, the RT is flipped
+	// vertically and so we don't need to do csRayDir.y *= -1.0; to get a LHS ray direction
 	csRayDir.z = rcp(tan(_Fov / 2.0)); // tan(fov_y / 2) = 1 / (norm_z)
 	csRayDir = normalize(csRayDir);
 			
 	// alternative way to find ray direction using interpolated world pos from the VS		
 	//float3 csRayDir = normalize(mul(_WorldToCameraMatrix, float4(i.worldPos - _CameraWorldPos, 0)));
 
-	// Using a camere-AABB for the volume shows a snapping artifact as the camera moves
-	// Unsure if this is a lag problem or sth else.
-	//float3 csAABBStart	= csRayDir * (_AABBMin.z / csRayDir.z);
-	//float3 csAABBEnd	= csRayDir * (_AABBMax.z / csRayDir.z);
-			
 	// Find the approximate bounds of the entire metavoxel grid region in camera space
 	// This is done to to find the near and far AABB planes of the volume (parallel to camera view plane) to start/end the ray march through the volume
-	float3 csVolOrigin = mul(_WorldToCamera, float4(_MetavoxelGridCenter, 1)); // [todo] remove restriction on grid being centered at world origin		
+	float3 csVolOrigin = mul(_WorldToCamera, float4(_MetavoxelGridCenter, 1));
 	float2 nn = max(_MetavoxelGridDim.xx, _MetavoxelGridDim.yz);
 	float maxGridDim = max(nn.x, nn.y);
 
-	float csVolHalfZ = SQ_ROOT_3 * 0.5 * maxGridDim * _MetavoxelSize.x;
+	float csVolHalfZ = SQ_ROOT_3 * 0.5 * maxGridDim * _MetavoxelScale;
 	float csZVolMin = csVolOrigin.z - csVolHalfZ, // minZ > maxZ since -Z is the camera view direction
 		  csZVolMax = csVolOrigin.z + csVolHalfZ;
 	float3 csAABBStart	= csRayDir * (csZVolMin / csRayDir.z); // start is closer to the camera; camera is at the origin in camera space
@@ -215,7 +222,7 @@ frag(v2f i) : COLOR
 	// The number of steps marched along any ray from the camera is a constant. The step length varies as a result (oblique rays == longer steps)
 	float totalRayMarchSteps = /*SQ_ROOT_3*/ maxGridDim * float(_NumRaymarchStepsPerMV); // per ray
 	float oneOverTotalRayMarchSteps = rcp(totalRayMarchSteps);
-	float mvRayLength = csRayLength * rcp(_MetavoxelSize.z); // [todo] this restricts metavoxel to only cubes
+	float mvRayLength = csRayLength * rcp(_MetavoxelScale); // [todo] this restricts metavoxel to only cubes
 	float mvStepSize = mvRayLength * oneOverTotalRayMarchSteps;
 
 	// Find the intersection between the ray and the current metavoxel	
@@ -274,24 +281,10 @@ frag(v2f i) : COLOR
 	}		
 
 
-	//// Another debug viewer to color code number of samples per ray for this metavoxel
-	//if (_ShowNumSamples == 1) {
-	//	// Ray march steps per metavoxel caps the # of samples we'll make (64 for a 32-voxel-wide metavoxel => 2 samples per voxel)
-	//	if (samples < 5)
-	//		return green1;
-	//	if (samples < 10)
-	//		return green2;
-	//	if (samples < 20)
-	//		return yellow;
-	//	if (samples < 30)
-	//		return orange;
-	//	if (samples < 40)
-	//		return red;
-	//	if (samples < 50)
-	//		return red2;
-							
-	//	return red3;
-	//}
+	// Debug viewer to color code number of samples per ray for this metavoxel
+	#if defined(DBG_ON_NUM_SAMPLES)
+		return RayMarchSamplesColoring(samples);			
+	#endif
 
 	return float4(result.rgb, 1 - transmittance);			
 } // frag

@@ -1,4 +1,4 @@
-﻿Shader "Custom/Fill Volume" {
+﻿Shader "Hidden/Fill Volume" {
 Properties {
 	_DisplacementTexture("Displaced sphere", Cube) = "white" {}
 	_RampTexture("Ramp Texture", 2D) = "" {}
@@ -81,7 +81,7 @@ CBUFFER_START(VolumeConstants)
 	float3 _MetavoxelGridDim;		
 	float _NumVoxels; // (nv) each metavoxel is made up of nv * nv * nv voxels
 	int _MetavoxelBorderSize;
-	float _MetavoxelScaleZ;
+	float _MetavoxelScale;
 CBUFFER_END
 	
 	// -- particle stuff
@@ -157,7 +157,7 @@ CBUFFER_END
 
 		// Iterate through the voxel column with the first particle, clearing the voxel if it isn't covered
 		// (This saves us a conditional check for every other particle)
-		float oneVoxelSize = _MetavoxelScaleZ / _NumVoxels; // assuming scale is same in X and Y below (this scale includes the border)
+		float oneVoxelSize = _MetavoxelScale / _NumVoxels; // assuming scale is same in X and Y below (this scale includes the border)
 		float3 voxel0WorldPos = get_voxel_world_pos(i.pos.xy, 0);
 		float3 voxelWorldPos = voxel0WorldPos;
 
