@@ -72,7 +72,7 @@ namespace MetavoxelEngine
         /********************* game objects/components that need to be set *************************/
         public Light dirLight;
         public LayerMask particlesLayer;       
-        public GameObject gridCenter;
+        //public GameObject gridCenter; // control center of the metavoxel grid [FIXME] needs to update based on view frustum
 
         /********************** metavoxel layout/size **********************************************/
         public int numMetavoxelsX, numMetavoxelsY, numMetavoxelsZ; // # metavoxels in the grid along x, y & z
@@ -139,15 +139,33 @@ namespace MetavoxelEngine
         //-------------------------------  Unity callbacks ----------------------------------------
         void Start()
         {
+            // Check inspector fields that need to be assigned.
+            if (!dirLight)
+            {
+                Debug.Log("dirLight not assigned in inspector. Searching for object of type Light in scene.");
+
+                dirLight = FindObjectOfType<Light>(); // search for light source in scene
+
+                if (!dirLight)
+                    Debug.LogError("Didn't find object of type light in scene");
+            }
+
+            if (particlesLayer == 0)
+            {
+                Debug.LogError("[VolumetricParticleRenderer] particlesLayer not assigned." + 
+                                "Please create a layer to house volumetric particle systems in and have particlesLayer set to it.");
+            }
+
+
+            lightOrientation = dirLight.transform.rotation;
             fadeOutParticles = false;
             volumeTextureAnisoLevel = 1; // The value range of this variable goes from 1 to 9, where 1 equals no filtering applied and 9 equals full filtering applied
-            lightOrientation = dirLight.transform.rotation;
             numMetavoxelsCovered = 0;
             wsGridCenter = Vector3.zero;
             mvScaleWithBorder = mvScale * numVoxelsInMetavoxel / (numVoxelsInMetavoxel - 2 * numBorderVoxels);
 
             CreateResources();
-            CreateMeshes();
+            CreateMeshes();         
             InitCameraAtLight();
             GetParticleSystems();
             //CreateNoiseCubemap();
@@ -187,11 +205,11 @@ namespace MetavoxelEngine
 
             if (Time.frameCount % updateInterval == 0)
             {
-                if (dirLight.transform.rotation != lightOrientation /* light direction has changed*/ ||
-                    wsGridCenter != gridCenter.transform.position)
+                if (dirLight.transform.rotation != lightOrientation /* light direction has changed*/)
+                    //|| wsGridCenter != gridCenter.transform.position)
                 {
                     lightOrientation = dirLight.transform.rotation;
-                    wsGridCenter = gridCenter.transform.position;
+                    //wsGridCenter = gridCenter.transform.position;
                     UpdateMetavoxelPositions();
                     UpdatePositionOfCameraAtLight();
                 }
@@ -493,7 +511,7 @@ namespace MetavoxelEngine
 
             foreach(ParticleSystem ps in objs)
             {
-                if (particlesLayer.value == (1 << ps.gameObject.layer))
+                if ((particlesLayer.value & (1 << ps.gameObject.layer)) > 0)
                 {
                     count++;
                     lps.Add(ps);

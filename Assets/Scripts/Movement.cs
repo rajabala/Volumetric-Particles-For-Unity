@@ -16,6 +16,15 @@ public class Movement : MonoBehaviour {
 	void Start () {     
         startPos = transform.position;
         startRot = transform.rotation;
+
+        if (!dirLight)
+        {
+            Debug.Log("dirLight not assigned in inspector. Searching for object of type Light in scene.");
+            dirLight = FindObjectOfType<Light>();
+
+            if (!dirLight)
+                Debug.LogError("Didn't find directional light source in scene");
+        }
 	}
 	
 	// Update is called once per frame
@@ -75,7 +84,7 @@ public class Movement : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.C))
         {
             moveCamera = !moveCamera;
-            if (moveCamera)
+            if (moveCamera && beingMovedText)
             {
                 moveLight = false;
                 beingMovedText.text = "Moving camera..";
@@ -85,17 +94,17 @@ public class Movement : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.L))
         {
             moveLight = !moveLight;
-            if (moveLight)
+            if (moveLight && beingMovedText)
             {
                 moveCamera = false;
                 beingMovedText.text = "Moving light..";
             }
         }
 
-        if (!moveCamera && !moveLight)
+        if (!moveCamera && !moveLight && beingMovedText)
             beingMovedText.text = "";
 
-        if (Input.GetKeyDown(KeyCode.H))
+        if (Input.GetKeyDown(KeyCode.H) && instructions)
         {
             instructions.gameObject.SetActive(!instructions.gameObject.activeSelf);
         }

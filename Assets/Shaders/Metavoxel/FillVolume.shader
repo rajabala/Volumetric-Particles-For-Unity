@@ -124,7 +124,7 @@ CBUFFER_END
 		// voxelParticleDistSq < 0.7 * netDisplacement ==> baseDensity = 1, voxelParticleDistSq > netDisplacement ==> baseDensity = 0
 		// 0.7 * netDisplacement < voxelParticleDistSq < netDisplacement ==> baseDensity ==> linear drop
 		half baseDensity = smoothstep(netDisplacement, 0.7 * netDisplacement, voxelParticleDistSq); // [0.0, 1.0]
-		half density = baseDensity *  _OpacityFactor; 
+		half density = baseDensity *  _OpacityFactor * _OpacityFactor * _OpacityFactor; 
 			
 		// factor in the particle's lifetime fade factor
 		if (_FadeOutParticles == 1)
@@ -199,8 +199,8 @@ CBUFFER_END
 				{
 					compute_voxel_color(psVoxelPos, p.mLifetimeOpacity, v);
 
-					voxelColumn[slice].density = max(voxelColumn[slice].density , v.density);
-					voxelColumn[slice].ao		= max(voxelColumn[slice].ao, v.ao);
+					voxelColumn[slice].density += v.density;
+					voxelColumn[slice].ao	= max(voxelColumn[slice].ao, v.ao);
 				}
 			} // per particle
 
