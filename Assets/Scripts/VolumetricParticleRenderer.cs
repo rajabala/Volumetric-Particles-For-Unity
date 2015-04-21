@@ -46,12 +46,12 @@ namespace MetavoxelEngine
 
     // When filling a metavoxel column using the "Fill Volume" shader, we send per-particle-info
     // for use in the voxel-particle coverage test
-    struct DisplacedParticle
+    struct SphericalParticle
     {
         public Matrix4x4 mWorldToLocal;
         public Vector3 mWorldPos;
         public float mRadius; // world units
-        public float mOpacity;
+        public float mPercLifeLeft;
     }
 
     // Helps sort metavoxels of a Z-Slice by distance from the eye
@@ -182,6 +182,7 @@ namespace MetavoxelEngine
             wsGridCenter = Vector3.zero;
             mvScaleWithBorder = mvScale * numVoxelsInMetavoxel / (float)(numVoxelsInMetavoxel - 2 * numBorderVoxels);
             mainCam = GetComponent<Camera>();
+            mainCam.cullingMask &= ~particlesLayer.value;
 
             CreateResources();
             CreateMeshes();         
@@ -192,7 +193,7 @@ namespace MetavoxelEngine
             // [FIXME] The raymarch step requires the camera depth buffer for depth occlusion.
             // The scene needs to be shaded POST raymarching, t
             // [perf threat] Unity is going to do a Z-prepass simply because of the line below
-            // mainCam.depthTextureMode = DepthTextureMode.Depth; // this makes the depth buffer available for all the shaders as _CameraDepthTexture
+            mainCam.depthTextureMode = DepthTextureMode.Depth; // this makes the depth buffer available for all the shaders as _CameraDepthTexture
 
             bShowRayMarchSamplesPerPixel = bShowMetavoxelGrid = bShowRayMarchSamplesPerPixel 
                                          = bShowMetavoxelDrawOrder = bShowRayMarchBlendFunc = false;        
@@ -347,7 +348,7 @@ namespace MetavoxelEngine
         // Create mv info & associated fill texture for every mv in the grid
         void CreateMetavoxelGrid(int xDim, int yDim, int zDim)
         {
-            mvGrid = new MetaVoxel[xDim, yDim, zDim]; // note index order -- prefer locality in X,Y
+            mvGrid = new MetaVoxel[zDim, yDim, xDim]; // note index order -- prefer locality in X,Y
             mvFillTextures = new RenderTexture[zDim, yDim, xDim];
 
             // Init fill texture and particle list per metavoxel
@@ -725,26 +726,26 @@ namespace MetavoxelEngine
 
             // fill structured buffer
             int numParticles = mvGrid[zz, yy, xx].mParticlesCovered.Count;
-            DisplacedParticle[] dpArray = new DisplacedParticle[numParticles];
+            SphericalParticle[] particles = new SphericalParticle[numParticles];
 
             int index = 0;
 
             foreach (MetaVoxel.ParticleInfo pinfo in mvGrid[zz, yy, xx].mParticlesCovered)
             {
-                ParticleSystem.Particle p = pinfo.mParticle;
+                ParticleSystem.Particle p = pinfo.mParticle;                
                 ParticleSystem psys = pinfo.mParent;
 
                 Vector3 wsPos = psys.transform.localToWorldMatrix.MultiplyPoint3x4(p.position);
-                dpArray[index].mWorldToLocal = Matrix4x4.TRS(wsPos, Quaternion.AngleAxis(p.rotation, psys.transform.forward), new Vector3(p.size, p.size, p.size)).inverse;
-                dpArray[index].mWorldPos = wsPos;
-                dpArray[index].mRadius = p.size / 2f;
-                dpArray[index].mOpacity = p.lifetime / p.startLifetime; // [time-particle-will-remain-alive / particle-lifetime] use this to make particles less "dense" as they meet their end.
+                particles[index].mWorldToLocal  = Matrix4x4.TRS(wsPos, Quaternion.AngleAxis(p.rotation, psys.transform.forward), new Vector3(p.size, p.size, p.size)).inverse;
+                particles[index].mWorldPos      = wsPos;
+                particles[index].mRadius        = p.size / 2f; // size is diameter
+                particles[index].mPercLifeLeft  = p.lifetime / p.startLifetime; // [time-particle-will-remain-alive / particle-lifetime] use this to make particles less "dense" as they meet their end.
                 index++;
             }
 
-            ComputeBuffer dpBuffer = new ComputeBuffer(numParticles,
-                                                        Marshal.SizeOf(dpArray[0]));
-            dpBuffer.SetData(dpArray);
+            ComputeBuffer particlesBuffer = new ComputeBuffer(numParticles,
+                                                        Marshal.SizeOf(particles[0]));
+            particlesBuffer.SetData(particles);
 
             
             matFillVolume.SetMatrix("_MetavoxelToWorld", Matrix4x4.TRS(mvGrid[zz, yy, xx].mPos,
@@ -752,11 +753,11 @@ namespace MetavoxelEngine
                                                                        Vector3.one * mvScaleWithBorder)); // need to fill the border voxels of this metavoxel too (so we need to make it "seem" bigger)
             matFillVolume.SetVector("_MetavoxelIndex", new Vector3(xx, yy, zz));
             matFillVolume.SetInt("_NumParticles", numParticles);
-            matFillVolume.SetBuffer("_Particles", dpBuffer);
+            matFillVolume.SetBuffer("_Particles", particlesBuffer);
 
             Graphics.Blit(fillMetavoxelRT1, fillMetavoxelRT1, matFillVolume, 0);
             // cleanup
-            dpBuffer.Release();
+            particlesBuffer.Release();
             Graphics.ClearRandomWriteTargets();
         }
 
@@ -881,8 +882,8 @@ namespace MetavoxelEngine
 
             // Camera uniforms
             matRayMarch.SetFloat("_Fov", Mathf.Deg2Rad * Camera.main.fieldOfView);
-            //matRayMarch.SetFloat("_Near", Camera.main.nearClipPlane);
-            //matRayMarch.SetFloat("_Far", Camera.main.farClipPlane);
+            matRayMarch.SetFloat("_NearZ", Camera.main.nearClipPlane);
+            matRayMarch.SetFloat("_FarZ", Camera.main.farClipPlane);
           
             
             // Debug/Tmp constants

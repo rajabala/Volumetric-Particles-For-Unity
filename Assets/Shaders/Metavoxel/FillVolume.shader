@@ -48,14 +48,15 @@ SubShader {
 	// particle
 	struct Particle {
 		float4x4 mWorldToLocal;
-		float3	mWorldPos;
+		float3	mWorldPos;		
 		float	mRadius;
-		float	mLifetimeOpacity; // [0.0, 1.0]
+		float	mPercLifeLeft; // [0.0, 1.0]
 	};
 
 	struct Voxel {
-		half density; // affects opacity
-		half ao; // affects color
+		half density;	// affects opacity
+		half ao;		// [0.0, 1.0] affects ambient light (0 -> dark, 1 -> bright)
+		half3 color;
 	};
 		
 	// UAVs
@@ -122,7 +123,7 @@ CBUFFER_END
 
 	void 
 	compute_voxel_color(float3 psVoxelPos	/*voxel position in particle space*/, 
-						float fadeFactor,		/*particle opacity -- particle fades away as it dies*/
+						float pPercLifeLeft,	/*particle opacity -- particle fades away as it dies*/
 						out Voxel v)
 	{
 		// sample the displacement noise texture for the particle
@@ -141,10 +142,11 @@ CBUFFER_END
 			
 		// factor in the particle's lifetime fade factor
 		if (_FadeOutParticles == 1)
-			density *= fadeFactor;
+			density *= pPercLifeLeft;
 
-		v.density = density;
-		v.ao = netDisplacement;
+		v.density	= density;
+		v.ao		= netDisplacement;		
+		v.color		= lerp(half3(0, 0, 0), half3(1,0,0), pPercLifeLeft);
 	}
 
 
@@ -184,13 +186,14 @@ CBUFFER_END
 				
 			if (dist2 <= 0.25) // 0.5 * 0.5 -- if the voxel center is within the particle it'd be less than 0.5 units away from the particle center in particle space
 			{
-				compute_voxel_color(psVoxelPos, p.mLifetimeOpacity, voxelColumn[slice]);				
+				compute_voxel_color(psVoxelPos, p.mPercLifeLeft, voxelColumn[slice]);				
 			}
 			else 
 			{
 				// particle doesn't cover voxel. clear it.
 				voxelColumn[slice].density = 0.0;
 				voxelColumn[slice].ao      = 0.0;
+				voxelColumn[slice].color   = half3(0,0,0);
 			}				
 
 			voxelWorldPos += _LightForward * oneVoxelSize;
@@ -210,8 +213,9 @@ CBUFFER_END
 
 				if (dist2 <= 0.25) // 0.5 * 0.5 -- if the voxel center is within the particle it'd be less than 0.5 units away from the particle center in particle space
 				{
-					compute_voxel_color(psVoxelPos, p.mLifetimeOpacity, v);
+					compute_voxel_color(psVoxelPos, p.mPercLifeLeft, v);
 
+					voxelColumn[slice].color = max(v.color, voxelColumn[slice].color);
 					voxelColumn[slice].density += v.density;
 					voxelColumn[slice].ao	= max(voxelColumn[slice].ao, v.ao);
 				}
@@ -225,9 +229,10 @@ CBUFFER_END
 		
 		// don't need to convert voxel to light clip space since our shadow map is constrained to the exact dimensions of a "slice" of the volume grid			
 		float2 lsTexCoord = (i.pos.xy + _MetavoxelIndex.xy * _NumVoxels) / (_MetavoxelGridDim.xy * _NumVoxels);
-		// don't need to invert the y component of UV (even though Unity renders to the depth texture with Y inverted).
-		float d = tex2D(_LightDepthMap, lsTexCoord); // [0,1]						
-		float a = rcp(_FarZ - _NearZ), b = -_NearZ * a;			
+
+		// convert shadow map depth to light space depth for the voxel column
+		float d = tex2D(_LightDepthMap, lsTexCoord); // don't need to invert the y component of UV (even though Unity renders to the depth texture with Y inverted).							
+		float a = rcp(_FarZ - _NearZ), b = -_NearZ * a;	// orthographic projection	third row (if column major) is [0  0  1/(f-n)  -n/(f-n)]
 		float lsSceneDepth = (d - b) * rcp(a);
 		float lsVoxelColumnStart = lsVoxel0.z;
 
@@ -252,7 +257,7 @@ CBUFFER_END
 			else
 				propagatedLight = transmittedLight;
 
-			half3 finalColor = diffuseColor * _LightColor * transmittedLight /* direct lighting */ +
+			half3 finalColor = voxelColumn[slice].color * diffuseColor * _LightColor * transmittedLight /* direct lighting */ +
 								(_AmbientColor * voxelColumn[slice].ao);	  /* indirect lighting */
 
 			transmittedLight *= rcp(1.0 + voxelColumn[slice].density);

@@ -52,11 +52,12 @@ CGPROGRAM
 #define SQ_ROOT_3 1.73205
 
 sampler3D _VolumeTexture; // per-voxel data for the current metavoxel
+sampler2D _CameraDepthTexture;
 
 // Per Metavoxel uniforms
 CBUFFER_START(MetavoxelConstants)
 	float4x4 _MetavoxelToWorld;
-	float4x4 _CameraToMetavoxel;
+	float4x4 _CameraToMetavoxel;	
 	float3 _MetavoxelIndex;		
 CBUFFER_END
 
@@ -77,16 +78,14 @@ CBUFFER_END
 CBUFFER_START(CameraConstants)
 	float4x4 _WorldToCamera; // set by Unity when declared
 	float _Fov;
+	float _NearZ, _FarZ;	
 	//float4 _ScreenParams; // built-in Unity shader variable; http://docs.unity3d.com/462/Documentation/Manual/SL-BuiltinValues.html
 CBUFFER_END
 
-// tmp
+// Debug stuff
 CBUFFER_START(TmpConstants)
-	//int _ShowNumSamples;
-	int _ShowMetavoxelDrawOrder;
 	int _OrderIndex;
 	int _NumMetavoxelsCovered;
-	int _ShowRayMarchBlendFunc;
 	int _RayMarchBlendOver;
 CBUFFER_END
 
@@ -162,7 +161,7 @@ float4 RayMarchSamplesColoring(int samples)
 
 struct v2f {
 	float4 pos : SV_POSITION;
-	//float3 worldPos : TEXCOORD;
+	float3 cameraPos : TEXCOORD;
 };
 
 
@@ -173,9 +172,9 @@ vert(appdata_base i) {
 	// transform from model -> world -> eye -> proj -> clip space
 	v2f o;
 
-	// can't use the default UNITY_MATRIX_MVP since the draw is made using Graphics.DrawMeshNow
+	// can't use the default UNITY_MATRIX_MVP since the draw is made using Graphics.DrawMeshNow without the metavoxel scale info
 	o.pos = mul(mul(UNITY_MATRIX_VP, _MetavoxelToWorld), i.vertex); // clip space
-	//o.worldPos = mul(_MetavoxelToWorld, i.vertex); // world space
+	o.cameraPos = mul( _WorldToCamera, mul(_MetavoxelToWorld, i.vertex) ); // camera space
 	return o;
 }
 	
@@ -245,6 +244,22 @@ frag(v2f i) : COLOR
 	if (!intersects)
 		return seethrough; // ray passes through the cube corner
 	
+	// if the exit point of the metavoxel (that passed the depth test) is really close to an object, make it soft
+	bool exitNearObject = false;
+
+	// convert depth buffer non-linear z to view space Z
+	float d = tex2D(_CameraDepthTexture, i.pos.xy/_ScreenParams); // [0.0, 1.0]
+	float a = _FarZ * rcp(_FarZ - _NearZ), b = -_NearZ * a;	// perspective projection third row (if column major) is [0  0  f/f-n  -fn/(f-n)
+	float csSceneDepth = (d - b) * rcp(a);
+
+	float dMetavoxelExit = (a * i.cameraPos.z  +  b) * rcp(i.cameraPos.z);
+	
+	float csMetavoxelExitZ = i.cameraPos.z;
+	float epsilon = 0.1;
+	if ((csSceneDepth - csMetavoxelExitZ) < epsilon)
+	//if ((d - dMetavoxelExit) < epsilon)
+		exitNearObject = true;
+
 	// find step indices; note that tentry and texit are guaranteed to be >=0
 	// however, it is possible for the camera to be within the current metavoxel, in which case texit > tcamera >= tentry. 
 	// for this case, we should ensure we don't sample points (within the metavoxel) behind the camera
@@ -291,6 +306,9 @@ frag(v2f i) : COLOR
 						
 		mvRayPos -= mvRayStep;
 		samples++;
+
+		if (exitNearObject)
+			result.rgb = float3(1,1,1);
 	}		
 
 
