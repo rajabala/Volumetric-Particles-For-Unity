@@ -101,9 +101,10 @@ namespace MetavoxelEngine
         public int volumeTextureAnisoLevel;
 
         /*********************** materials/shaders (should be auto set via prefab) ***********/
-        public Material matFillVolume;
-        public Material matRayMarch;
-        public Material matBlendParticles; // material to blend the raymarched volume with the camera's RT    
+        public Material matFillVolume;      // material used to fill volume data into each covered metavoxel
+        public Material matRayMarch;        // material to raymarch each covered metavoxel
+        public Material matBlendParticles;  // material to blend the raymarched volume with the camera's RT    
+        public Material matCopyDepthBufferToTexture;    // material to make a copy of the main camera's depth buffer for use as texture
         public Material mvLineColor;
         public Shader generateLightDepthMapShader;
 
@@ -132,11 +133,12 @@ namespace MetavoxelEngine
 
         // Render target resources
         private RenderTexture mainSceneRT; // camera draws all the objects in the scene but for the particles into this
-        private RenderTexture particlesRT; // result of raymarching the metavoxels is stored in this    
+        public RenderTexture particlesRT; // result of raymarching the metavoxels is stored in this    
         private RenderTexture fillMetavoxelRT, fillMetavoxelRT1; // bind this as RT when filling a metavoxel. we don't sample/use it though..
         private RenderTexture[, ,] mvFillTextures; // 3D textures that hold metavoxel fill data
         public RenderTexture[,] lightPropogationUAVs; // Light propogation texture used while filling metavoxels
         public RenderTexture lightDepthMap;
+        public RenderTexture tmpDepth;
 
         // scripted camera for mini-shadow map generation
         private GameObject lightCamera;
@@ -222,11 +224,13 @@ namespace MetavoxelEngine
         // OnPostRender is called after a camera has finished rendering the scene.
         void OnPostRender()
         {
-            // Generate the depth map from the light's pov
+            // Generate the mini-depth map from the light's pov
             shadowCam.RenderWithShader(generateLightDepthMapShader, null as string);
 
+            // Updating metavoxels is costly every frame, so allow for sparse updates
             if (Time.frameCount % updateInterval == 0)
             {
+                // if light has moved (or) grid center has changed, update metavoxel positions and the shadowCam
                 if (dirLight.transform.rotation != lightOrientation /* light direction has changed*/)
                     //|| wsGridCenter != gridCenter.transform.position)
                 {
@@ -242,15 +246,10 @@ namespace MetavoxelEngine
                 FillMetavoxels();
             }
 
-            // Use the camera's existing depth buffer to depth-test the particles, while
-            // writing the ray marched volume into a separate color buffer (particlesRT),
-            // that is later composited with the main scene
-            Graphics.SetRenderTarget(particlesRT.colorBuffer, mainSceneRT.depthBuffer);
-
             // fill particlesRT with the ray marched volume
             RaymarchMetavoxels();
 
-            // blend the particles onto the main (opaque) scene
+            // Composite the particles onto the main scene
             Graphics.Blit(particlesRT, mainSceneRT, matBlendParticles);
 
             if (bShowMetavoxelGrid)
@@ -271,7 +270,7 @@ namespace MetavoxelEngine
 
         //-------------------------------  private fns --------------------------------------------
         // Create all the render targets/uavs needed. 
-        // Note: None of them use RenderTexture.GetTemporary(); Don't know if that's the better choice. 
+        // Note: None of them use RenderTexture.GetTemporary(); Don't think that's the better choice. 
         void CreateResources()
         {
             if (!particlesRT)
@@ -327,7 +326,11 @@ namespace MetavoxelEngine
                 lightDepthMap.enableRandomWrite = false;
                 lightDepthMap.Create();
             }
-           
+
+            //**clean***//
+            //tmpDepth = new RenderTexture(Screen.width, Screen.height, 0, RenderTextureFormat.RFloat); // just color, no depth
+            //tmpDepth.Create();
+
             CreateMetavoxelGrid(numMetavoxelsX, numMetavoxelsY, numMetavoxelsZ); // creates the fill texture per metavoxel
             CreateLightPropagationUAVs();
         }
@@ -788,6 +791,19 @@ namespace MetavoxelEngine
         // Submit a cube per metavoxel from the perspective of the main camera, to ray march its contents and blend with previously raymarched metavoxels
         public void RaymarchMetavoxels()
         {
+            // Copy the camera's depth buffer into a texture to sample from during the ray march
+            // We need to do this since the depth buffer is also bound (even though we don't write to it, the API doesn't allow it to be bound this way)
+            //RenderTexture tmpDepth = new RenderTexture(Screen.width, Screen.height, 0, RenderTextureFormat.ARGB32); // just color, no depth
+            //tmpDepth.Create();
+            //Graphics.SetRenderTarget(mainSceneRT); // The RT was changed in the Fill pass, so reset it
+            //Graphics.Blit(mainSceneRT, tmpDepth, matCopyDepthBufferToTexture);
+
+            // Use the camera's existing depth buffer to depth-test the particles, while
+            // writing the ray marched volume into a separate color buffer (particlesRT),
+            // that is later composited with the main scene
+            Graphics.SetRenderTarget(particlesRT.colorBuffer, mainSceneRT.depthBuffer);
+
+            //matRayMarch.SetTexture("_CameraDepth", tmpDepth);
             // Set constant buffers that are shared by all the metavoxels
             SetRaymarchPassConstants();
 
@@ -863,6 +879,8 @@ namespace MetavoxelEngine
                     }
                 }
             }
+
+            //tmpDepth.Release();
         }
 
 
