@@ -198,7 +198,7 @@ frag(v2f i) : COLOR
 	#endif
 
 
-	// Naming convention: 
+	// Naming convention:  
 	// Positions and directions are generally prefixed with their space [cs = camera (view) space, mv = metavoxel space]
 	// All spaces use the LHS convention
 					
@@ -248,28 +248,28 @@ frag(v2f i) : COLOR
 		return seethrough; // ray passes through the cube corner
 	
 	// if the exit point of the metavoxel (that passed the depth test) is really close to an object, make it soft
-	//bool exitNearObject = false;
+	bool exitNearObject = false;
 
-	//// convert depth buffer non-linear z to view space Z
-	//float dScene = Linear01Depth(tex2D(_CameraDepth, 1 - i.pos.xy/_ScreenParams).r); // [0.0, 1.0]
+	// convert depth buffer non-linear z to view space Z
+	float dScene = tex2D(_CameraDepth, 1 - i.pos.xy/_ScreenParams).r; // Depth texture is flipped in both X and Y
 
-	//float a = _FarZ * rcp(_FarZ - _NearZ), b = -_NearZ * a;	// perspective projection third row (column major) is [0  0  f/f-n  -fn/(f-n)]
+	float a = _FarZ * rcp(_FarZ - _NearZ), b = -_NearZ * a;	// perspective projection third row (column major) is [0  0  f/f-n  -fn/(f-n)]
 	//
-	////Cz = Vz * a  +  b
-	////Cw = Vz
-	////d = Cz/Cw
-	////d = a + b/Vz
-	////Vz = b / (d - a)
+	//Cz = Vz * a  +  b
+	//Cw = Vz
+	//d = Cz/Cw
+	//d = a + b/Vz
+	float dMetavoxelExit = a + b * rcp(i.cameraPos.z);	
 
-	//float csSceneDepth = b * rcp(dScene - a);
+	//Vz = b / (d - a)
+	float csSceneDepth = b * rcp(dScene - a);
+	float csMetavoxelExitZ = i.cameraPos.z;
+	float epsilon = 0.0;
 
-	//float dMetavoxelExit = a + b * rcp(i.cameraPos.z);	
-	//float csMetavoxelExitZ = i.cameraPos.z;
-
-
-	//float epsilon = 0.01;
-	/*if ((csSceneDepth - csMetavoxelExitZ) < epsilon)
-		return red;*/
+	if (dScene < dMetavoxelExit)
+	//if (csSceneDepth < csMetavoxelExitZ)
+		return float4(dScene, 0,0,0.6);
+		//exitNearObject = true;
 
 	// find step indices; note that tentry and texit are guaranteed to be >=0
 	// however, it is possible for the camera to be within the current metavoxel, in which case texit > tcamera >= tentry. 
@@ -317,8 +317,6 @@ frag(v2f i) : COLOR
 						
 		mvRayPos -= mvRayStep;
 		samples++;
-	/*	if (exitNearObject)
-			result.rgb = float3(1,1,1);*/
 	}		
 
 

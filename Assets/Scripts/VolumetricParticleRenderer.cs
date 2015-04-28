@@ -193,7 +193,8 @@ namespace MetavoxelEngine
             //CreateNoiseCubemap();
             
             // [FIXME] The raymarch step requires the camera depth buffer for depth occlusion.
-            // The scene needs to be shaded POST raymarching, t
+            // The scene needs to be shaded POST raymarching to get shadows cast by the volume
+
             // [perf threat] Unity is going to do a Z-prepass simply because of the line below
             mainCam.depthTextureMode = DepthTextureMode.Depth; // this makes the depth buffer available for all the shaders as _CameraDepthTexture
 
@@ -328,8 +329,8 @@ namespace MetavoxelEngine
             }
 
             //**clean***//
-            //tmpDepth = new RenderTexture(Screen.width, Screen.height, 0, RenderTextureFormat.RFloat); // just color, no depth
-            //tmpDepth.Create();
+            tmpDepth = new RenderTexture(Screen.width, Screen.height, 0, RenderTextureFormat.RFloat); // just color, no depth
+            tmpDepth.Create();
 
             CreateMetavoxelGrid(numMetavoxelsX, numMetavoxelsY, numMetavoxelsZ); // creates the fill texture per metavoxel
             CreateLightPropagationUAVs();
@@ -795,15 +796,15 @@ namespace MetavoxelEngine
             // We need to do this since the depth buffer is also bound (even though we don't write to it, the API doesn't allow it to be bound this way)
             //RenderTexture tmpDepth = new RenderTexture(Screen.width, Screen.height, 0, RenderTextureFormat.ARGB32); // just color, no depth
             //tmpDepth.Create();
-            //Graphics.SetRenderTarget(mainSceneRT); // The RT was changed in the Fill pass, so reset it
-            //Graphics.Blit(mainSceneRT, tmpDepth, matCopyDepthBufferToTexture);
+            Graphics.SetRenderTarget(mainSceneRT); // The RT was changed in the Fill pass, so reset it
+            Graphics.Blit(mainSceneRT, tmpDepth, matCopyDepthBufferToTexture);
 
             // Use the camera's existing depth buffer to depth-test the particles, while
             // writing the ray marched volume into a separate color buffer (particlesRT),
             // that is later composited with the main scene
             Graphics.SetRenderTarget(particlesRT.colorBuffer, mainSceneRT.depthBuffer);
 
-            //matRayMarch.SetTexture("_CameraDepth", tmpDepth);
+            matRayMarch.SetTexture("_CameraDepth", tmpDepth);
             // Set constant buffers that are shared by all the metavoxels
             SetRaymarchPassConstants();
 

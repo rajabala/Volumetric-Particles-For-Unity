@@ -82,8 +82,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dirLight: {fileID: 0}
-  lookSpeed: 1
-  moveSpeed: 2
+  lookSpeed: 4
+  moveSpeed: 3
   instructions: {fileID: 0}
   beingMovedText: {fileID: 0}
 --- !u!114 &11473202
@@ -100,12 +100,11 @@ MonoBehaviour:
   dirLight: {fileID: 0}
   particlesLayer:
     serializedVersion: 2
-    m_Bits: 1024
-  gridCenter: {fileID: 0}
-  numMetavoxelsX: 20
-  numMetavoxelsY: 20
-  numMetavoxelsZ: 20
-  mvScale: {x: 3, y: 3, z: 3}
+    m_Bits: 1280
+  numMetavoxelsX: 16
+  numMetavoxelsY: 16
+  numMetavoxelsZ: 16
+  mvScale: 3
   numVoxelsInMetavoxel: 32
   numBorderVoxels: 1
   updateInterval: 2
@@ -115,15 +114,20 @@ MonoBehaviour:
   matFillVolume: {fileID: 2100000, guid: 742e800cae20c4547bc14935a578e998, type: 2}
   matRayMarch: {fileID: 2100000, guid: 865bff02ba66c2b4490cdab2d995b16f, type: 2}
   matBlendParticles: {fileID: 2100000, guid: 81bb6726bf20108478e2d39eedcfffce, type: 2}
+  matCopyDepthBufferToTexture: {fileID: 2100000, guid: 47cf230ae9e74cc45b89eb5c95727e36,
+    type: 2}
   mvLineColor: {fileID: 2100000, guid: e091f90250c3ccc4eb5732506a7b76f6, type: 2}
   generateLightDepthMapShader: {fileID: 4800000, guid: d503664f424880d40a00f7762d575f5c,
     type: 3}
   fDisplacementScale: .699999988
   fadeOutParticles: 0
-  opacityFactor: .0399999991
+  opacityFactor: .200000003
   softParticleStepDistance: 20
-  lightPropogationUAV: {fileID: 0}
+  fParticleGreyscale: .600000024
+  bUsePerlinNoise: 0
+  particlesRT: {fileID: 0}
   lightDepthMap: {fileID: 0}
+  tmpDepth: {fileID: 0}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

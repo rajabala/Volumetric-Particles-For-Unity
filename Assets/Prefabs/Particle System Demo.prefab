@@ -10,7 +10,7 @@ GameObject:
   - 4: {fileID: 416434}
   - 198: {fileID: 19808670}
   - 199: {fileID: 19997126}
-  m_Layer: 10
+  m_Layer: 8
   m_Name: Particle System Demo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -23,8 +23,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100554}
-  m_LocalRotation: {x: 0, y: 1, z: 0, w: -4.37113883e-08}
-  m_LocalPosition: {x: 0, y: 5, z: 11.1999998}
+  m_LocalRotation: {x: 6.36262687e-09, y: .989349484, z: -.145559922, w: -4.32458478e-08}
+  m_LocalPosition: {x: 0, y: 0, z: 9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -394,15 +394,15 @@ ParticleSystem:
         m_PostInfinity: 2
       minMaxState: 0
   ColorModule:
-    enabled: 0
+    enabled: 1
     gradient:
       maxGradient:
         key0:
           serializedVersion: 2
-          rgba: 4294967295
+          rgba: 4282417622
         key1:
           serializedVersion: 2
-          rgba: 4294967295
+          rgba: 4292861919
         key2:
           serializedVersion: 2
           rgba: 0
@@ -736,7 +736,7 @@ ParticleSystem:
     inWorldSpace: 0
     randomizePerFrame: 0
   ExternalForcesModule:
-    enabled: 0
+    enabled: 1
     multiplier: 1
   ClampVelocityModule:
     enabled: 0

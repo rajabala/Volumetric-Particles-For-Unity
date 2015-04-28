@@ -146,7 +146,7 @@ CBUFFER_END
 
 		v.density	= density;
 		v.ao		= netDisplacement;		
-		v.color		= lerp(half3(0, 0, 0), half3(1,0,0), pPercLifeLeft);
+		v.color		= lerp(half3(0, 0, 0), half3(0,1,0), pPercLifeLeft);
 	}
 
 
@@ -278,7 +278,7 @@ CBUFFER_END
 			if (inShadow)
 				transmittedLight = 0.0;
 						
-			half3 finalColor = diffuseColor * _LightColor * transmittedLight /* direct lighting */ +
+			half3 finalColor =  voxelColumn[slice].color * diffuseColor * _LightColor * transmittedLight /* direct lighting */ +
 								(_AmbientColor * voxelColumn[slice].ao);	  /* indirect lighting */
 
 			transmittedLight *= rcp(1.0 + voxelColumn[slice].density);
