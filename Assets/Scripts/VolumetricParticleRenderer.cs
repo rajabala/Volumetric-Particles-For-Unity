@@ -329,7 +329,7 @@ namespace MetavoxelEngine
             }
 
             //**clean***//
-            tmpDepth = new RenderTexture(Screen.width, Screen.height, 0, RenderTextureFormat.RFloat); // just color, no depth
+            tmpDepth = new RenderTexture(Screen.width, Screen.height, 0, RenderTextureFormat.ARGB32); // just color, no depth
             tmpDepth.Create();
 
             CreateMetavoxelGrid(numMetavoxelsX, numMetavoxelsY, numMetavoxelsZ); // creates the fill texture per metavoxel

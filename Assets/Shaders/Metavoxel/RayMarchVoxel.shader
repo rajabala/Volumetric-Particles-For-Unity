@@ -252,25 +252,22 @@ frag(v2f i) : COLOR
 
 	// convert depth buffer non-linear z to view space Z
 	float dScene = tex2D(_CameraDepth, 1 - i.pos.xy/_ScreenParams).r; // Depth texture is flipped in both X and Y
-
 	float a = _FarZ * rcp(_FarZ - _NearZ), b = -_NearZ * a;	// perspective projection third row (column major) is [0  0  f/f-n  -fn/(f-n)]
-	//
 	//Cz = Vz * a  +  b
 	//Cw = Vz
 	//d = Cz/Cw
 	//d = a + b/Vz
-	float dMetavoxelExit = a + b * rcp(i.cameraPos.z);	
-
+	//float dMetavoxelExit = a + b * rcp(i.cameraPos.z);	
 	//Vz = b / (d - a)
 	float csSceneDepth = b * rcp(dScene - a);
 	float csMetavoxelExitZ = i.cameraPos.z;
-	float epsilon = 0.0;
+	float epsilon = 2;
 
-	if (dScene < dMetavoxelExit)
-	//if (csSceneDepth < csMetavoxelExitZ)
-		return float4(dScene, 0,0,0.6);
-		//exitNearObject = true;
-
+	if (abs(csSceneDepth - csMetavoxelExitZ) < epsilon)	{	
+		exitNearObject = true;
+		//return float4(0.6, 0, 0, 1);
+	}
+		
 	// find step indices; note that tentry and texit are guaranteed to be >=0
 	// however, it is possible for the camera to be within the current metavoxel, in which case texit > tcamera >= tentry. 
 	// for this case, we should ensure we don't sample points (within the metavoxel) behind the camera
@@ -309,7 +306,7 @@ frag(v2f i) : COLOR
 			// make less dense
 			density *= (stepIndex - tCamera) * rcp(_SoftDistance);
 		}
-
+		
 		half blendFactor = rcp(1.0 + density);
 
 		result.rgb = lerp(color, result.rgb, blendFactor);
@@ -324,6 +321,9 @@ frag(v2f i) : COLOR
 	#if defined(DBG_ON_NUM_SAMPLES)
 		return RayMarchSamplesColoring(samples);			
 	#endif
+	if (exitNearObject) {
+		return float4(result.rgb, (1 - transmittance) * 0.001);
+	}
 
 	return float4(result.rgb, 1 - transmittance);			
 } // frag

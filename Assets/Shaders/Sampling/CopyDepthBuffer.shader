@@ -15,8 +15,8 @@ sampler2D _CameraDepthTexture;
 float4 frag(v2f_img i) : COLOR
 {
 	float2 uv;
-	uv = 1 - i.pos.xy / _ScreenParams.xy; // weird that X also needs to be flipped..
-	float d = Linear01Depth(tex2D(_CameraDepthTexture, uv).r);
+	uv = 1 - i.pos.xy / _ScreenParams.xy; // weird that X also needs to be flipped..	
+	float d = SAMPLE_DEPTH_TEXTURE(_CameraDepthTexture, uv);
 	return float4(d, d, d, 1);
 }
 ENDCG
